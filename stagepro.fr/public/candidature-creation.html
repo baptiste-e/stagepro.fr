@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postuler à une offre</title>
+  <meta name="description" content="Formulaire de candidature : CV et lettre de motivation.">
+</head>
+
+<body>
+  <a href="#contenu">Aller au contenu</a>
+
+  <header>
+    <nav aria-label="Navigation principale">
+      <ul>
+        <li><a href="accueil.html">Accueil</a></li>
+        <li><a href="offres.html">Offres</a></li>
+        <li><a href="entreprises.html">Entreprises</a></li>
+        <li><a href="candidatures.html">Candidatures</a></li>
+        <li><a href="wish-list.html">Wish-list</a></li>
+        <li><a href="etudiant.html">Étudiant</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenu">
+    <nav aria-label="Fil d’ariane">
+      <p>
+        <a href="accueil.html">Accueil</a> &gt;
+        <a href="offres.html">Offres</a> &gt;
+        Postuler
+      </p>
+    </nav>
+
+    <section>
+      <h1>Postuler à une offre</h1>
+      <p>Envoyer une candidature avec un CV et une lettre de motivation (SFx20).</p>
+    </section>
+
+    <section>
+      <h2>Formulaire</h2>
+
+      <form action="#" method="post" enctype="multipart/form-data" aria-label="Formulaire de candidature">
+        <p>
+          <label for="offre">Offre (référence / titre)</label><br>
+          <input type="text" id="offre" name="offre" required>
+        </p>
+
+        <p>
+          <label for="cv">CV (fichier)</label><br>
+          <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+        </p>
+
+        <p>
+          <label for="lm">Lettre de motivation</label><br>
+          <textarea id="lm" name="lm" rows="10" required></textarea>
+        </p>
+
+        <p>
+          <button type="submit">Envoyer la candidature</button>
+          <a href="offres.html">Annuler</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 – Projet CESI</p>
+  </footer>
+</body>
+</html>
