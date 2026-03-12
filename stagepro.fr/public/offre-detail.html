@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détail de l’offre</title>
+  <meta name="description" content="Détail d’une offre de stage : informations, compétences, candidatures et actions.">
+</head>
+
+<body>
+  <a href="#contenu">Aller au contenu</a>
+
+  <header>
+    <nav aria-label="Navigation principale">
+      <ul>
+        <li><a href="accueil.html">Accueil</a></li>
+        <li><a href="offres.html">Offres</a></li>
+        <li><a href="entreprises.html">Entreprises</a></li>
+        <li><a href="candidatures.html">Candidatures</a></li>
+        <li><a href="wish-list.html">Wish-list</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenu">
+    <nav aria-label="Fil d’ariane">
+      <p>
+        <a href="accueil.html">Accueil</a> &gt;
+        <a href="offres.html">Offres</a> &gt;
+        Détail de l’offre
+      </p>
+    </nav>
+
+    <section>
+      <h1>Détail de l’offre</h1>
+      <p>Informations détaillées sur une offre de stage.</p>
+    </section>
+
+    <section>
+      <h2>Informations</h2>
+
+      <ul>
+        <li><strong>Titre :</strong> —</li>
+        <li><strong>Entreprise :</strong> —</li>
+        <li><strong>Description :</strong> —</li>
+        <li><strong>Compétences :</strong> —</li>
+        <li><strong>Base de rémunération :</strong> —</li>
+        <li><strong>Date de l’offre :</strong> —</li>
+        <li><strong>Nombre de candidatures :</strong> —</li>
+      </ul>
+
+      <p>
+        <a href="offre-creation.html">Modifier</a>
+        <button type="button">Supprimer</button>
+      </p>
+    </section>
+
+    <section>
+      <h2>Actions</h2>
+
+      <p>
+        <a href="#postuler">Postuler à cette offre</a> |
+        <button type="button">Ajouter à la wish-list</button>
+      </p>
+    </section>
+
+    <section id="postuler">
+      <h2>Postuler à l’offre</h2>
+
+      <form action="#" method="post" enctype="multipart/form-data" aria-label="Formulaire de candidature">
+        <p>
+          <label for="cv">CV (fichier)</label><br>
+          <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+        </p>
+
+        <p>
+          <label for="lm">Lettre de motivation</label><br>
+          <textarea id="lm" name="lm" rows="6" required></textarea>
+        </p>
+
+        <p>
+          <button type="submit">Envoyer la candidature</button>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 – Projet CESI</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer / modifier un étudiant</title>
+  <meta name="description" content="Création ou modification d'un compte étudiant.">
+</head>
+
+<body>
+  <a href="#contenu">Aller au contenu</a>
+
+  <header>
+    <nav aria-label="Navigation principale">
+      <ul>
+        <li><a href="accueil.html">Accueil</a></li>
+        <li><a href="offres.html">Offres</a></li>
+        <li><a href="entreprises.html">Entreprises</a></li>
+        <li><a href="etudiant.html">Étudiant</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenu">
+    <nav aria-label="Fil d’ariane">
+      <p>
+        <a href="accueil.html">Accueil</a> &gt;
+        <a href="etudiant.html">Étudiant</a> &gt;
+        Création / modification
+      </p>
+    </nav>
+
+    <section>
+      <h1>Créer / modifier un étudiant</h1>
+      <p>Formulaire de gestion d’un compte étudiant.</p>
+    </section>
+
+    <section>
+      <form action="#" method="post" aria-label="Formulaire création/modification étudiant">
+
+        <p>
+          <label for="nom">Nom</label><br>
+          <input type="text" id="nom" name="nom" required>
+        </p>
+
+        <p>
+          <label for="prenom">Prénom</label><br>
+          <input type="text" id="prenom" name="prenom" required>
+        </p>
+
+        <p>
+          <label for="email">Email</label><br>
+          <input type="email" id="email" name="email" required>
+        </p>
+
+        <p>
+          <label for="etat">État de la recherche</label><br>
+          <select id="etat" name="etat" required>
+            <option value="">Sélectionner</option>
+            <option value="non_commence">Non commencée</option>
+            <option value="en_cours">En cours</option>
+            <option value="entretiens">Entretiens</option>
+            <option value="stage_trouve">Stage trouvé</option>
+          </select>
+        </p>
+
+        <p>
+          <button type="submit">Enregistrer</button>
+          <a href="etudiant.html">Annuler</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 – Projet CESI</p>
+    <p><a href="mentions-legales.html">Mentions légales</a></p>
+  </footer>
+</body>
+</html>

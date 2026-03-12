@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Étudiants</title>
+  <meta name="description" content="Recherche et consultation des comptes étudiants et suivi de recherche de stage.">
+</head>
+
+<body>
+  <a href="#contenu">Aller au contenu</a>
+
+  <header>
+    <nav aria-label="Navigation principale">
+      <ul>
+        <li><a href="accueil.html">Accueil</a></li>
+        <li><a href="offres.html">Offres</a></li>
+        <li><a href="entreprises.html">Entreprises</a></li>
+        <li><a href="candidatures.html">Candidatures</a></li>
+        <li><a href="wish-list.html">Wish-list</a></li>
+        <li><strong>Étudiant</strong></li>
+        <li><a href="pilote.html">Pilote</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenu">
+    <section>
+      <h1>Étudiants</h1>
+      <p>Rechercher et gérer les comptes étudiants.</p>
+
+      <p>
+        <a href="etudiant-creation.html">Créer un compte étudiant</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>Rechercher un étudiant</h2>
+
+      <form action="#" method="get" aria-label="Formulaire de recherche étudiant">
+        <p>
+          <label for="nom">Nom</label><br>
+          <input type="text" id="nom" name="nom">
+        </p>
+
+        <p>
+          <label for="prenom">Prénom</label><br>
+          <input type="text" id="prenom" name="prenom">
+        </p>
+
+        <p>
+          <label for="email">Email</label><br>
+          <input type="email" id="email" name="email">
+        </p>
+
+        <p>
+          <label for="etat">État de la recherche</label><br>
+          <select id="etat" name="etat">
+            <option value="">Tous</option>
+            <option value="non_commence">Non commencée</option>
+            <option value="en_cours">En cours</option>
+            <option value="entretiens">Entretiens</option>
+            <option value="stage_trouve">Stage trouvé</option>
+          </select>
+        </p>
+
+        <p>
+          <button type="submit">Rechercher</button>
+          <button type="reset">Réinitialiser</button>
+        </p>
+      </form>
+    </section>
+
+    <section>
+      <h2>Résultats</h2>
+      <p>Les étudiants seront affichés ici.</p>
+
+      <div aria-label="Liste des étudiants">
+      </div>
+
+      <nav aria-label="Pagination des étudiants">
+        <button type="button" disabled>Précédent</button>
+        <button type="button">1</button>
+        <button type="button">2</button>
+        <button type="button">3</button>
+        <button type="button">Suivant</button>
+      </nav>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 – Projet CESI</p>
+    <p><a href="mentions-legales.html">Mentions légales</a></p>
+  </footer>
+</body>
+</html>
