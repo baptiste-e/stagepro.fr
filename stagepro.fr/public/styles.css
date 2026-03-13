@@ -115,6 +115,16 @@ article {
   transition: all 0.3s ease;
   position: relative;
 }
+/* --- Images de fond spécifiques (Corrigées en .jpg) --- */
+.card-etudiant { 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/etudiant.jpg'); 
+}
+.card-pilote { 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/pilote.jpg'); 
+}
+.card-admin { 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/admin.jpg'); 
+}
 
 article a.lien-etendu {
   position: absolute;
