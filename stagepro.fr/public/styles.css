@@ -114,6 +114,10 @@ article {
   padding: 1.5rem;
   transition: all 0.3s ease;
   position: relative;
+  background-size: cover;       /* L'image remplit toute la carte */
+  background-position: center;   /* L'image est centrée */
+  background-repeat: no-repeat;
+  overflow: hidden;              /* Pour que rien ne dépasse des bords arrondis */
 }
 /* --- Images de fond spécifiques (Corrigées en .jpg) --- */
 .card-etudiant { 
@@ -132,18 +136,20 @@ article a.lien-etendu {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 10;
   text-indent: -9999px;
 }
 
 article:hover {
   border-color: var(--accent-blue);
-  background: var(--surface-hover);
   cursor: pointer;
 }
 
-article h3 { font-size: 1.05rem; margin-bottom: 0.5rem; position: relative; z-index: 2; }
-article p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; position: relative; z-index: 2; }
+article h3, article p {
+  position: relative; 
+  z-index: 1; /* Doit être inférieur au z-index du lien */
+  pointer-events: none; /* Optionnel : rend le texte "transparent" aux clics */
+}
 
 /* --- Formulaires & Footer inchangés --- */
 form { max-width: 600px; background: var(--surface); padding: 2rem; border: 1px solid var(--border); border-radius: 6px; }
