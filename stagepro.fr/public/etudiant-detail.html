@@ -5,24 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Détail étudiant</title>
   <meta name="description" content="Profil d’un étudiant et suivi de sa recherche de stage.">
+
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <a href="#contenu">Aller au contenu</a>
 
-  <header>
+ <header>
+    <h1>StageFlow</h1>
+
     <nav aria-label="Navigation principale">
-      <ul>
-        <li><a href="accueil.html">Accueil</a></li>
-        <li><a href="offres.html">Offres</a></li>
-        <li><a href="entreprises.html">Entreprises</a></li>
-        <li><a href="candidatures.html">Candidatures</a></li>
-        <li><a href="wish-list.html">Wish-list</a></li>
-        <li><a href="etudiant.html">Étudiant</a></li>
-        <li><a href="pilote.html">Pilote</a></li>
-      </ul>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span></span>
+        </label>
+
+        <ul>
+            <li><a href="accueil.html">Accueil</a></li>
+            <li><a href="offres.html">Offres</a></li>
+            <li><a href="entreprises.html">Entreprises</a></li>
+            <li><a href="candidatures.html">Candidatures</a></li>
+            <li><a href="wish-list.html">Wish-list</a></li>
+            <li><a href="offres-statistiques.html">Statistiques</a></li>
+            <li><strong>Étudiants</strong></li>
+            <li><a href="pilote.html">Pilotes</a></li>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+        </ul>
     </nav>
-  </header>
+</header>
 
   <main id="contenu">
     <nav aria-label="Fil d’ariane">
@@ -73,5 +84,6 @@
   <footer>
     <p>© 2026 – Projet CESI</p>
   </footer>
+  <script src="scripts.js"></script>
 </body>
 </html>

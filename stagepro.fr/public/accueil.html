@@ -3,97 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accueil | StagePro</title>
+  <title>Accueil | Plateforme de stages</title>
   <meta name="description" content="Plateforme de gestion des stages : offres, entreprises, candidatures et suivi des étudiants.">
+  
+  <style>
+    /* Styles pour la disposition des cartes */
+    .hero { text-align: center; padding: 3rem 1rem; }
+    .hero h1 { margin-bottom: 1rem; }
+    .btn-cta { display: inline-block; padding: 0.8rem 1.5rem; background: var(--accent-blue, #38bdf8); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; }
+
+    .container-espaces {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+    .card {
+        position: relative;
+        flex: 1;
+        min-width: 250px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        transition: transform 0.3s ease, background-color 0.3s;
+        background-color: #f9f9f9;
+    }
+    .card:hover { transform: scale(1.02); background-color: #eef; }
+    
+    .lien-etendu {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; text-indent: -9999px;
+    }
+
+    /* Grille des offres à la une */
+    .grid-offres { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <a href="#contenu">Aller au contenu</a>
 
   <header>
+    <h1>StageFlow</h1>
     <nav aria-label="Navigation principale">
-      <ul>
-        <li><strong>Accueil</strong></li>
-        <li><a href="offres.html">Offres</a></li>
-        <li><a href="entreprises.html">Entreprises</a></li>
-        <li><a href="candidatures.html">Candidatures</a></li>
-        <li><a href="wish-list.html">Wish-list</a></li>
-        <li><a href="etudiant.html">Étudiant</a></li>
-        <li><a href="pilote.html">Pilote</a></li>
-      </ul>
+        <ul>
+            <li><strong>Accueil</strong></li>
+            <li><a href="offres.html">Offres</a></li>
+            <li><a href="candidatures.html">Candidatures</a></li>
+            <li><a href="etudiant.html">Étudiants</a></li>
+            <li><a href="pilote.html">Pilotes</a></li>
+        </ul>
     </nav>
   </header>
 
   <main id="contenu">
-    <section>
-      <h1>Plateforme de gestion des stages</h1>
-      <p>
-        Bienvenue sur la plateforme de gestion des stages.
-        Ce site permet de centraliser les offres de stage, les entreprises partenaires
-        et le suivi des candidatures des étudiants.
-      </p>
-      <p>
-        Le projet est réalisé dans un cadre pédagogique pour faciliter l’accompagnement
-        des étudiants dans leur recherche de stage.
-      </p>
-    </section>
-
-    <section>
-      <h2>Accès rapides</h2>
-      <ul>
-        <li><a href="offres.html">Consulter les offres de stage</a></li>
-        <li><a href="entreprises.html">Découvrir les entreprises</a></li>
-        <li><a href="wish-list.html">Voir ma wish-list</a></li>
-        <li><a href="candidatures.html">Suivre les candidatures</a></li>
-      </ul>
+    <section class="hero">
+      <h1>Trouvez le stage qui propulsera votre carrière</h1>
+      <a href="offres.html" class="btn-cta">Explorer les offres</a>
     </section>
 
     <section>
       <h2>Espaces utilisateurs</h2>
-      <p>La plateforme propose différents espaces selon votre profil.</p>
-
-      <article>
-        <h3>Espace étudiant</h3>
-        <p>
-          Consulter les offres, postuler à des stages, gérer sa wish-list
-          et suivre l’avancement de ses candidatures.
-        </p>
-        <p>
-          <a href="etudiant.html">Accéder à l’espace étudiant</a>
-        </p>
-      </article>
-
-      <article>
-        <h3>Espace pilote de promotion</h3>
-        <p>
-          Suivre les candidatures des étudiants, consulter les offres
-          et accompagner les étudiants dans leur recherche de stage.
-        </p>
-        <p>
-          <a href="pilote.html">Accéder à l’espace pilote</a>
-        </p>
-      </article>
+      <div class="container-espaces">
+          <article class="card">
+            <h3>Espace étudiant</h3>
+            <p>Consulter les offres, postuler et suivre vos candidatures.</p>
+            <a href="etudiant.html" class="lien-etendu" target="_blank" rel="noopener noreferrer">Accéder à l’espace étudiant</a>
+          </article>
+          <article class="card">
+            <h3>Espace pilote</h3>
+            <p>Suivre les candidatures, consulter les offres et accompagner les étudiants.</p>
+            <a href="pilote.html" class="lien-etendu" target="_blank" rel="noopener noreferrer">Accéder à l’espace pilote</a>
+          </article>
+          <article class="card">
+            <h3>Espace Admin</h3>
+            <p>Gestion des comptes, des entreprises et administration globale.</p>
+            <a href="admin.html" class="lien-etendu" target="_blank" rel="noopener noreferrer">Accéder à l’espace admin</a>
+          </article>
+      </div>
     </section>
 
     <section>
-      <h2>Fonctionnalités principales</h2>
-      <ul>
-        <li>Gestion des entreprises partenaires</li>
-        <li>Gestion des offres de stage</li>
-        <li>Gestion des candidatures</li>
-        <li>Gestion des wish-lists</li>
-        <li>Suivi des étudiants par les pilotes</li>
-        <li>Consultation de statistiques</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Contexte du projet</h2>
-      <p>
-        Cette application web est développée dans le cadre d’un projet pédagogique
-        au CESI. Elle a pour objectif de mettre en pratique les compétences acquises
-        en développement web front-end et back-end.
-      </p>
+      <h2>Offres à la une</h2>
+      <div class="grid-offres">
+        <article class="card"><h3>Développeur Web</h3><p>Entreprise : TechCorp</p></article>
+        <article class="card"><h3>Data Analyst</h3><p>Entreprise : DataFlow</p></article>
+        <article class="card"><h3>UI/UX Designer</h3><p>Entreprise : CreativeLab</p></article>
+      </div>
     </section>
   </main>
 
@@ -101,5 +97,6 @@
     <p>© 2026 – Projet CESI</p>
     <p><a href="mentions-legales.html">Mentions légales</a></p>
   </footer>
+  <script src="scripts.js"></script>
 </body>
 </html>

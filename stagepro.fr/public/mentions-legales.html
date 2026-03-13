@@ -5,25 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mentions légales</title>
   <meta name="description" content="Mentions légales du site de gestion des stages.">
+
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <a href="#contenu">Aller au contenu</a>
 
-  <header>
+<header>
+    <h1>StageFlow</h1>
+
     <nav aria-label="Navigation principale">
-      <ul>
-        <li><a href="accueil.html">Accueil</a></li>
-        <li><a href="offres.html">Offres</a></li>
-        <li><a href="entreprises.html">Entreprises</a></li>
-        <li><a href="candidatures.html">Candidatures</a></li>
-        <li><a href="wish-list.html">Wish-list</a></li>
-        <li><a href="etudiant.html">Étudiant</a></li>
-        <li><a href="pilote.html">Pilote</a></li>
-        <li><strong>Mentions légales</strong></li>
-      </ul>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span></span>
+        </label>
+
+        <ul>
+            <li><a href="accueil.html">Accueil</a></li>
+            <li><a href="offres.html">Offres</a></li>
+            <li><a href="entreprises.html">Entreprises</a></li>
+            <li><a href="candidatures.html">Candidatures</a></li>
+            <li><a href="wish-list.html">Wish-list</a></li>
+            <li><a href="offres-statistiques.html">Statistiques</a></li>
+            <li><a href="etudiant.html">Étudiants</a></li>
+            <li><a href="pilote.html">Pilotes</a></li>
+            <li><strong>Mentions légales</strong></li>
+        </ul>
     </nav>
-  </header>
+</header>
 
   <main id="contenu">
     <section>
@@ -98,5 +108,6 @@
     <p>© 2026 – Projet CESI</p>
     <p><a href="accueil.html">Retour à l’accueil</a></p>
   </footer>
+  <script src="scripts.js"></script>
 </body>
 </html>
