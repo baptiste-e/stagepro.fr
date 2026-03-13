@@ -5,43 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accueil | Plateforme de stages</title>
   <meta name="description" content="Plateforme de gestion des stages : offres, entreprises, candidatures et suivi des étudiants.">
-  
-  <style>
-    /* Styles pour la disposition des cartes */
-    .hero { text-align: center; padding: 3rem 1rem; }
-    .hero h1 { margin-bottom: 1rem; }
-    .btn-cta { display: inline-block; padding: 0.8rem 1.5rem; background: var(--accent-blue, #38bdf8); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; }
-
-    .container-espaces {
-        display: flex;
-        gap: 20px;
-        margin-top: 20px;
-        flex-wrap: wrap;
-    }
-    .card {
-        position: relative;
-        flex: 1;
-        min-width: 250px;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        transition: transform 0.3s ease, background-color 0.3s;
-        background-color: #f9f9f9;
-    }
-    .card:hover { transform: scale(1.02); background-color: #eef; }
-    
-    .lien-etendu {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; text-indent: -9999px;
-    }
-
-    /* Grille des offres à la une */
-    .grid-offres { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
-  </style>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  
 
   <header>
     <h1>StagePro</h1>
@@ -65,17 +32,17 @@
     <section>
       <h2>Espaces utilisateurs</h2>
       <div class="container-espaces">
-          <article class="card">
+          <article class="card card-etudiant">
             <h3>Espace étudiant</h3>
             <p>Consulter les offres, postuler et suivre vos candidatures.</p>
             <a href="etudiant.html" class="lien-etendu" target="_blank" rel="noopener noreferrer">Accéder à l’espace étudiant</a>
           </article>
-          <article class="card">
+          <article class="card card-pilote">
             <h3>Espace pilote</h3>
             <p>Suivre les candidatures, consulter les offres et accompagner les étudiants.</p>
             <a href="pilote.html" class="lien-etendu" target="_blank" rel="noopener noreferrer">Accéder à l’espace pilote</a>
           </article>
-          <article class="card">
+          <article class="card card-admin">
             <h3>Espace Admin</h3>
             <p>Gestion des comptes, des entreprises et administration globale.</p>
             <a href="admin.html" class="lien-etendu" target="_blank" rel="noopener noreferrer">Accéder à l’espace admin</a>
@@ -97,6 +64,7 @@
     <p>© 2026 – Projet CESI</p>
     <p><a href="mentions-legales.html">Mentions légales</a></p>
   </footer>
+  
   <script src="scripts.js"></script>
 </body>
 </html>
