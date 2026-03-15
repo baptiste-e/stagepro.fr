@@ -49,4 +49,12 @@ Actuellement en recherche d'un stage de fin d'études, je suis très intéressé
   </div>
 </section>
 
-<section style="margin-top: 3rem; padding: 2rem; background: rgba(255, 0, 0, 0.05); border: 1px dashed #ff4444
+<section style="margin-top: 3rem; padding: 2rem; background: rgba(255, 0, 0, 0.05); border: 1px dashed #ff4444; border-radius: 6px;">
+  <h2 style="color: #ff4444; font-size: 1.1rem; margin-bottom: 1rem;">Actions d'administration</h2>
+  <div style="display: flex; gap: 1.5rem; align-items: center;">
+    <button type="button" style="background: #ff4444; color: white;">Supprimer la candidature</button>
+    <a href="candidatures.php" style="color: var(--text-muted); text-decoration: none;">Retour à la liste</a>
+  </div>
+</section>
+
+<?php include 'includes/footer.php'; ?>
