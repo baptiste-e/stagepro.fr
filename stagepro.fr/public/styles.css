@@ -119,25 +119,26 @@ article {
   background-repeat: no-repeat;
   overflow: hidden;              /* Pour que rien ne dépasse des bords arrondis */
 }
-/* --- Images de fond spécifiques (Corrigées en .jpg) --- */
+/* Ajoute ../ devant images pour "sortir" du dossier CSS */
 .card-etudiant { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/etudiant.jpg'); 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/etudiant.jpg'); 
 }
 .card-pilote { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/pilote.jpg'); 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/pilote.jpg'); 
 }
 .card-admin { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/admin.jpg'); 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/admin.jpg'); 
 }
 
-.card-dev_web{ 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/dev_web.jpg'); 
+/* Fais la même chose pour les offres en bas */
+.card-dev_web { 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/dev_web.jpg'); 
 }
-.card-data_analyst{ 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/data_analyst.jpg'); 
+.card-data_analyst { 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/data_analyst.jpg'); 
 }
-.card-UI_UX_designer{ 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/UI_UX_designer.jpg'); 
+.card-UI_UX_designer { 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/UI_UX_designer.jpg'); 
 }
 article a.lien-etendu {
   position: absolute;

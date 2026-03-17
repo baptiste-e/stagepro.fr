@@ -32,28 +32,28 @@
     </div>
   </section>
 
-  <section>
-    <h2>Offres à la une</h2>
-    <div class="grid-offres">
-      <article class="card card-dev_web">
-        <h3>Développeur Web</h3>
-        <p>Entreprise : TechCorp</p>
-        <a href="offres.php" class="lien-etendu">Voir l'offre</a>
-      </article>
+<section>
+  <h2>Offres à la une</h2>
+  <div class="grid-offres">
+    <article class="card card-dev_web">
+      <h3>Développeur Web</h3>
+      <p>Entreprise : TechCorp</p>
+      <a href="offres.php" class="lien-etendu">Voir l'offre</a>
+    </article>
 
-      <article class="card card-data_analyst">
-        <h3>Data Analyst</h3>
-        <p>Entreprise : DataFlow</p>
-        <a href="offres.php" class="lien-etendu">Voir l'offre</a>
-      </article>
+    <article class="card card-data_analyst">
+      <h3>Data Analyst</h3>
+      <p>Entreprise : DataFlow</p>
+      <a href="offres.php" class="lien-etendu">Voir l'offre</a>
+    </article>
 
-      <article class="card card-UI_UX_designer">
-        <h3>UI/UX Designer</h3>
-        <p>Entreprise : CreativeLab</p>
-        <a href="offres.php" class="lien-etendu">Voir l'offre</a>
-      </article>
-    </div>
-  </section>
+    <article class="card card-UI_UX_designer">
+      <h3>UI/UX Designer</h3>
+      <p>Entreprise : CreativeLab</p>
+      <a href="offres.php" class="lien-etendu">Voir l'offre</a>
+    </article>
+  </div>
+</section>
 </main>
 
 <?php include 'includes/footer.php'; ?>
