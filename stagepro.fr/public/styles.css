@@ -130,6 +130,15 @@ article {
   background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/admin.jpg'); 
 }
 
+.card-dev_web{ 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/dev_web.jpg'); 
+}
+.card-data_analyst{ 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/data_analyst.jpg'); 
+}
+.card-UI_UX_designer{ 
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/UI_UX_designer.jpg'); 
+}
 article a.lien-etendu {
   position: absolute;
   top: 0;
