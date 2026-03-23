@@ -1,14 +1,15 @@
 <?php
 require 'includes/db.php';
 
-$titre_page = "Toutes les Offres | StagePro";
-include 'includes/header.php';
-
 $sql = "SELECT offres.*, entreprises.nom AS entreprise_nom
         FROM offres
         JOIN entreprises ON offres.entreprise_id = entreprises.id";
+
 $resultat = $pdo->query($sql);
-$offres = $resultat->fetchAll();
+$offres = $resultat->fetchAll(PDO::FETCH_ASSOC);
+
+$titre_page = "Toutes les Offres | StagePro";
+include 'includes/header.php';
 ?>
 
 <section>
