@@ -57,14 +57,14 @@
                 <span style="font-size: 0.7rem; background: var(--border); padding: 3px 7px; border-radius: 3px;">PDF</span>
                 <span style="font-size: 0.7rem; background: var(--border); padding: 3px 7px; border-radius: 3px;">LM</span>
             </div>
-            <a href="detail-candidature.php?id=123" class="lien-etendu">Voir détails</a>
+            <a href="detail-candidature.php?id=123" class="lien-etendu"></a>
           </article>
 
           <article class="card">
             <h3 style="font-size: 1rem;">Stage CyberSécurité</h3>
             <p><strong>Entreprise :</strong> SecureNet</p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Postulé le : 02/03/2026</p>
-            <a href="detail-candidature.php?id=124" class="lien-etendu">Voir détails</a>
+            <a href="detail-candidature.php?id=124" class="lien-etendu"></a>
           </article>
       </div>
 

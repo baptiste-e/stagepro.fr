@@ -69,7 +69,7 @@
             <span style="color: var(--accent-purple); font-weight: bold;">650 €/mois</span>
             <span style="font-size: 0.75rem;">Publié le 12/03</span>
         </div>
-        <a href="detail-offre.php?id=101" class="lien-etendu">Voir l'offre</a>
+        <a href="detail-offre.php?id=101" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -81,7 +81,7 @@
             <span style="color: var(--accent-purple); font-weight: bold;">800 €/mois</span>
             <span style="font-size: 0.75rem;">Publié le 10/03</span>
         </div>
-        <a href="detail-offre.php?id=102" class="lien-etendu">Voir l'offre</a>
+        <a href="detail-offre.php?id=102" class="lien-etendu"></a>
       </article>
 
   </div>

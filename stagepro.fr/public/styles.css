@@ -1,171 +1,113 @@
-/* --- Importation des polices "Tech & Science" --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap');
-
+/* --- Style Standard & Lisible --- */
 :root {
-  --bg-dark: #050505;        /* Fond ultra-noir */
-  --surface: #0c0c0e;       /* Cartes et sections */
-  --surface-hover: #141417;   /* Survol */
-  --accent-blue: #38bdf8;      /* Bleu électrique Cradle */
-  --accent-purple: #818cf8;    /* Violet science */
-  --text-main: #f4f4f5;        /* Blanc cassé */
-  --text-muted: #a1a1aa;       /* Gris secondaire */
-  --border: #27272a;          /* Bordure fine */
-  --border-bright: #3f3f46;    /* Bordure active */
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: 'Fira Code', monospace;
+  --bg-body: #f4f4f4;       /* Gris très clair */
+  --surface: #ffffff;       /* Blanc pur pour les cartes */
+  --accent: #2563eb;        /* Bleu standard */
+  --text-main: #1f2937;     /* Anthracite */
+  --text-muted: #6b7280;    /* Gris texte */
+  --border: #d1d5db;        /* Bordure grise standard */
 }
 
-/* --- Base & Scrollbar --- */
+/* --- Base --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background-color: var(--bg-dark);
+  background-color: var(--bg-body);
   color: var(--text-main);
-  font-family: var(--font-sans);
-  line-height: 1.6;
-  overflow-x: hidden;
+  font-family: sans-serif; /* Utilise la police système */
+  line-height: 1.5;
   padding-bottom: 2rem;
 }
 
-/* Scrollbar futuriste */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
-
-/* --- Header & Navigation --- */
+/* --- Header Simple --- */
 header {
-  border-bottom: 1px solid var(--border);
-  padding: 1.2rem 5%;
+  border-bottom: 2px solid var(--border);
+  padding: 1rem 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(5, 5, 5, 0.9);
-  backdrop-filter: blur(15px);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  background: #fff;
 }
 
 header h1 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -1px;
-  background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.4rem;
+  color: var(--accent);
 }
 
-/* Masquage des éléments de bascule menu mobile */
-.nav-toggle, .nav-toggle-label { display: none; }
-
-nav ul { display: flex; list-style: none; gap: 1.5rem; align-items: center; }
+nav ul { display: flex; list-style: none; gap: 1rem; }
 
 nav ul li a, nav ul li strong {
   text-decoration: none;
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: 0.9rem;
   color: var(--text-muted);
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
-nav ul li a:hover { color: var(--accent-blue); }
-nav ul li strong { color: var(--text-main); border-bottom: 1px solid var(--accent-blue); padding-bottom: 4px; }
+nav ul li a:hover { text-decoration: underline; }
+nav ul li strong { color: var(--text-main); font-weight: bold; }
 
-/* --- Layout Principal --- */
+/* --- Layout --- */
 main {
-  max-width: 1200px;
-  margin: 3rem auto;
-  padding: 0 2rem;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
-section { margin-bottom: 3rem; animation: fadeIn 0.6s ease-out; }
+section { margin-bottom: 2.5rem; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- Section Accueil (Hero) --- */
-.hero { text-align: center; padding: 2rem 0 4rem; }
-.hero h1 { font-size: 2.5rem; margin-bottom: 1.5rem; letter-spacing: -1px; }
+/* --- Hero --- */
+.hero { text-align: center; padding: 2rem; background: #fff; border: 1px solid var(--border); }
+.hero h1 { font-size: 2rem; margin-bottom: 1rem; }
 .btn-cta { 
-  display: inline-block; padding: 0.8rem 1.8rem; 
-  background: var(--accent-blue); color: var(--bg-dark); 
-  text-decoration: none; border-radius: 4px; font-weight: 700; 
-  transition: 0.3s;
+  display: inline-block; padding: 0.6rem 1.2rem; 
+  background: var(--accent); color: #fff; 
+  text-decoration: none; border-radius: 4px;
 }
-.btn-cta:hover { background: var(--accent-purple); color: #fff; }
 
-/* --- Cartes & Articles --- */
-div[aria-label*="Liste"], .container-espaces, .grid-offres, .grid-stats {
+/* --- Grille de Cartes --- */
+div[aria-label*="Liste"], .container-espaces, .grid-offres {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 article {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  padding: 1rem;
   position: relative;
-  background-size: cover;       /* L'image remplit toute la carte */
-  background-position: center;   /* L'image est centrée */
-  background-repeat: no-repeat;
-  overflow: hidden;              /* Pour que rien ne dépasse des bords arrondis */
-}
-/* Ajoute ../ devant images pour "sortir" du dossier CSS */
-.card-etudiant { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/etudiant.jpg'); 
-}
-.card-pilote { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/pilote.jpg'); 
-}
-.card-admin { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/admin.jpg'); 
+  min-height: 150px;
+  /* On garde les images mais sans les filtres violets/noirs complexes */
+  background-size: cover;
+  background-position: center;
 }
 
-/* Fais la même chose pour les offres en bas */
-.card-dev_web { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/dev_web.jpg'); 
+/* Filtre gris simple pour la lisibilité du texte sur image */
+.card-etudiant, .card-pilote, .card-admin, .card-dev_web, .card-data_analyst, .card-UI_UX_designer { 
+  background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)); 
 }
-.card-data_analyst { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/data_analyst.jpg'); 
-}
-.card-UI_UX_designer { 
-  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/UI_UX_designer.jpg'); 
-}
+
 article a.lien-etendu {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  text-indent: -9999px;
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5;
 }
 
 article:hover {
-  border-color: var(--accent-blue);
-  cursor: pointer;
+  background-color: #f9fafb;
+  border-color: var(--accent);
 }
 
-article h3, article p {
-  position: relative; 
-  z-index: 1; /* Doit être inférieur au z-index du lien */
-  pointer-events: none; /* Optionnel : rend le texte "transparent" aux clics */
+/* --- Formulaires --- */
+form { background: #fff; padding: 1.5rem; border: 1px solid var(--border); }
+label { font-weight: bold; font-size: 0.8rem; display: block; margin-bottom: 0.3rem; }
+input, select, textarea { 
+  width: 100%; border: 1px solid var(--border); padding: 0.5rem; margin-bottom: 1rem; 
 }
 
-/* --- Formulaires & Footer inchangés --- */
-form { max-width: 600px; background: var(--surface); padding: 2rem; border: 1px solid var(--border); border-radius: 6px; }
-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-blue); display: block; margin-bottom: 0.5rem; text-transform: uppercase; }
-input, select, textarea { width: 100%; background: #000; border: 1px solid var(--border); color: var(--text-main); padding: 0.7rem; border-radius: 4px; margin-bottom: 1rem; font-family: var(--font-sans); }
-input:focus, textarea:focus { border-color: var(--accent-blue); outline: none; }
-button { background: var(--text-main); color: var(--bg-dark); border: none; padding: 0.7rem 1.2rem; border-radius: 4px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-button:hover { background: var(--accent-blue); color: #fff; }
-footer { margin-top: 5rem; padding: 2rem; border-top: 1px solid var(--border); text-align: center; font-size: 0.75rem; color: var(--text-muted); }
+button { 
+  background: #374151; color: #fff; border: none; padding: 0.6rem 1rem; cursor: pointer; 
+}
+button:hover { background: var(--accent); }
+
+footer { 
+  margin-top: 3rem; padding: 1rem; text-align: center; border-top: 1px solid var(--border); 
+}

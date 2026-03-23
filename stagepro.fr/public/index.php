@@ -15,19 +15,19 @@
         <article class="card card-etudiant">
           <h3>Espace étudiant</h3>
           <p>Consulter les offres, postuler et suivre vos candidatures.</p>
-          <a href="etudiant.php" class="lien-etendu">Accéder à l’espace étudiant</a>
+          <a href="etudiant.php" class="lien-etendu"></a>
         </article>
 
         <article class="card card-pilote">
           <h3>Espace pilote</h3>
           <p>Suivre les candidatures, consulter les offres et accompagner les étudiants.</p>
-          <a href="pilote.php" class="lien-etendu">Accéder à l’espace pilote</a>
+          <a href="pilote.php" class="lien-etendu"></a>
         </article>
 
         <article class="card card-admin">
           <h3>Espace Admin</h3>
           <p>Gestion des comptes, des entreprises et administration globale.</p>
-          <a href="admin.php" class="lien-etendu">Accéder à l’espace admin</a>
+          <a href="admin.php" class="lien-etendu"></a>
         </article>
     </div>
   </section>
@@ -38,19 +38,19 @@
     <article class="card card-dev_web">
       <h3>Développeur Web</h3>
       <p>Entreprise : TechCorp</p>
-      <a href="offres.php" class="lien-etendu">Voir l'offre</a>
+      <a href="offres.php" class="lien-etendu"></a>
     </article>
 
     <article class="card card-data_analyst">
       <h3>Data Analyst</h3>
       <p>Entreprise : DataFlow</p>
-      <a href="offres.php" class="lien-etendu">Voir l'offre</a>
+      <a href="offres.php" class="lien-etendu"></a>
     </article>
 
     <article class="card card-UI_UX_designer">
       <h3>UI/UX Designer</h3>
       <p>Entreprise : CreativeLab</p>
-      <a href="offres.php" class="lien-etendu">Voir l'offre</a>
+      <a href="offres.php" class="lien-etendu"></a>
     </article>
   </div>
 </section>

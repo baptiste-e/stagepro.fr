@@ -66,7 +66,7 @@
           <p><strong>Étudiant :</strong> Jean Dupont</p>
           <p><strong>Offre :</strong> Dev Web @TechCorp</p>
           <p style="font-size: 0.8rem; color: var(--accent-purple);">Pilote : Mme Martin</p>
-          <a href="detail-candidature.php?id=124" class="lien-etendu">Voir</a>
+          <a href="detail-candidature.php?id=124" class="lien-etendu"></a>
       </article>
       
       <?php if(false): ?>
