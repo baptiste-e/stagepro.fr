@@ -24,7 +24,7 @@
         <p><strong>Entreprise :</strong> TechCorp</p>
         <p><strong>Statut :</strong> <span style="color: #fbbf24;">En attente</span></p>
         <p style="font-size: 0.75rem;">Postulé le 10/03/2026</p>
-        <a href="detail-candidature.php?id=1" class="lien-etendu">Voir le détail</a>
+        <a href="detail-candidature.php?id=1" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -32,7 +32,7 @@
         <p><strong>Entreprise :</strong> DataFlow</p>
         <p><strong>Statut :</strong> <span style="color: #4ade80;">Accepté</span></p>
         <p style="font-size: 0.75rem;">Postulé le 05/03/2026</p>
-        <a href="detail-candidature.php?id=2" class="lien-etendu">Voir le détail</a>
+        <a href="detail-candidature.php?id=2" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -40,7 +40,7 @@
         <p><strong>Entreprise :</strong> CreativeLab</p>
         <p><strong>Statut :</strong> <span style="color: #f87171;">Refusé</span></p>
         <p style="font-size: 0.75rem;">Postulé le 01/03/2026</p>
-        <a href="detail-candidature.php?id=3" class="lien-etendu">Voir le détail</a>
+        <a href="detail-candidature.php?id=3" class="lien-etendu"></a>
       </article>
   </div>
 

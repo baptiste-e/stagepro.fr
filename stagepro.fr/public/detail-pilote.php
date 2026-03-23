@@ -48,14 +48,14 @@
             <h3 style="font-size: 1rem; color: var(--accent-blue);">Jean Dupont</h3>
             <p style="font-size: 0.85rem;">Offre : <strong>Développeur PHP</strong></p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Statut : En attente</p>
-            <a href="detail-candidature.php?id=123" class="lien-etendu">Voir la candidature</a>
+            <a href="detail-candidature.php?id=123" class="lien-etendu"></a>
           </article>
 
           <article class="card">
             <h3 style="font-size: 1rem; color: var(--accent-blue);">Alice Martin</h3>
             <p style="font-size: 0.85rem;">Offre : <strong>UI Designer</strong></p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Statut : Entretien</p>
-            <a href="detail-candidature.php?id=124" class="lien-etendu">Voir la candidature</a>
+            <a href="detail-candidature.php?id=124" class="lien-etendu"></a>
           </article>
       </div>
 

@@ -36,7 +36,7 @@
         <article class="card">
           <h3>Développeur Fullstack</h3>
           <p>6 mois - Lyon</p>
-          <a href="detail-offre.php?id=101" class="lien-etendu">Voir l'offre</a>
+          <a href="detail-offre.php?id=101" class="lien-etendu"></a>
         </article>
       </div>
     </section>

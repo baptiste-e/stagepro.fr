@@ -31,7 +31,7 @@
         <p><strong>Offre :</strong> Développeur Web</p>
         <p><strong>Entreprise :</strong> TechCorp</p>
         <p><strong>État :</strong> <span style="color: #fbbf24;">En attente</span></p>
-        <a href="detail-candidature.php?id=1" class="lien-etendu">Gérer la candidature</a>
+        <a href="detail-candidature.php?id=1" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -39,7 +39,7 @@
         <p><strong>Offre :</strong> Data Analyst</p>
         <p><strong>Entreprise :</strong> DataFlow</p>
         <p><strong>État :</strong> <span style="color: #4ade80;">Validée par Pilote</span></p>
-        <a href="detail-candidature.php?id=2" class="lien-etendu">Gérer la candidature</a>
+        <a href="detail-candidature.php?id=2" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -47,7 +47,7 @@
         <p><strong>Offre :</strong> Cyber Sécurité</p>
         <p><strong>Entreprise :</strong> SafeNet</p>
         <p><strong>État :</strong> <span style="color: #f87171;">Refusée</span></p>
-        <a href="detail-candidature.php?id=3" class="lien-etendu">Gérer la candidature</a>
+        <a href="detail-candidature.php?id=3" class="lien-etendu"></a>
       </article>
   </div>
 

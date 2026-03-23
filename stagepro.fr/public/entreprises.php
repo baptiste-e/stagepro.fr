@@ -62,7 +62,7 @@
         <p><strong>Ville :</strong> Lyon</p>
         <p><strong>Note :</strong> ⭐⭐⭐⭐☆ (4.2)</p>
         <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">12 offres publiées</p>
-        <a href="fiche-entreprise.php?id=1" class="lien-etendu">Consulter la fiche</a>
+        <a href="fiche-entreprise.php?id=1" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -70,7 +70,7 @@
         <p><strong>Ville :</strong> Paris</p>
         <p><strong>Note :</strong> ⭐⭐⭐⭐⭐ (4.9)</p>
         <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">5 offres publiées</p>
-        <a href="fiche-entreprise.php?id=2" class="lien-etendu">Consulter la fiche</a>
+        <a href="fiche-entreprise.php?id=2" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -78,7 +78,7 @@
         <p><strong>Ville :</strong> Nantes</p>
         <p><strong>Note :</strong> ⭐⭐⭐☆☆ (3.5)</p>
         <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">8 offres publiées</p>
-        <a href="fiche-entreprise.php?id=3" class="lien-etendu">Consulter la fiche</a>
+        <a href="fiche-entreprise.php?id=3" class="lien-etendu"></a>
       </article>
   </div>
 

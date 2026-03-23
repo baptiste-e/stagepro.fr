@@ -64,7 +64,7 @@
         </div>
         <p style="font-size: 0.85rem;"><strong>Statut :</strong> <span style="color: var(--accent-blue);">En cours</span></p>
         <p style="font-size: 0.8rem; color: var(--text-muted);">jean.dupont@viacesi.fr</p>
-        <a href="detail-etudiant.php?id=1" class="lien-etendu">Voir le profil</a>
+        <a href="detail-etudiant.php?id=1" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -74,7 +74,7 @@
         </div>
         <p style="font-size: 0.85rem;"><strong>Statut :</strong> <span style="color: #4ade80;">Stage trouvé</span></p>
         <p style="font-size: 0.8rem; color: var(--text-muted);">alice.martin@viacesi.fr</p>
-        <a href="detail-etudiant.php?id=2" class="lien-etendu">Voir le profil</a>
+        <a href="detail-etudiant.php?id=2" class="lien-etendu"></a>
       </article>
   </div>
 

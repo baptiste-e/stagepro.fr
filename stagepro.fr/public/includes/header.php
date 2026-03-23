@@ -14,8 +14,10 @@
             <li><a href="index.php">Accueil</a></li>
             <li><a href="offres.php">Offres</a></li>
             <li><a href="candidatures.php">Candidatures</a></li>
+            <li><a href="entreprises.php">Entreprises</a></li>
             <li><a href="etudiant.php">Étudiants</a></li>
             <li><a href="pilote.php">Pilotes</a></li>
+            <li><a href="wish-list.php">Wish-List</a></li>
         </ul>
     </nav>
   </header>

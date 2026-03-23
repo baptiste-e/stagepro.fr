@@ -53,7 +53,7 @@
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
             <p style="font-size: 0.75rem; color: var(--accent-purple);">24 étudiants suivis</p>
         </div>
-        <a href="detail-pilote.php?id=1" class="lien-etendu">Gérer le compte</a>
+        <a href="detail-pilote.php?id=1" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -66,7 +66,7 @@
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
             <p style="font-size: 0.75rem; color: var(--accent-purple);">18 étudiants suivis</p>
         </div>
-        <a href="detail-pilote.php?id=2" class="lien-etendu">Gérer le compte</a>
+        <a href="detail-pilote.php?id=2" class="lien-etendu"></a>
       </article>
 
   </div>

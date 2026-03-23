@@ -40,7 +40,7 @@
                 </button>
             </form>
         </div>
-        <a href="detail-offre.php?id=101" class="lien-etendu">Voir l'offre</a>
+        <a href="detail-offre.php?id=101" class="lien-etendu"></a>
       </article>
 
       <article class="card">
@@ -52,7 +52,7 @@
             <a href="detail-offre.php?id=105" class="btn-cta" style="font-size: 0.75rem; padding: 5px 10px;">Postuler</a>
             <button type="button" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 5px 10px; font-size: 0.75rem;">Retirer</button>
         </div>
-        <a href="detail-offre.php?id=105" class="lien-etendu">Voir l'offre</a>
+        <a href="detail-offre.php?id=105" class="lien-etendu"></a>
       </article>
 
   </div>
