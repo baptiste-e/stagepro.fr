@@ -1,6 +1,14 @@
-<?php 
-  $titre_page = "Toutes les Offres | StagePro";
-  include 'includes/header.php'; 
+<?php
+require 'includes/db.php';
+
+$titre_page = "Toutes les Offres | StagePro";
+include 'includes/header.php';
+
+$sql = "SELECT offres.*, entreprises.nom AS entreprise_nom
+        FROM offres
+        JOIN entreprises ON offres.entreprise_id = entreprises.id";
+$resultat = $pdo->query($sql);
+$offres = $resultat->fetchAll();
 ?>
 
 <section>
@@ -60,29 +68,28 @@
   
   <div class="container-espaces" style="margin-top: 1.5rem;">
       
-      <article class="card">
-        <h3 style="color: var(--accent-blue);">Développeur Fullstack PHP</h3>
-        <p><strong>Entreprise :</strong> TechCorp</p>
-        <p style="font-size: 0.85rem; margin: 0.5rem 0;">📍 Lyon (69)</p>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">Compétences : PHP, React, MySQL</p>
-        <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <span style="color: var(--accent-purple); font-weight: bold;">650 €/mois</span>
-            <span style="font-size: 0.75rem;">Publié le 12/03</span>
-        </div>
-        <a href="detail-offre.php?id=101" class="lien-etendu"></a>
-      </article>
+      <?php foreach ($offres as $offre): ?>
+        <article class="card">
+          <h3 style="color: var(--accent-blue);"><?= htmlspecialchars($offre['titre']) ?></h3>
+          
+          <p><strong>Entreprise :</strong> <?= htmlspecialchars($offre['entreprise_nom']) ?></p>
+          
+          <p style="font-size: 0.85rem; margin: 0.5rem 0;">
+            <?= htmlspecialchars($offre['description']) ?>
+          </p>
+          
+          <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--accent-purple); font-weight: bold;">
+                <?= htmlspecialchars($offre['remuneration']) ?> €/mois
+              </span>
+              <span style="font-size: 0.75rem;">
+                Publié le <?= htmlspecialchars($offre['date_offre']) ?>
+              </span>
+          </div>
 
-      <article class="card">
-        <h3 style="color: var(--accent-blue);">Data Analyst Stagiaire</h3>
-        <p><strong>Entreprise :</strong> DataFlow</p>
-        <p style="font-size: 0.85rem; margin: 0.5rem 0;">📍 Paris (75)</p>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">Compétences : Python, Tableau, Excel</p>
-        <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <span style="color: var(--accent-purple); font-weight: bold;">800 €/mois</span>
-            <span style="font-size: 0.75rem;">Publié le 10/03</span>
-        </div>
-        <a href="detail-offre.php?id=102" class="lien-etendu"></a>
-      </article>
+          <a href="detail-offre.php?id=<?= (int) $offre['id'] ?>" class="lien-etendu"></a>
+        </article>
+      <?php endforeach; ?>
 
   </div>
 
