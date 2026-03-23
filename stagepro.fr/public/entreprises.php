@@ -1,6 +1,12 @@
-<?php 
-  $titre_page = "Liste des Entreprises | StagePro";
-  include 'includes/header.php'; 
+<?php
+require 'includes/db.php';
+
+$titre_page = "Liste des Entreprises | StagePro";
+include 'includes/header.php';
+
+$sql = "SELECT * FROM entreprises";
+$resultat = $pdo->query($sql);
+$entreprises = $resultat->fetchAll();
 ?>
 
 <section>
@@ -57,29 +63,22 @@
   <h2>Entreprises partenaires</h2>
   
   <div class="container-espaces" style="margin-top: 1.5rem;">
+    <?php foreach ($entreprises as $entreprise): ?>
       <article class="card">
-        <h3 style="color: var(--accent-blue);">TechCorp SAS</h3>
-        <p><strong>Ville :</strong> Lyon</p>
-        <p><strong>Note :</strong> ⭐⭐⭐⭐☆ (4.2)</p>
-        <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">12 offres publiées</p>
-        <a href="fiche-entreprise.php?id=1" class="lien-etendu"></a>
-      </article>
+        <h3 style="color: var(--accent-blue);">
+          <?= htmlspecialchars($entreprise['nom']) ?>
+        </h3>
 
-      <article class="card">
-        <h3 style="color: var(--accent-blue);">DataFlow</h3>
-        <p><strong>Ville :</strong> Paris</p>
-        <p><strong>Note :</strong> ⭐⭐⭐⭐⭐ (4.9)</p>
-        <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">5 offres publiées</p>
-        <a href="fiche-entreprise.php?id=2" class="lien-etendu"></a>
-      </article>
+        <p>
+          <?= htmlspecialchars($entreprise['description'] ?? 'Aucune description disponible.') ?>
+        </p>
 
-      <article class="card">
-        <h3 style="color: var(--accent-blue);">CreativeLab</h3>
-        <p><strong>Ville :</strong> Nantes</p>
-        <p><strong>Note :</strong> ⭐⭐⭐☆☆ (3.5)</p>
-        <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">8 offres publiées</p>
-        <a href="fiche-entreprise.php?id=3" class="lien-etendu"></a>
+        <p><strong>Email :</strong> <?= htmlspecialchars($entreprise['email_contact'] ?? '-') ?></p>
+        <p><strong>Téléphone :</strong> <?= htmlspecialchars($entreprise['telephone_contact'] ?? '-') ?></p>
+
+        <a href="fiche-entreprise.php?id=<?= (int) $entreprise['id'] ?>" class="lien-etendu"></a>
       </article>
+    <?php endforeach; ?>
   </div>
 
   <nav aria-label="Pagination" style="margin-top: 3rem; display: flex; justify-content: center; gap: 0.5rem;">
