@@ -1,10 +1,7 @@
 <?php
-require 'includes/auth.php';
-?>
-
-<?php 
-  $titre_page = "Gestion des Candidatures | StagePro";
-  include 'includes/header.php'; 
+require 'includes/auth.php'; 
+$titre_page = "Gestion des Candidatures | StagePro";
+include 'includes/header.php';
 ?>
 
 <section>

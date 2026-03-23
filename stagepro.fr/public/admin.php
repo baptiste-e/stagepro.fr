@@ -1,3 +1,7 @@
+<?php
+require 'includes/auth-admin.php';
+?>
+
 <?php 
   $titre_page = "Tableau de Bord Administrateur | StagePro";
   include 'includes/header.php'; 
