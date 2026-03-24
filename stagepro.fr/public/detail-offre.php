@@ -119,9 +119,12 @@ include 'includes/header.php';
         Modifier l'offre
       </a>
 
-      <button type="button" style="width: 100%; background: #ff4444; color: white; font-size: 0.85rem;">
-        Supprimer
-      </button>
+      <form action="supprimer-offre.php" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette offre ?');">
+  <input type="hidden" name="id" value="<?= (int) $offre['id'] ?>">
+  <button type="submit" style="width: 100%; background: #ff4444; color: white; font-size: 0.85rem;">
+    Supprimer
+  </button>
+</form>
     </div>
   </aside>
 
