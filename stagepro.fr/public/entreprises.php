@@ -1,12 +1,13 @@
 <?php
 require 'includes/db.php';
 
-$titre_page = "Liste des Entreprises | StagePro";
-include 'includes/header.php';
-
 $sql = "SELECT * FROM entreprises";
 $resultat = $pdo->query($sql);
-$entreprises = $resultat->fetchAll();
+$entreprises = $resultat->fetchAll(PDO::FETCH_ASSOC);
+
+$titre_page = "Liste des Entreprises | StagePro";
+
+include 'includes/header.php';
 ?>
 
 <section>
@@ -15,7 +16,10 @@ $entreprises = $resultat->fetchAll();
       <h1>Annuaire des entreprises</h1>
       <p style="color: var(--text-muted);">Trouvez votre futur lieu de stage parmi nos partenaires.</p>
     </div>
-    <a href="formulaire-entreprise.php" class="btn-cta" style="font-size: 0.85rem;">+ Créer une entreprise</a>
+
+    <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['admin', 'pilote'])): ?>
+      <a href="formulaire-entreprise.php" class="btn-cta" style="font-size: 0.85rem;">+ Créer une entreprise</a>
+    <?php endif; ?>
   </div>
 </section>
 
