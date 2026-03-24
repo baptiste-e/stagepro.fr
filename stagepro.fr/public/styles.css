@@ -111,7 +111,6 @@ button:hover { background: var(--accent); }
 footer { 
   margin-top: 3rem; padding: 1rem; text-align: center; border-top: 1px solid var(--border); 
 }
-/* 1. On lie chaque classe à son image dans le dossier images */
 .card-etudiant { 
     background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/etudiant.jpg'); 
 }
@@ -123,7 +122,17 @@ footer {
 .card-admin { 
     background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/admin.jpg'); 
 }
+.card-data_analyst { 
+    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/data_analyst.jpg'); 
+}
 
+.card-dev_web { 
+    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/dev_web.jpg'); 
+}
+
+.card-UI_UX_designer { 
+    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/UI_UX_designer.jpg'); 
+}
 /* 2. On règle l'affichage pour que l'image soit propre */
 .card {
     background-size: cover;       /* L'image remplit le carré sans se déformer */

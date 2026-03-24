@@ -38,7 +38,7 @@
 
         <div class="form-group" style="grid-column: span 2;">
           <label for="etat">État de la recherche de stage</label>
-          <select id="etat" name="etat" required style="width: 100%; background: #000; color: var(--text-main); border: 1px solid var(--border); padding: 0.7rem; border-radius: 4px;">
+          <select id="etat" name="etat" required style="width: 100%; background: #ffffff; color: var(--text-main); border: 1px solid var(--border); padding: 0.7rem; border-radius: 4px;">
             <option value="">-- Sélectionner un statut --</option>
             <option value="non_commence">⚪ Non commencée</option>
             <option value="en_cours">🔵 En cours (recherche active)</option>
