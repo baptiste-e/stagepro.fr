@@ -1,9 +1,14 @@
 <?php
 require 'includes/auth.php';
+require 'includes/db.php';
 
 if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'pilote'])) {
     die('Accès refusé.');
 }
+
+$sql = "SELECT id, nom FROM entreprises ORDER BY nom ASC";
+$resultat = $pdo->query($sql);
+$entreprises = $resultat->fetchAll(PDO::FETCH_ASSOC);
 
 $titre_page = "Gestion Offre | StagePro";
 include 'includes/header.php';
@@ -33,8 +38,15 @@ include 'includes/header.php';
         </div>
 
         <div class="form-group">
-          <label for="entreprise">Entreprise</label>
-          <input type="text" id="entreprise" name="entreprise" placeholder="Nom de l'entreprise" required>
+          <label for="entreprise_id">Entreprise</label>
+          <select id="entreprise_id" name="entreprise_id" required>
+            <option value="">-- Sélectionnez une entreprise --</option>
+            <?php foreach ($entreprises as $entreprise): ?>
+              <option value="<?= (int) $entreprise['id'] ?>">
+                <?= htmlspecialchars($entreprise['nom']) ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
         </div>
 
         <div class="form-group">

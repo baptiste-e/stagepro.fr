@@ -12,28 +12,26 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $titre = trim($_POST['titre'] ?? '');
-$entrepriseNom = trim($_POST['entreprise'] ?? '');
+$entrepriseId = (int) ($_POST['entreprise_id'] ?? 0);
 $date = trim($_POST['date'] ?? '');
 $remuneration = trim($_POST['remuneration'] ?? '');
 $description = trim($_POST['description'] ?? '');
 
-if ($titre === '' || $entrepriseNom === '' || $date === '' || $description === '') {
+if ($titre === '' || $entrepriseId <= 0 || $date === '' || $description === '') {
     die('Veuillez remplir tous les champs obligatoires.');
 }
 
-// Recherche de l'entreprise par son nom
-$sqlEntreprise = "SELECT id FROM entreprises WHERE nom = :nom LIMIT 1";
+// Vérifier que l'entreprise existe bien
+$sqlEntreprise = "SELECT id FROM entreprises WHERE id = :id LIMIT 1";
 $stmtEntreprise = $pdo->prepare($sqlEntreprise);
-$stmtEntreprise->bindValue(':nom', $entrepriseNom, PDO::PARAM_STR);
+$stmtEntreprise->bindValue(':id', $entrepriseId, PDO::PARAM_INT);
 $stmtEntreprise->execute();
 
 $entreprise = $stmtEntreprise->fetch(PDO::FETCH_ASSOC);
 
 if (!$entreprise) {
-    die("Entreprise introuvable. Créez d'abord l'entreprise avant de publier une offre.");
+    die("Entreprise invalide.");
 }
-
-$entrepriseId = (int) $entreprise['id'];
 
 $sql = "INSERT INTO offres (entreprise_id, titre, description, remuneration, date_offre)
         VALUES (:entreprise_id, :titre, :description, :remuneration, :date_offre)";
@@ -42,7 +40,13 @@ $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':entreprise_id', $entrepriseId, PDO::PARAM_INT);
 $stmt->bindValue(':titre', $titre, PDO::PARAM_STR);
 $stmt->bindValue(':description', $description, PDO::PARAM_STR);
-$stmt->bindValue(':remuneration', $remuneration !== '' ? $remuneration : null);
+
+if ($remuneration === '') {
+    $stmt->bindValue(':remuneration', null, PDO::PARAM_NULL);
+} else {
+    $stmt->bindValue(':remuneration', $remuneration);
+}
+
 $stmt->bindValue(':date_offre', $date, PDO::PARAM_STR);
 
 $stmt->execute();
