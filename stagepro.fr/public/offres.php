@@ -20,7 +20,10 @@ include 'includes/header.php';
     </div>
     <div style="display: flex; gap: 1rem;">
         <a href="offres-statistiques.php" style="color: var(--accent-purple); text-decoration: none; font-size: 0.9rem; padding-top: 10px;">📊 Statistiques</a>
-        <a href="formulaire-offre.php" class="btn-cta" style="font-size: 0.85rem;">+ Publier une offre</a>
+
+        <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['admin', 'pilote'])): ?>
+          <a href="formulaire-offre.php" class="btn-cta" style="font-size: 0.85rem;">+ Publier une offre</a>
+        <?php endif; ?>
     </div>
   </div>
 </section>

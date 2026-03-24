@@ -1,6 +1,12 @@
-<?php 
-  $titre_page = "Gestion Offre | StagePro";
-  include 'includes/header.php'; 
+<?php
+require 'includes/auth.php';
+
+if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'pilote'])) {
+    die('Accès refusé.');
+}
+
+$titre_page = "Gestion Offre | StagePro";
+include 'includes/header.php';
 ?>
 
 <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">

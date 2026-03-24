@@ -7,6 +7,12 @@ require 'includes/db.php';
 
 $erreur = '';
 
+// Si déjà connecté → redirection
+if (isset($_SESSION['user'])) {
+    header('Location: index.php');
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $motDePasse = $_POST['mot_de_passe'] ?? '';
@@ -23,9 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
 
-        $utilisateur = $stmt->fetch();
+        $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($utilisateur && password_verify($motDePasse, $utilisateur['mot_de_passe'])) {
+
+            // 🔐 Création session utilisateur (IMPORTANT)
             $_SESSION['user'] = [
                 'id' => $utilisateur['id'],
                 'nom' => $utilisateur['nom'],
@@ -36,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             header('Location: index.php');
             exit;
+
         } else {
             $erreur = "Email ou mot de passe incorrect.";
         }
