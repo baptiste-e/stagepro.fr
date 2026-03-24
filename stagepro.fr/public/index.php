@@ -1,59 +1,133 @@
-<?php 
-  $titre_page = "Accueil | Plateforme de stages";
-  include 'includes/header.php'; 
-?>
+<?php
+// public/index.php
+session_start();
 
-<main>
-  <section class="hero">
-    <h1>Trouvez le stage qui propulsera votre carrière</h1>
-    <a href="offres.php" class="btn-cta">Explorer les offres</a>
-  </section>
+// 1. Imports de la configuration et des contrôleurs
+require_once '../config/Database.php';
+require_once '../app/Controllers/OffreController.php';
+require_once '../app/Controllers/EntrepriseController.php';
+require_once '../app/Controllers/EtudiantController.php';
+require_once '../app/Controllers/PiloteController.php';
+require_once '../app/Controllers/AdminController.php';
+require_once '../app/Controllers/AuthController.php';
+require_once '../app/Controllers/CandidatureController.php';
+require_once '../app/Controllers/WishlistController.php';
 
-  <section>
-    <h2>Espaces utilisateurs</h2>
-    <div class="container-espaces">
-        <article class="card card-etudiant">
-          <h3>Espace étudiant</h3>
-          <p>Consulter les offres, postuler et suivre vos candidatures.</p>
-          <a href="etudiant.php" class="lien-etendu"></a>
-        </article>
+// 2. Récupération des paramètres
+$page = $_GET['page'] ?? 'home';
+$id = (int)($_GET['id'] ?? 0);
 
-        <article class="card card-pilote">
-          <h3>Espace pilote</h3>
-          <p>Suivre les candidatures, consulter les offres et accompagner les étudiants.</p>
-          <a href="pilote.php" class="lien-etendu"></a>
-        </article>
+// 3. Aiguillage (Routing)
+switch ($page) {
+    case 'home':
+        $titre_page = "Accueil | StagePro";
+        include __DIR__ . '/../app/Views/layout/header.php';
+        include __DIR__ . '/../app/Views/home.php';
+        include __DIR__ . '/../app/Views/layout/footer.php';
+        break;
 
-        <article class="card card-admin">
-          <h3>Espace Admin</h3>
-          <p>Gestion des comptes, des entreprises et administration globale.</p>
-          <a href="admin.php" class="lien-etendu"></a>
-        </article>
-    </div>
-  </section>
+    // --- OFFRES ---
+    case 'offres':
+        (new OffreController())->index();
+        break;
+    case 'offre-detail':
+        (new OffreController())->show($id);
+        break;
+    case 'offre-create':
+    case 'offre-edit':   // <--- AJOUTE CETTE LIGNE
+    case 'offre-form': 
+        (new OffreController())->create($id); // On passe bien l'ID ici
+        break;
+    case 'offre-save': // <--- AJOUTE CETTE ROUTE
+        (new OffreController())->save();
+        break;
 
-<section>
-  <h2>Offres à la une</h2>
-  <div class="grid-offres">
-    <article class="card card-dev_web">
-      <h3>Développeur Web</h3>
-      <p>Entreprise : TechCorp</p>
-      <a href="offres.php" class="lien-etendu"></a>
-    </article>
+    case 'offre-delete': // <--- AJOUTE CECI
+        (new OffreController())->delete($id);
+        break;
 
-    <article class="card card-data_analyst">
-      <h3>Data Analyst</h3>
-      <p>Entreprise : DataFlow</p>
-      <a href="offres.php" class="lien-etendu"></a>
-    </article>
+    case 'offres-stats': // <--- AJOUTE CETTE ROUTE
+        (new OffreController())->stats();
+        break;
 
-    <article class="card card-UI_UX_designer">
-      <h3>UI/UX Designer</h3>
-      <p>Entreprise : CreativeLab</p>
-      <a href="offres.php" class="lien-etendu"></a>
-    </article>
-  </div>
-</section>
-</main>
+    // --- ENTREPRISES ---
+    case 'entreprises':
+        (new EntrepriseController())->index();
+        break;
+    case 'entreprise-detail':
+        (new EntrepriseController())->show($id);
+        break;
 
-<?php include 'includes/footer.php'; ?>
+    // --- ÉTUDIANTS (CORRIGÉ ICI) ---
+    case 'etudiants':
+        (new EtudiantController())->index();
+        break;
+    case 'etudiant-detail': // Route pour voir le profil
+        (new EtudiantController())->show($id);
+        break;
+    case 'etudiant-create': // Route pour le formulaire de création
+        (new EtudiantController())->create();
+        break;
+
+    // --- PILOTES ---
+    case 'pilotes':
+        (new PiloteController())->index();
+        break;
+    case 'pilote-detail':
+        (new PiloteController())->show($id);
+        break;
+    case 'pilote-create': // <--- AJOUTER
+        (new PiloteController())->create();
+        break;
+    case 'pilote-save':   // <--- AJOUTER (pour traiter l'envoi du formulaire)
+        (new PiloteController())->save();
+        break;
+
+    // --- ADMIN & CANDIDATURES ---
+    case 'admin':
+        (new AdminController())->dashboard();
+        break;
+    case 'candidatures':
+        (new CandidatureController())->index();
+        break;
+    case 'postuler':
+        (new CandidatureController())->postuler();
+        break;
+
+    // Dans public/index.php
+
+    // --- WISHLIST ---
+    case 'wishlist':
+        (new WishlistController())->index();
+        break;
+
+    case 'wishlist-add':    // <--- AJOUTER
+        (new WishlistController())->add();
+        break;
+
+    case 'wishlist-remove': // <--- AJOUTER
+        (new WishlistController())->remove();
+        break;
+
+
+    case 'mentions':
+        $titre_page = "Mentions Légales | StagePro";
+        include __DIR__ . '/../app/Views/layout/header.php';
+        include __DIR__ . '/../app/Views/layout/mentions.php';
+        include __DIR__ . '/../app/Views/layout/footer.php';
+        break;
+
+    case 'login':
+        (new AuthController())->login();
+        break;
+    case 'logout':
+        session_destroy();
+        header('Location: index.php?page=home');
+        exit;
+
+    default:
+        http_response_code(404);
+        echo "<h1>Page non trouvée</h1>";
+        echo "<p>La page demandée (<strong>" . htmlspecialchars($page) . "</strong>) n'existe pas.</p>";
+        break;
+}
