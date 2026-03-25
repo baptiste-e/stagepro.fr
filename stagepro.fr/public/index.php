@@ -76,6 +76,10 @@ switch ($page) {
         (new EtudiantController())->save();
         break;
 
+    case 'etudiant-delete': 
+        (new EtudiantController())->delete(); 
+        break;
+
     // --- PILOTES ---
     case 'pilotes':
         (new PiloteController())->index();

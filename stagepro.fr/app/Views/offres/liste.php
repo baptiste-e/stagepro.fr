@@ -15,7 +15,7 @@
         <a href="index.php?page=offres-stats" class="btn-cta">Consulter les statistiques</a>
         
         <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'], ['admin', 'pilote'])): ?>
-          <a href="index.php?page=offre-create" class="btn-cta" style="background: var(--accent-purple);">+ Publier une offre</a>
+          <a href="index.php?page=offre-create" class="btn-cta">+ Publier une offre</a>
         <?php endif; ?>
     </div>
   </div>
