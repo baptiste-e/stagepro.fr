@@ -17,6 +17,7 @@ body {
   font-family: sans-serif; /* Utilise la police système */
   line-height: 1.5;
   padding-bottom: 2rem;
+  background: red;
 }
 
 header {
