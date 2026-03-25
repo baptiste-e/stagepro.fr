@@ -35,7 +35,7 @@ switch ($page) {
         break;
     case 'offre-create':
     case 'offre-edit':
-    case 'offre-form':
+    case 'offre-form': 
         (new OffreController())->create($id);
         break;
     case 'offre-save':
@@ -72,10 +72,12 @@ switch ($page) {
     case 'etudiant-create':
         (new EtudiantController())->create();
         break;
+    case 'etudiant-edit':
+        (new EtudiantController())->edit($id);
+        break;
     case 'etudiant-save':
         (new EtudiantController())->save();
         break;
-
     case 'etudiant-delete': 
         (new EtudiantController())->delete(); 
         break;
@@ -90,10 +92,13 @@ switch ($page) {
     case 'pilote-create':
         (new PiloteController())->create();
         break;
+    case 'pilote-edit':
+        (new PiloteController())->edit($id);
+        break;
     case 'pilote-save':
         (new PiloteController())->save();
         break;
-    case 'pilote-delete':
+    case 'pilote-delete': 
         (new PiloteController())->delete();
         break;
 
@@ -119,6 +124,7 @@ switch ($page) {
         (new WishlistController())->remove();
         break;
 
+    // --- DIVERS ---
     case 'mentions':
         $titre_page = "Mentions Légales | StagePro";
         include __DIR__ . '/../app/Views/layout/header.php';

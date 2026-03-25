@@ -24,10 +24,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgb(255, 255, 255);
+  background: #fff;
   position: sticky;
   top: 0;
   z-index: 1000;
+  border-bottom: none;
 }
 
 header h1 {
@@ -148,4 +149,8 @@ footer {
     padding: 20px;
     text-decoration: none;
     color: #333;                  /* Couleur du texte en gris foncé/noir */
+}
+
+header.scrolled {
+  border-bottom: 2px solid var(--border);
 }
