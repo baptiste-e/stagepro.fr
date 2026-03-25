@@ -1,5 +1,4 @@
 <?php
-// app/Controllers/PiloteController.php
 require_once __DIR__ . '/../Models/Utilisateur.php';
 
 class PiloteController
@@ -23,14 +22,12 @@ class PiloteController
         $this->startSessionIfNeeded();
 
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], $roles, true)) {
-            header('Location: index.php?page=home');
-            exit;
+            die('Accès refusé.');
         }
     }
 
     public function index()
     {
-        // Seuls admin et pilote peuvent voir l'annuaire des pilotes
         $this->requireRoles(['admin', 'pilote']);
 
         $pilotes = $this->model->findByRole('pilote');
@@ -43,14 +40,12 @@ class PiloteController
 
     public function show($id)
     {
-        // Seuls admin et pilote peuvent voir le détail d'un pilote
         $this->requireRoles(['admin', 'pilote']);
 
         $pilote = $this->model->findById($id);
 
         if (!$pilote) {
-            header('Location: index.php?page=pilotes');
-            exit;
+            die('Pilote introuvable.');
         }
 
         $titre_page = "Profil Pilote : " . htmlspecialchars($pilote['nom']) . " | StagePro";
@@ -62,7 +57,6 @@ class PiloteController
 
     public function create()
     {
-        // Seul l'admin peut créer un pilote
         $this->requireRoles(['admin']);
 
         $titre_page = "Ajouter un pilote | StagePro";
