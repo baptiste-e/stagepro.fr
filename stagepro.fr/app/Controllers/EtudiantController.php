@@ -62,4 +62,48 @@ if (!isset($_SESSION['user']) || $role === 'etudiant') {
         include __DIR__ . '/../Views/layout/footer.php';
     }
 
+public function save() {
+        // Sécurité : Seul un admin ou un pilote peut créer/modifier un étudiant
+        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
+            header('Location: index.php?page=home');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?page=etudiants');
+            exit;
+        }
+
+        $id = (int)($_POST['id'] ?? 0);
+        $data = [
+            'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
+            'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
+            'email'   => htmlspecialchars($_POST['email'] ?? ''),
+            'role_id' => 3 // ID correspondant au rôle 'etudiant'
+        ];
+
+        // Hachage du mot de passe
+        if (!empty($_POST['password'])) {
+            $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        } elseif ($id === 0) {
+            // Mot de passe par défaut à la création si le champ est vide
+            $data['mot_de_passe'] = password_hash('Cesi2026!', PASSWORD_DEFAULT);
+        }
+
+        // Utilisation du modèle Utilisateur (qui a déjà create et update)
+        if ($id > 0) {
+            $this->model->update($id, $data);
+        } else {
+            $this->model->create($data);
+        }
+
+        header('Location: index.php?page=etudiants');
+        exit;
+    }
+
+
+
+
+
 } // Fin de la classe
