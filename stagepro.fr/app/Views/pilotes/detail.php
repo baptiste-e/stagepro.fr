@@ -30,7 +30,7 @@
         <li><strong style="color: var(--text-muted);">Centre :</strong><br> <?= htmlspecialchars($pilote['centre_nom'] ?? 'Non assigné') ?></li>
       </ul>
 
-      <?php if (isset($_SESSION['user']) && $_SESSION['user']['role_nom'] === 'admin'): ?>
+      <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
       <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
         <a href="index.php?page=pilote-edit&id=<?= (int)$pilote['id'] ?>" class="btn-cta" style="display: block; text-align: center; margin-bottom: 0.7rem; font-size: 0.85rem;">
             Modifier le compte
