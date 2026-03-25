@@ -1,4 +1,5 @@
 <?php
+// app/Controllers/PiloteController.php
 require_once __DIR__ . '/../Models/Utilisateur.php';
 
 class PiloteController
@@ -21,10 +22,12 @@ class PiloteController
     {
         $this->startSessionIfNeeded();
 
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], $roles, true)) {
-            session_unset();
-            session_destroy();
-            header('Location: index.php?page=login');
+        // On vérifie role_nom OU role (pour être compatible avec tes différentes versions)
+        $userRole = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+
+        if (!isset($_SESSION['user']) || !in_array(strtolower($userRole), $roles, true)) {
+            // On ne détruit pas la session, on redirige juste pour éviter de déconnecter l'user
+            header('Location: index.php?page=home&error=access_denied');
             exit;
         }
     }
@@ -64,9 +67,64 @@ class PiloteController
         $this->requireRoles(['admin']);
 
         $titre_page = "Ajouter un pilote | StagePro";
+        $modeEdition = false;
 
         include __DIR__ . '/../Views/layout/header.php';
         include __DIR__ . '/../Views/pilotes/formulaire.php';
         include __DIR__ . '/../Views/layout/footer.php';
+    }
+
+    /**
+     * AJOUT : Méthode save() pour traiter le formulaire
+     */
+    public function save()
+    {
+        $this->requireRoles(['admin']);
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?page=pilotes');
+            exit;
+        }
+
+        $id = (int)($_POST['id'] ?? 0);
+        $data = [
+            'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
+            'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
+            'email'   => htmlspecialchars($_POST['email'] ?? ''),
+            'role_id' => 2 // ID correspondant au rôle 'pilote'
+        ];
+
+        // Hachage du mot de passe si rempli
+        if (!empty($_POST['password'])) {
+            $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        } elseif ($id === 0) {
+            // Par défaut à la création
+            $data['mot_de_passe'] = password_hash('StagePro2026', PASSWORD_DEFAULT);
+        }
+
+        if ($id > 0) {
+            $this->model->update($id, $data);
+        } else {
+            $this->model->create($data);
+        }
+
+        header('Location: index.php?page=pilotes&status=success');
+        exit;
+    }
+
+    /**
+     * AJOUT : Méthode delete() pour compléter le contrôleur
+     */
+    public function delete()
+    {
+        $this->requireRoles(['admin']);
+
+        $id = (int)($_POST['id'] ?? 0);
+        if ($id > 0) {
+            $this->model->delete($id);
+        }
+
+        header('Location: index.php?page=pilotes&message=deleted');
+        exit;
     }
 }
