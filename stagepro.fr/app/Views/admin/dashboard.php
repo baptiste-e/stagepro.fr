@@ -1,0 +1,77 @@
+<section>
+  <h1>Console d'administration</h1>
+  <p style="color: var(--text-muted);">Gestion globale des utilisateurs, des entreprises et monitoring du système.</p>
+</section>
+
+<div class="container-espaces" style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+    <div class="card" style="border-left: 4px solid var(--accent-blue);">
+        <h3 style="font-size: 0.8rem; color: var(--text-muted);">ÉTUDIANTS</h3>
+        <p style="font-size: 1.8rem; font-weight: bold;"><?= number_format($stats['etudiants'] ?? 0) ?></p>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--accent-purple);">
+        <h3 style="font-size: 0.8rem; color: var(--text-muted);">PILOTES</h3>
+        <p style="font-size: 1.8rem; font-weight: bold;"><?= number_format($stats['pilotes'] ?? 0) ?></p>
+    </div>
+    <div class="card" style="border-left: 4px solid #fbbf24;">
+        <h3 style="font-size: 0.8rem; color: var(--text-muted);">ENTREPRISES</h3>
+        <p style="font-size: 1.8rem; font-weight: bold;"><?= number_format($stats['entreprises'] ?? 0) ?></p>
+    </div>
+    <div class="card" style="border-left: 4px solid #4ade80;">
+        <h3 style="font-size: 0.8rem; color: var(--text-muted);">OFFRES ACTIVES</h3>
+        <p style="font-size: 1.8rem; font-weight: bold;"><?= number_format($stats['offres'] ?? 0) ?></p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 3rem;">
+    <section>
+        <h2 style="margin-bottom: 1.5rem;">Actions de gestion</h2>
+        <div class="container-espaces" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <article class="card">
+                <h3>Utilisateurs</h3>
+                <p style="font-size: 0.8rem;">Gérer les comptes Étudiants et Pilotes.</p>
+                <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                    <a href="index.php?page=etudiants" class="btn-cta" style="font-size: 0.7rem;">Étudiants</a>
+                    <a href="index.php?page=pilotes" class="btn-cta" style="font-size: 0.7rem; background: var(--accent-purple);">Pilotes</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <h3>Entreprises</h3>
+                <p style="font-size: 0.8rem;">Valider les nouveaux partenaires ou éditer les fiches.</p>
+                <div style="margin-top: 1rem;">
+                    <a href="index.php?page=entreprises" class="btn-cta" style="font-size: 0.7rem;">Gérer le catalogue</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <h3>Offres de stage</h3>
+                <p style="font-size: 0.8rem;">Modération des offres et suivi des statistiques.</p>
+                <div style="margin-top: 1rem;">
+                    <a href="index.php?page=offres" class="btn-cta" style="font-size: 0.7rem;">Modérer</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <h3>Maintenance</h3>
+                <p style="font-size: 0.8rem;">Sauvegarde de la base de données et logs système.</p>
+                <div style="margin-top: 1rem;">
+                    <button style="font-size: 0.7rem; padding: 5px 10px; background: #ff4444; color: white; border:none; cursor:pointer; border-radius:4px;">Backup DB</button>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <aside style="background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+        <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent-blue);">Dernières alertes</h2>
+        <ul style="list-style: none; font-size: 0.85rem; line-height: 1.6; padding: 0;">
+            <li style="margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
+                <span style="color: #f87171;">●</span> <strong>Nouvelle Entreprise</strong> à valider : <em>CyberSoft</em>
+                <br><small style="color: var(--text-muted);">Il y a 12 min</small>
+            </li>
+            <li>
+                <span style="color: #4ade80;">●</span> Backup auto effectué avec succès.
+                <br><small style="color: var(--text-muted);">Ce matin à 04:00</small>
+            </li>
+        </ul>
+    </aside>
+</div>
