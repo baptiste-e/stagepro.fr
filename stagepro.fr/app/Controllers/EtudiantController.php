@@ -13,7 +13,6 @@ class EtudiantController {
      * Affiche l'annuaire des étudiants
      */
     public function index() {
-        // On récupère uniquement les utilisateurs ayant le rôle 'etudiant'
         $etudiants = $this->model->findByRole('etudiant');
         $titre_page = "Annuaire des étudiants | StagePro";
 
@@ -26,15 +25,11 @@ class EtudiantController {
      * Affiche le profil détaillé d'un étudiant
      */
     public function show($id) {
-        // On récupère l'étudiant précis par son ID
         $etudiant = $this->model->findById($id);
-
         if (!$etudiant) {
-            // Si l'étudiant n'existe pas, on redirige vers la liste
             header('Location: index.php?page=etudiants');
             exit;
         }
-
         $titre_page = "Profil de " . htmlspecialchars($etudiant['nom']) . " | StagePro";
 
         include __DIR__ . '/../Views/layout/header.php';
@@ -43,35 +38,53 @@ class EtudiantController {
     }
 
     /**
-     * Affiche le formulaire de création d'un étudiant
+     * Formulaire de création
      */
     public function create() {
-        // Sécurité optionnelle : vérifier si l'utilisateur est admin ou pilote
-        // On utilise ?? pour donner une valeur vide par défaut si la clé n'existe pas
-$role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
-
-if (!isset($_SESSION['user']) || $role === 'etudiant') {
-    header('Location: index.php?page=home');
-    exit;
-}
-
+        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+        if (!isset($_SESSION['user']) || $role === 'etudiant') {
+            header('Location: index.php?page=home');
+            exit;
+        }
         $titre_page = "Ajouter un étudiant | StagePro";
+        $modeEdition = false;
 
         include __DIR__ . '/../Views/layout/header.php';
         include __DIR__ . '/../Views/etudiants/formulaire.php'; 
         include __DIR__ . '/../Views/layout/footer.php';
     }
 
-public function save() {
-        // Sécurité : Seul un admin ou un pilote peut créer/modifier un étudiant
+    /**
+     * Formulaire de modification
+     */
+    public function edit($id) {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=home');
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $etudiant = $this->model->findById($id);
+        if (!$etudiant) {
             header('Location: index.php?page=etudiants');
+            exit;
+        }
+
+        $titre_page = "Modifier l'étudiant | StagePro";
+        $modeEdition = true;
+
+        include __DIR__ . '/../Views/layout/header.php';
+        include __DIR__ . '/../Views/etudiants/formulaire.php'; 
+        include __DIR__ . '/../Views/layout/footer.php';
+    }
+
+    /**
+     * Sauvegarde (Create ou Update)
+     */
+    public function save() {
+        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
+            header('Location: index.php?page=home');
             exit;
         }
 
@@ -80,18 +93,15 @@ public function save() {
             'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
             'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
             'email'   => htmlspecialchars($_POST['email'] ?? ''),
-            'role_id' => 3 // ID correspondant au rôle 'etudiant'
+            'role_id' => 3 
         ];
 
-        // Hachage du mot de passe
         if (!empty($_POST['password'])) {
             $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         } elseif ($id === 0) {
-            // Mot de passe par défaut à la création si le champ est vide
             $data['mot_de_passe'] = password_hash('Cesi2026!', PASSWORD_DEFAULT);
         }
 
-        // Utilisation du modèle Utilisateur (qui a déjà create et update)
         if ($id > 0) {
             $this->model->update($id, $data);
         } else {
@@ -102,8 +112,10 @@ public function save() {
         exit;
     }
 
-
-public function delete() {
+    /**
+     * Suppression
+     */
+    public function delete() {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             die("Accès refusé.");
@@ -113,10 +125,7 @@ public function delete() {
         if ($id > 0) {
             $this->model->delete($id);
         }
-
         header('Location: index.php?page=etudiants&message=deleted');
         exit;
     }
-
-
-} // Fin de la classe
+}
