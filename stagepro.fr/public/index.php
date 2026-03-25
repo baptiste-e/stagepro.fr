@@ -33,6 +33,9 @@ switch ($page) {
     case 'offre-detail':
         (new OffreController())->show($id);
         break;
+    case 'offres-stats': // <--- AJOUTÉ : Correction de l'erreur 404
+        (new OffreController())->stats();
+        break;
     case 'offre-create':
     case 'offre-edit':
     case 'offre-form':
@@ -58,10 +61,10 @@ switch ($page) {
     case 'entreprise-edit':
         (new EntrepriseController())->edit($id);
         break;
-    case 'entreprise-save':   // Pour la création (INSERT)
+    case 'entreprise-save':
         (new EntrepriseController())->save();
         break;
-    case 'entreprise-update': // Pour la modification (UPDATE)
+    case 'entreprise-update':
         (new EntrepriseController())->update();
         break;
     case 'entreprise-delete':

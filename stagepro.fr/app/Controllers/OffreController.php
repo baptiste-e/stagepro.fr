@@ -42,7 +42,7 @@ class OffreController {
             exit;
         }
 
-        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+        $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
         if ($role === 'etudiant') {
             die("Accès refusé : les étudiants ne peuvent pas gérer les offres.");
         }
@@ -61,7 +61,7 @@ class OffreController {
     }
 
     public function delete($id) {
-        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+        $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
         if (!isset($_SESSION['user']) || $role === 'etudiant') {
             die("Accès refusé.");
         }
@@ -129,29 +129,16 @@ class OffreController {
             exit;
         }
 
+        // Sécurité : Seul admin ou pilote voient les stats
+        $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
+        if ($role === 'etudiant') {
+            header('Location: index.php?page=home&error=access_denied');
+            exit;
+        }
+
         $statsLocalite = $this->model->getStatsByLocalite();
         $statsEntreprise = $this->model->getStatsByEntreprise();
         $totalOffres = (int)$this->model->countAll();
-
-        $topLocalite = !empty($statsLocalite) ? $statsLocalite[0] : null;
-        $topEntreprise = null;
-
-        if (!empty($statsEntreprise)) {
-            foreach ($statsEntreprise as $entreprise) {
-                if ((int)$entreprise['nb'] > 0) {
-                    $topEntreprise = $entreprise;
-                    break;
-                }
-            }
-        }
-
-        $nbLocalites = count($statsLocalite);
-        $nbEntreprisesAvecOffres = 0;
-        foreach ($statsEntreprise as $entreprise) {
-            if ((int)$entreprise['nb'] > 0) {
-                $nbEntreprisesAvecOffres++;
-            }
-        }
 
         $titre_page = "Statistiques des offres | StagePro";
 
