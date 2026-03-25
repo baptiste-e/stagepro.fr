@@ -68,6 +68,15 @@ switch ($page) {
     case 'etudiant-create':
         (new EtudiantController())->create();
         break;
+    case 'etudiant-edit':
+        (new EtudiantController())->edit($id);
+        break;
+    case 'etudiant-save':
+        (new EtudiantController())->save();
+        break;
+    case 'etudiant-delete':
+        (new EtudiantController())->delete();
+        break;
 
     case 'pilotes':
         (new PiloteController())->index();
@@ -77,6 +86,9 @@ switch ($page) {
         break;
     case 'pilote-create':
         (new PiloteController())->create();
+        break;
+    case 'pilote-edit':
+        (new PiloteController())->edit($id);
         break;
     case 'pilote-save':
         (new PiloteController())->save();
