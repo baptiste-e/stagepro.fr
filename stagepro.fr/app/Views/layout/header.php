@@ -20,8 +20,15 @@ if (session_status() === PHP_SESSION_NONE) {
           <li><a href="index.php?page=offres">Offres</a></li>
           <li><a href="index.php?page=candidatures">Candidatures</a></li>
           <li><a href="index.php?page=entreprises">Entreprises</a></li>
-          <li><a href="index.php?page=etudiants">Étudiants</a></li>
-          <li><a href="index.php?page=pilotes">Pilotes</a></li>
+
+          <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['admin', 'pilote'], true)): ?>
+              <li><a href="index.php?page=etudiants">Étudiants</a></li>
+          <?php endif; ?>
+
+          <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['admin', 'pilote'], true)): ?>
+              <li><a href="index.php?page=pilotes">Pilotes</a></li>
+          <?php endif; ?>
+
           <li><a href="index.php?page=wishlist">Wish-List</a></li>
 
           <?php if (isset($_SESSION['user'])): ?>

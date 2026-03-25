@@ -32,11 +32,11 @@
 
       <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
       <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-        <a href="index.php?page=pilote-edit&id=<?= (int)$pilote['id'] ?>" class="btn-cta" style="display: block; text-align: center; margin-bottom: 0.7rem; font-size: 0.85rem;">
+        <a href="index.php?page=pilote-edit&id=<?= (int) $pilote['id'] ?>" class="btn-cta" style="display: block; text-align: center; margin-bottom: 0.7rem; font-size: 0.85rem;">
             Modifier le compte
         </a>
         <form action="index.php?page=pilote-delete" method="post" onsubmit="return confirm('Supprimer ce pilote ?');">
-            <input type="hidden" name="id" value="<?= (int)$pilote['id'] ?>">
+            <input type="hidden" name="id" value="<?= (int) $pilote['id'] ?>">
             <button type="submit" style="width: 100%; background: transparent; border: 1px solid #ff4444; color: #ff4444; font-size: 0.85rem; cursor: pointer; padding: 0.5rem;">
                 Supprimer le pilote
             </button>
@@ -46,7 +46,7 @@
     </section>
   </aside>
 
-  <main-content>
+  <div>
     <section>
       <h2 style="margin-bottom: 1.5rem;">Candidatures des étudiants rattachés</h2>
       
@@ -60,6 +60,6 @@
           </article>
       </div>
     </section>
-  </main-content>
+  </div>
 
 </div>
