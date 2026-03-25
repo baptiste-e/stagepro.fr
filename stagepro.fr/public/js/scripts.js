@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.log("Menu fermé");
             }
+    
         });
     }
 
@@ -33,4 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Formulaire soumis : validation en cours...");
         });
     });
+
+        const header = document.querySelector('header');
+
+    if (header) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 0) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    }
 });
