@@ -103,7 +103,20 @@ public function save() {
     }
 
 
+public function delete() {
+        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
+            die("Accès refusé.");
+        }
 
+        $id = (int)($_POST['id'] ?? 0);
+        if ($id > 0) {
+            $this->model->delete($id);
+        }
+
+        header('Location: index.php?page=etudiants&message=deleted');
+        exit;
+    }
 
 
 } // Fin de la classe
