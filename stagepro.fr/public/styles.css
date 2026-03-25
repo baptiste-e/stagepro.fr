@@ -17,7 +17,6 @@ body {
   font-family: sans-serif; /* Utilise la police système */
   line-height: 1.5;
   padding-bottom: 2rem;
-  background: red;
 }
 
 header {
@@ -25,7 +24,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgb(4, 255, 0);
+  background: rgb(255, 255, 255);
   position: sticky;
   top: 0;
   z-index: 1000;
