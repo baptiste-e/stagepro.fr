@@ -1,8 +1,6 @@
 <?php
-// public/index.php
 session_start();
 
-// 1. Imports de la configuration et des contrôleurs
 require_once '../config/Database.php';
 require_once '../app/Controllers/OffreController.php';
 require_once '../app/Controllers/EntrepriseController.php';
@@ -13,11 +11,9 @@ require_once '../app/Controllers/AuthController.php';
 require_once '../app/Controllers/CandidatureController.php';
 require_once '../app/Controllers/WishlistController.php';
 
-// 2. Récupération des paramètres
 $page = $_GET['page'] ?? 'home';
 $id = (int)($_GET['id'] ?? 0);
 
-// 3. Aiguillage (Routing)
 switch ($page) {
     case 'home':
         $titre_page = "Accueil | StagePro";
@@ -26,7 +22,6 @@ switch ($page) {
         include __DIR__ . '/../app/Views/layout/footer.php';
         break;
 
-    // --- OFFRES ---
     case 'offres':
         (new OffreController())->index();
         break;
@@ -48,21 +43,22 @@ switch ($page) {
         (new OffreController())->stats();
         break;
 
-    // --- ENTREPRISES ---
     case 'entreprises':
         (new EntrepriseController())->index();
         break;
     case 'entreprise-detail':
         (new EntrepriseController())->show($id);
         break;
-    case 'entreprise-create':
-        (new EntrepriseController())->create();
+    case 'entreprise-edit':
+        (new EntrepriseController())->edit($id);
         break;
-    case 'entreprise-save':
-        (new EntrepriseController())->save();
+    case 'entreprise-update':
+        (new EntrepriseController())->update();
+        break;
+    case 'entreprise-delete':
+        (new EntrepriseController())->delete();
         break;
 
-    // --- ÉTUDIANTS ---
     case 'etudiants':
         (new EtudiantController())->index();
         break;
@@ -72,15 +68,7 @@ switch ($page) {
     case 'etudiant-create':
         (new EtudiantController())->create();
         break;
-    case 'etudiant-save':
-        (new EtudiantController())->save();
-        break;
 
-    case 'etudiant-delete': 
-        (new EtudiantController())->delete(); 
-        break;
-
-    // --- PILOTES ---
     case 'pilotes':
         (new PiloteController())->index();
         break;
@@ -97,7 +85,6 @@ switch ($page) {
         (new PiloteController())->delete();
         break;
 
-    // --- ADMIN & CANDIDATURES ---
     case 'admin':
         (new AdminController())->dashboard();
         break;
@@ -108,7 +95,6 @@ switch ($page) {
         (new CandidatureController())->postuler();
         break;
 
-    // --- WISHLIST ---
     case 'wishlist':
         (new WishlistController())->index();
         break;
