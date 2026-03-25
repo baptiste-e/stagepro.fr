@@ -39,13 +39,12 @@ class Offre {
             $params['competences'] = '%' . $filters['competences'] . '%';
         }
 
-        if ($filters['remuneration'] !== '' && $filters['remuneration'] !== null) {
+        if (isset($filters['remuneration']) && $filters['remuneration'] !== '') {
             $sql .= " AND offres.remuneration >= :remuneration";
             $params['remuneration'] = (float)$filters['remuneration'];
         }
 
         $sql .= " ORDER BY offres.id DESC";
-
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
 
@@ -80,35 +79,21 @@ class Offre {
                 remuneration = :remuneration, 
                 nb_places = :nb_places, 
                 entreprise_id = :id_entreprise 
-                WHERE id = :id";
+                WHERE id = :target_id";
         
-        $data['id'] = $id;
+        $data['target_id'] = $id; // Changé pour éviter conflit avec id_entreprise
         
         $stmt = $this->db->prepare($sql);
         return $stmt->execute($data);
     }
 
     public function countAll() {
-        return $this->db->query("SELECT COUNT(*) FROM offres")->fetchColumn();
+        return (int)$this->db->query("SELECT COUNT(*) FROM offres")->fetchColumn();
     }
 
     public function delete($id) {
         $sql = "DELETE FROM offres WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute(['id' => $id]);
-    }
-
-    public function getStatsByLocalite() {
-        $sql = "SELECT localite, COUNT(*) as nb FROM offres GROUP BY localite ORDER BY nb DESC";
-        return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function getStatsByEntreprise() {
-        $sql = "SELECT e.nom, COUNT(o.id) as nb 
-                FROM entreprises e 
-                LEFT JOIN offres o ON e.id = o.entreprise_id 
-                GROUP BY e.id 
-                ORDER BY nb DESC";
-        return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 }
