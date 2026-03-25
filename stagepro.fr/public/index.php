@@ -34,19 +34,17 @@ switch ($page) {
         (new OffreController())->show($id);
         break;
     case 'offre-create':
-    case 'offre-edit':   // <--- AJOUTE CETTE LIGNE
+    case 'offre-edit':
     case 'offre-form': 
-        (new OffreController())->create($id); // On passe bien l'ID ici
+        (new OffreController())->create($id);
         break;
-    case 'offre-save': // <--- AJOUTE CETTE ROUTE
+    case 'offre-save':
         (new OffreController())->save();
         break;
-
-    case 'offre-delete': // <--- AJOUTE CECI
+    case 'offre-delete':
         (new OffreController())->delete($id);
         break;
-
-    case 'offres-stats': // <--- AJOUTE CETTE ROUTE
+    case 'offres-stats':
         (new OffreController())->stats();
         break;
 
@@ -57,22 +55,29 @@ switch ($page) {
     case 'entreprise-detail':
         (new EntrepriseController())->show($id);
         break;
+    case 'entreprise-create':
+        (new EntrepriseController())->create();
+        break;
+    case 'entreprise-save':
+        (new EntrepriseController())->save();
+        break;
 
-    // --- ÉTUDIANTS (CORRIGÉ ICI) ---
+    // --- ÉTUDIANTS ---
     case 'etudiants':
         (new EtudiantController())->index();
         break;
-    case 'etudiant-detail': // Route pour voir le profil
+    case 'etudiant-detail':
         (new EtudiantController())->show($id);
         break;
-    case 'etudiant-create': // Route pour le formulaire de création
+    case 'etudiant-create':
         (new EtudiantController())->create();
         break;
-
-    case 'etudiant-save': // <--- AJOUTE CETTE ROUTE
+    case 'etudiant-edit':
+        (new EtudiantController())->edit($id);
+        break;
+    case 'etudiant-save':
         (new EtudiantController())->save();
         break;
-
     case 'etudiant-delete': 
         (new EtudiantController())->delete(); 
         break;
@@ -84,15 +89,17 @@ switch ($page) {
     case 'pilote-detail':
         (new PiloteController())->show($id);
         break;
-    case 'pilote-create': // <--- AJOUTER
+    case 'pilote-create':
         (new PiloteController())->create();
         break;
-    case 'pilote-save':   // <--- AJOUTER (pour traiter l'envoi du formulaire)
+    case 'pilote-edit':
+        (new PiloteController())->edit($id);
+        break;
+    case 'pilote-save':
         (new PiloteController())->save();
         break;
-
     case 'pilote-delete': 
-        (new PiloteController())->delete(); // Pas besoin de passer l'ID ici car on va le récupérer en POST
+        (new PiloteController())->delete();
         break;
 
     // --- ADMIN & CANDIDATURES ---
@@ -106,22 +113,18 @@ switch ($page) {
         (new CandidatureController())->postuler();
         break;
 
-    // Dans public/index.php
-
     // --- WISHLIST ---
     case 'wishlist':
         (new WishlistController())->index();
         break;
-
-    case 'wishlist-add':    // <--- AJOUTER
+    case 'wishlist-add':
         (new WishlistController())->add();
         break;
-
-    case 'wishlist-remove': // <--- AJOUTER
+    case 'wishlist-remove':
         (new WishlistController())->remove();
         break;
 
-
+    // --- DIVERS ---
     case 'mentions':
         $titre_page = "Mentions Légales | StagePro";
         include __DIR__ . '/../app/Views/layout/header.php';
