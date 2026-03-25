@@ -1,3 +1,4 @@
+console.log("JS chargé");
 /* --- script.js : Gestion de l'interactivité --- */
 
 document.addEventListener('DOMContentLoaded', () => {
