@@ -13,7 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
 </head>
 <body>
   <header>
-    <h1>StagePro</h1>
+    <h1><a href="index.php?page=home">StagePro</a></h1>
     <nav aria-label="Navigation principale">
       <ul>
           <li><a href="index.php?page=home">Accueil</a></li>

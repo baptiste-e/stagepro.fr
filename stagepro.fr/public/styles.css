@@ -154,3 +154,8 @@ footer {
 header.scrolled {
   border-bottom: 2px solid var(--border);
 }
+
+header h1 a {
+  text-decoration: none;
+  color: var(--accent);
+}
