@@ -42,4 +42,12 @@ class Entreprise
             ':telephone_contact' => $telephone !== '' ? $telephone : null
         ]);
     }
+
+    public function countAll(): int 
+    {
+        $sql = "SELECT COUNT(*) as total FROM entreprises";
+        $stmt = $this->pdo->query($sql); // Corrigé : pdo au lieu de db
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)($result['total'] ?? 0);
+    }
 }

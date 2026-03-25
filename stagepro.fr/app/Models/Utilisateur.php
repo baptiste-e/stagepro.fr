@@ -26,7 +26,7 @@ class Utilisateur {
                 WHERE r.nom = :role";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['role' => $roleNom]);
-        return $stmt->fetchColumn();
+        return (int)$stmt->fetchColumn();
     }
 
     public function findById($id) {
@@ -56,6 +56,7 @@ class Utilisateur {
     public function update($id, $data) {
         $sql = "UPDATE utilisateurs 
                 SET nom = :nom, prenom = :prenom, email = :email, role_id = :role_id";
+        
         $params = [
             'nom'     => $data['nom'],
             'prenom'  => $data['prenom'],
@@ -74,7 +75,13 @@ class Utilisateur {
         return $stmt->execute($params);
     }
 
-    public function findByEmail($email) {
+    public function delete($id) {
+        $sql = "DELETE FROM utilisateurs WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
+
+public function findByEmail($email) {
         $sql = "SELECT u.*, r.nom AS role_nom
                 FROM utilisateurs u
                 JOIN roles r ON u.role_id = r.id
@@ -84,9 +91,4 @@ class Utilisateur {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function delete($id) {
-        $sql = "DELETE FROM utilisateurs WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute(['id' => $id]);
-    }
 }
