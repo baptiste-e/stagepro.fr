@@ -69,6 +69,14 @@ switch ($page) {
         (new EtudiantController())->create();
         break;
 
+    case 'etudiant-save': // <--- AJOUTE CETTE ROUTE
+        (new EtudiantController())->save();
+        break;
+
+    case 'etudiant-delete': 
+        (new EtudiantController())->delete(); 
+        break;
+
     // --- PILOTES ---
     case 'pilotes':
         (new PiloteController())->index();
