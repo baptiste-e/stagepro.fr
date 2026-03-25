@@ -21,12 +21,14 @@ body {
 
 /* --- Header Simple --- */
 header {
-  border-bottom: 2px solid var(--border);
   padding: 1rem 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 header h1 {

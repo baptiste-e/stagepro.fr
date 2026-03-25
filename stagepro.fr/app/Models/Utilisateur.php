@@ -9,53 +9,71 @@ class Utilisateur {
         $this->db = Database::getConnection();
     }
 
-    /**
-     * Récupère les utilisateurs par rôle
-     */
     public function findByRole($roleNom) {
-        $sql = "SELECT u.* FROM utilisateurs u
+        $sql = "SELECT u.*, r.nom AS role_nom FROM utilisateurs u
                 JOIN roles r ON u.role_id = r.id 
                 WHERE r.nom = :role";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['role' => $roleNom]);
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère un utilisateur précis par son ID
-     */
     public function findById($id) {
         $sql = "SELECT u.*, r.nom AS role_nom FROM utilisateurs u
                 JOIN roles r ON u.role_id = r.id
                 WHERE u.id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $id]);
-        return $stmt->fetch();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Compte le nombre d'utilisateurs par rôle
-     */
-    public function countByRole($roleNom) {
-        $sql = "SELECT COUNT(*) FROM utilisateurs 
-                JOIN roles ON utilisateurs.role_id = roles.id 
-                WHERE roles.nom = :role";
+    public function create($data) {
+        // Correction : Utilisation de la colonne 'mot_de_passe'
+        $sql = "INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role_id) 
+                VALUES (:nom, :prenom, :email, :mdp, :role_id)";
+        
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['role' => $roleNom]);
-        return $stmt->fetchColumn();
+        return $stmt->execute([
+            'nom'     => $data['nom'],
+            'prenom'  => $data['prenom'],
+            'email'   => $data['email'],
+            'mdp'     => $data['mot_de_passe'],
+            'role_id' => $data['role_id']
+        ]);
     }
 
-    /**
-     * Trouve un utilisateur par email avec son rôle (pour le Login)
-     */
+    public function update($id, $data) {
+        $sql = "UPDATE utilisateurs SET nom = :nom, prenom = :prenom, email = :email, role_id = :role_id";
+        $params = [
+            'nom'     => $data['nom'],
+            'prenom'  => $data['prenom'],
+            'email'   => $data['email'],
+            'role_id' => $data['role_id'],
+            'id'      => $id
+        ];
+
+        if (!empty($data['mot_de_passe'])) {
+            $sql .= ", mot_de_passe = :mdp";
+            $params['mdp'] = $data['mot_de_passe'];
+        }
+
+        $sql .= " WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
+    }
+
     public function findByEmail($email) {
-        $sql = "SELECT u.*, r.nom AS role_nom
-                FROM utilisateurs u
+        $sql = "SELECT u.*, r.nom AS role_nom FROM utilisateurs u
                 JOIN roles r ON u.role_id = r.id
                 WHERE u.email = :email";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['email' => $email]);
-        return $stmt->fetch();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-} // <--- L'accolade de fin de classe doit être ICI, après la dernière méthode.
+public function delete($id) {
+        $sql = "DELETE FROM utilisateurs WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
+}

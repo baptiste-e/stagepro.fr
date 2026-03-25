@@ -83,6 +83,10 @@ switch ($page) {
         (new PiloteController())->save();
         break;
 
+    case 'pilote-delete': 
+        (new PiloteController())->delete(); // Pas besoin de passer l'ID ici car on va le récupérer en POST
+        break;
+
     // --- ADMIN & CANDIDATURES ---
     case 'admin':
         (new AdminController())->dashboard();
