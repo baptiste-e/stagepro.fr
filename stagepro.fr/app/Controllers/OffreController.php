@@ -1,6 +1,4 @@
 <?php
-// app/Controllers/OffreController.php
-
 require_once __DIR__ . '/../Models/Offre.php';
 require_once __DIR__ . '/../Models/Entreprise.php';
 
@@ -11,11 +9,23 @@ class OffreController {
         $this->model = new Offre();
     }
 
-    /**
-     * Liste globale des offres
-     */
     public function index() {
-        $offres = $this->model->findAll();
+        $filters = [
+            'titre' => trim($_GET['titre'] ?? ''),
+            'entreprise' => trim($_GET['entreprise'] ?? ''),
+            'competences' => trim($_GET['competences'] ?? ''),
+            'remuneration' => trim($_GET['remuneration'] ?? '')
+        ];
+
+        $hasFilters = false;
+        foreach ($filters as $value) {
+            if ($value !== '') {
+                $hasFilters = true;
+                break;
+            }
+        }
+
+        $offres = $hasFilters ? $this->model->search($filters) : $this->model->findAll();
         $titre_page = "Offres de stage | StagePro";
 
         include __DIR__ . '/../Views/layout/header.php';
@@ -23,9 +33,6 @@ class OffreController {
         include __DIR__ . '/../Views/layout/footer.php';
     }
 
-    /**
-     * Formulaire Créer/Modifier
-     */
     public function create($id = 0) {
         if (!isset($_SESSION['user'])) {
             header('Location: index.php?page=login');
@@ -50,13 +57,14 @@ class OffreController {
         include __DIR__ . '/../Views/layout/footer.php';
     }
 
-    /**
-     * Suppression d'une offre
-     */
     public function delete($id) {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
         if (!isset($_SESSION['user']) || $role === 'etudiant') {
             die("Accès refusé.");
+        }
+
+        if ($id <= 0) {
+            $id = (int)($_POST['id'] ?? 0);
         }
 
         if ($id > 0) {
@@ -67,9 +75,6 @@ class OffreController {
         exit;
     }
 
-    /**
-     * Enregistrement (Save)
-     */
     public function save() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php?page=offres');
@@ -78,13 +83,13 @@ class OffreController {
 
         $id = (int)($_POST['id'] ?? 0);
         $data = [
-            'titre'         => htmlspecialchars($_POST['titre'] ?? ''),
-            'description'   => htmlspecialchars($_POST['description'] ?? ''),
-            'competences'   => htmlspecialchars($_POST['competences'] ?? ''),
-            'localite'      => htmlspecialchars($_POST['localite'] ?? ''),
-            'duree'         => htmlspecialchars($_POST['duree'] ?? ''),
-            'remuneration'  => htmlspecialchars($_POST['remuneration'] ?? ''),
-            'nb_places'     => (int)($_POST['nb_places'] ?? 1),
+            'titre' => htmlspecialchars($_POST['titre'] ?? ''),
+            'description' => htmlspecialchars($_POST['description'] ?? ''),
+            'competences' => htmlspecialchars($_POST['competences'] ?? ''),
+            'localite' => htmlspecialchars($_POST['localite'] ?? ''),
+            'duree' => htmlspecialchars($_POST['duree'] ?? ''),
+            'remuneration' => htmlspecialchars($_POST['remuneration'] ?? ''),
+            'nb_places' => (int)($_POST['nb_places'] ?? 1),
             'id_entreprise' => (int)($_POST['id_entreprise'] ?? 0)
         ];
 
@@ -102,12 +107,11 @@ class OffreController {
         exit;
     }
 
-    /**
-     * Détail d'une offre
-     */
     public function show($id) {
         $offre = $this->model->findById($id);
-        if (!$offre) { die("Offre introuvable."); }
+        if (!$offre) {
+            die("Offre introuvable.");
+        }
 
         $titre_page = htmlspecialchars($offre['titre']) . " | StagePro";
 
@@ -116,13 +120,10 @@ class OffreController {
         include __DIR__ . '/../Views/layout/footer.php';
     }
 
-    /**
-     * Statistiques (La version complète !)
-     */
     public function stats() {
-        if (!isset($_SESSION['user'])) { 
-            header('Location: index.php?page=login'); 
-            exit; 
+        if (!isset($_SESSION['user'])) {
+            header('Location: index.php?page=login');
+            exit;
         }
 
         $statsLocalite = $this->model->getStatsByLocalite();
@@ -132,7 +133,7 @@ class OffreController {
         $titre_page = "Statistiques des offres | StagePro";
         
         include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/offres/stats.php'; 
+        include __DIR__ . '/../Views/offres/stats.php';
         include __DIR__ . '/../Views/layout/footer.php';
     }
 }

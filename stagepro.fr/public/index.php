@@ -6,7 +6,7 @@ session_start();
 require_once '../config/Database.php';
 require_once '../app/Controllers/OffreController.php';
 require_once '../app/Controllers/EntrepriseController.php';
-require_once '../app/Controllers/EtudiantController.php'; // <--- Vérifie que ce fichier existe bien ici
+require_once '../app/Controllers/EtudiantController.php';
 require_once '../app/Controllers/PiloteController.php';
 require_once '../app/Controllers/AdminController.php';
 require_once '../app/Controllers/AuthController.php';
@@ -54,6 +54,12 @@ switch ($page) {
         break;
     case 'entreprise-detail':
         (new EntrepriseController())->show($id);
+        break;
+    case 'entreprise-create':
+        (new EntrepriseController())->create();
+        break;
+    case 'entreprise-save':
+        (new EntrepriseController())->save();
         break;
 
     // --- ÉTUDIANTS ---

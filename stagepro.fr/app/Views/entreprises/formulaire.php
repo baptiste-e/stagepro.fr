@@ -1,21 +1,10 @@
-<?php
-require 'includes/auth.php';
-
-if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'pilote'])) {
-    die('Accès refusé.');
-}
-
-$titre_page = "Créer une entreprise | StagePro";
-include 'includes/header.php';
-?>
-
 <section>
   <h1>Créer une entreprise</h1>
   <p style="color: var(--text-muted);">Ajoutez une nouvelle entreprise partenaire.</p>
 </section>
 
 <section style="margin-top: 2rem;">
-  <form action="traitement-entreprise.php" method="post" style="max-width: 800px; background: var(--surface); padding: 2rem; border-radius: 8px; border: 1px solid var(--border);">
+  <form action="index.php?page=entreprise-save" method="post" style="max-width: 800px; background: var(--surface); padding: 2rem; border-radius: 8px; border: 1px solid var(--border);">
     
     <div class="form-group">
       <label for="nom">Nom</label>
@@ -37,11 +26,12 @@ include 'includes/header.php';
       <input type="text" id="telephone_contact" name="telephone_contact">
     </div>
 
-    <div style="margin-top: 2rem;">
+    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
       <button type="submit">Enregistrer</button>
+      <a href="index.php?page=entreprises" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; padding-top: 0.5rem;">
+        Annuler
+      </a>
     </div>
 
   </form>
 </section>
-
-<?php include 'includes/footer.php'; ?>

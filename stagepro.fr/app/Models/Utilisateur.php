@@ -1,5 +1,4 @@
 <?php
-// app/Models/Utilisateur.php
 require_once __DIR__ . '/../../config/Database.php';
 
 class Utilisateur {
@@ -10,16 +9,29 @@ class Utilisateur {
     }
 
     public function findByRole($roleNom) {
-        $sql = "SELECT u.*, r.nom AS role_nom FROM utilisateurs u
-                JOIN roles r ON u.role_id = r.id 
-                WHERE r.nom = :role";
+        $sql = "SELECT u.*, r.nom AS role_nom
+                FROM utilisateurs u
+                JOIN roles r ON u.role_id = r.id
+                WHERE r.nom = :role
+                ORDER BY u.nom, u.prenom";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['role' => $roleNom]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function countByRole($roleNom) {
+        $sql = "SELECT COUNT(*) 
+                FROM utilisateurs u
+                JOIN roles r ON u.role_id = r.id
+                WHERE r.nom = :role";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['role' => $roleNom]);
+        return $stmt->fetchColumn();
+    }
+
     public function findById($id) {
-        $sql = "SELECT u.*, r.nom AS role_nom FROM utilisateurs u
+        $sql = "SELECT u.*, r.nom AS role_nom
+                FROM utilisateurs u
                 JOIN roles r ON u.role_id = r.id
                 WHERE u.id = :id";
         $stmt = $this->db->prepare($sql);
@@ -28,7 +40,6 @@ class Utilisateur {
     }
 
     public function create($data) {
-        // Correction : Utilisation de la colonne 'mot_de_passe'
         $sql = "INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role_id) 
                 VALUES (:nom, :prenom, :email, :mdp, :role_id)";
         
@@ -43,7 +54,8 @@ class Utilisateur {
     }
 
     public function update($id, $data) {
-        $sql = "UPDATE utilisateurs SET nom = :nom, prenom = :prenom, email = :email, role_id = :role_id";
+        $sql = "UPDATE utilisateurs 
+                SET nom = :nom, prenom = :prenom, email = :email, role_id = :role_id";
         $params = [
             'nom'     => $data['nom'],
             'prenom'  => $data['prenom'],
@@ -63,7 +75,8 @@ class Utilisateur {
     }
 
     public function findByEmail($email) {
-        $sql = "SELECT u.*, r.nom AS role_nom FROM utilisateurs u
+        $sql = "SELECT u.*, r.nom AS role_nom
+                FROM utilisateurs u
                 JOIN roles r ON u.role_id = r.id
                 WHERE u.email = :email";
         $stmt = $this->db->prepare($sql);
@@ -71,7 +84,7 @@ class Utilisateur {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-public function delete($id) {
+    public function delete($id) {
         $sql = "DELETE FROM utilisateurs WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute(['id' => $id]);
