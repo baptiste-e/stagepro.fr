@@ -25,7 +25,10 @@ class OffreController {
             }
         }
 
-        $offres = $hasFilters ? $this->model->search($filters) : $this->model->findAll();
+        $offres = $hasFilters && method_exists($this->model, 'search')
+            ? $this->model->search($filters)
+            : $this->model->findAll();
+
         $titre_page = "Offres de stage | StagePro";
 
         include __DIR__ . '/../Views/layout/header.php';
@@ -46,7 +49,7 @@ class OffreController {
 
         $modeEdition = ($id > 0);
         $offre = $modeEdition ? $this->model->findById($id) : null;
-        
+
         $entrepriseModel = new Entreprise();
         $entreprises = $entrepriseModel->findAll();
 
@@ -83,13 +86,13 @@ class OffreController {
 
         $id = (int)($_POST['id'] ?? 0);
         $data = [
-            'titre' => htmlspecialchars($_POST['titre'] ?? ''),
-            'description' => htmlspecialchars($_POST['description'] ?? ''),
-            'competences' => htmlspecialchars($_POST['competences'] ?? ''),
-            'localite' => htmlspecialchars($_POST['localite'] ?? ''),
-            'duree' => htmlspecialchars($_POST['duree'] ?? ''),
-            'remuneration' => htmlspecialchars($_POST['remuneration'] ?? ''),
-            'nb_places' => (int)($_POST['nb_places'] ?? 1),
+            'titre'         => htmlspecialchars($_POST['titre'] ?? ''),
+            'description'   => htmlspecialchars($_POST['description'] ?? ''),
+            'competences'   => htmlspecialchars($_POST['competences'] ?? ''),
+            'localite'      => htmlspecialchars($_POST['localite'] ?? ''),
+            'duree'         => htmlspecialchars($_POST['duree'] ?? ''),
+            'remuneration'  => htmlspecialchars($_POST['remuneration'] ?? ''),
+            'nb_places'     => (int)($_POST['nb_places'] ?? 1),
             'id_entreprise' => (int)($_POST['id_entreprise'] ?? 0)
         ];
 
@@ -128,10 +131,30 @@ class OffreController {
 
         $statsLocalite = $this->model->getStatsByLocalite();
         $statsEntreprise = $this->model->getStatsByEntreprise();
-        $totalOffres = $this->model->countAll();
+        $totalOffres = (int)$this->model->countAll();
+
+        $topLocalite = !empty($statsLocalite) ? $statsLocalite[0] : null;
+        $topEntreprise = null;
+
+        if (!empty($statsEntreprise)) {
+            foreach ($statsEntreprise as $entreprise) {
+                if ((int)$entreprise['nb'] > 0) {
+                    $topEntreprise = $entreprise;
+                    break;
+                }
+            }
+        }
+
+        $nbLocalites = count($statsLocalite);
+        $nbEntreprisesAvecOffres = 0;
+        foreach ($statsEntreprise as $entreprise) {
+            if ((int)$entreprise['nb'] > 0) {
+                $nbEntreprisesAvecOffres++;
+            }
+        }
 
         $titre_page = "Statistiques des offres | StagePro";
-        
+
         include __DIR__ . '/../Views/layout/header.php';
         include __DIR__ . '/../Views/offres/stats.php';
         include __DIR__ . '/../Views/layout/footer.php';
