@@ -10,7 +10,22 @@ class Candidature {
     }
 
     /**
-     * Récupère les candidatures d'un étudiant spécifique
+     * Récupère une candidature avec tous les détails de l'offre associée
+     */
+    public function findByIdFull($id) {
+        $sql = "SELECT c.*, o.titre AS offre_titre, o.description AS offre_desc, 
+                       o.localite, o.remuneration, e.nom AS entreprise_nom
+                FROM candidatures c
+                JOIN offres o ON c.offre_id = o.id
+                JOIN entreprises e ON o.entreprise_id = e.id
+                WHERE c.id = :id LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupère la liste des candidatures d'un étudiant
      */
     public function findByEtudiant($userId) {
         $sql = "SELECT c.*, o.titre AS offre_titre, e.nom AS entreprise_nom
@@ -21,11 +36,11 @@ class Candidature {
                 ORDER BY c.created_at DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $userId]);
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
-     * Enregistre une nouvelle candidature
+     * Crée une candidature
      */
     public function create($userId, $offreId, $cvPath, $lettre) {
         $sql = "INSERT INTO candidatures (utilisateur_id, offre_id, cv, lettre_motivation)
@@ -36,6 +51,18 @@ class Candidature {
             'offre' => $offreId,
             'cv' => $cvPath,
             'lettre' => $lettre
+        ]);
+    }
+
+    /**
+     * Supprime une candidature (sécurisé par userId)
+     */
+    public function deleteByIdentifiers($id_candidature, $userId) {
+        $sql = "DELETE FROM candidatures WHERE id = :id AND utilisateur_id = :user_id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            'id' => (int)$id_candidature,
+            'user_id' => (int)$userId
         ]);
     }
 }

@@ -126,12 +126,32 @@ class Offre {
         ]);
     }
 
+    /**
+     * Suppression sécurisée avec nettoyage des dépendances
+     */
     public function delete(int $id): bool {
-        $sql = "DELETE FROM offres WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        try {
+            // Début d'une transaction pour être sûr que tout soit supprimé ou rien du tout
+            $this->pdo->beginTransaction();
 
-        return $stmt->execute();
+            // 1. Supprimer les candidatures liées
+            $stmt1 = $this->pdo->prepare("DELETE FROM candidatures WHERE offre_id = :id");
+            $stmt1->execute([':id' => $id]);
+
+            // 2. Supprimer de la wishlist (si la table existe)
+            $stmt2 = $this->pdo->prepare("DELETE FROM wishlist WHERE offre_id = :id");
+            $stmt2->execute([':id' => $id]);
+
+            // 3. Supprimer l'offre elle-même
+            $stmt3 = $this->pdo->prepare("DELETE FROM offres WHERE id = :id");
+            $stmt3->execute([':id' => $id]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            return false;
+        }
     }
 
     public function countAll(): int {
