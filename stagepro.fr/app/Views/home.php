@@ -68,6 +68,7 @@
 
 <section class="espaces-section"></section>
 
+<section>
     <h2>Espaces utilisateurs</h2>
     <div class="container-espaces">
         <article class="card card-etudiant">
