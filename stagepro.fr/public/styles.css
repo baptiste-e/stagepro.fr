@@ -307,3 +307,20 @@ section:not(.hero) {
   width: 0%;
   background: var(--accent);
 }
+
+.espaces-section {
+  position: relative;
+  padding-top: 5rem;
+}
+
+.espaces-section::before {
+  content: "";
+  position: absolute;
+  top: -100px; /* remonte le fondu vers le haut */
+  left: 0;
+  width: 100%;
+  height: 100px;
+
+  background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,0));
+  pointer-events: none;
+}
