@@ -55,4 +55,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+        const testimonialCards = document.querySelectorAll('.testimonial-card');
+    const progressBar = document.querySelector('.testimonial-progress-bar');
+
+    if (testimonialCards.length > 0 && progressBar) {
+        let currentIndex = 0;
+        const duration = 10000;
+
+        function showTestimonial(index) {
+            testimonialCards.forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+        }
+
+        function animateProgress() {
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    progressBar.style.transition = `width ${duration}ms linear`;
+                    progressBar.style.width = '100%';
+                });
+            });
+        }
+
+        function nextTestimonial() {
+            currentIndex = (currentIndex + 1) % testimonialCards.length;
+            showTestimonial(currentIndex);
+            animateProgress();
+        }
+
+        showTestimonial(currentIndex);
+        animateProgress();
+
+        setInterval(nextTestimonial, duration);
+    }
 });
