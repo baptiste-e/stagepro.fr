@@ -12,7 +12,6 @@
 
 <section class="entreprise-showcase">
   <div class="entreprise-showcase-header">
-    <p class="showcase-eyebrow">Paroles d’entreprises</p>
     <h2>Pourquoi les entreprises recrutent des stagiaires</h2>
     <p class="showcase-intro">
       Découvrez comment les stages permettent aux entreprises de transmettre,
