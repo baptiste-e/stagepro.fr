@@ -26,6 +26,40 @@ switch ($page) {
         include __DIR__ . '/../app/Views/layout/footer.php';
         break;
 
+    // --- COOKIES ---
+    case 'cookie-accept':
+        setcookie('cookie_consent', 'accepted', [
+            'expires' => time() + 365 * 24 * 60 * 60,
+            'path' => '/',
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+        header('Location: index.php?page=home');
+        exit;
+
+    case 'cookie-refuse':
+        setcookie('cookie_consent', 'refused', [
+            'expires' => time() + 365 * 24 * 60 * 60,
+            'path' => '/',
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+        header('Location: index.php?page=home');
+        exit;
+
+    case 'cookie-reset':
+        setcookie('cookie_consent', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+        header('Location: index.php?page=home');
+        exit;
+
     // --- SECTION OFFRES ---
     case 'offres':
         (new OffreController())->index();
@@ -33,7 +67,7 @@ switch ($page) {
     case 'offre-detail':
         (new OffreController())->show($id);
         break;
-    case 'offres-stats': // <--- AJOUTÉ : Correction de l'erreur 404
+    case 'offres-stats':
         (new OffreController())->stats();
         break;
     case 'offre-create':
