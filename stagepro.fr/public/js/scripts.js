@@ -38,7 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const header = document.querySelector('header');
 
-    if (header) {
+        function updateHeaderHeight() {
+        if (header) {
+            document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
+        }
+    }
+        updateHeaderHeight();
+        window.addEventListener('resize', updateHeaderHeight);
+    
+        if (header) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 0) {
                 header.classList.add('scrolled');

@@ -6,6 +6,7 @@
   --text-main: #1f2937;     /* Anthracite */
   --text-muted: #6b7280;    /* Gris texte */
   --border: #d1d5db;        /* Bordure grise standard */
+  --header-height: 0px;
 }
 
 /* --- Base --- */
@@ -49,7 +50,6 @@ nav ul li strong { color: var(--text-main); font-weight: bold; }
 
 /* --- Layout --- */
 main {
-  max-width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -58,26 +58,22 @@ section { margin-bottom: 2.5rem; }
 
 /* --- Hero --- */
 .hero {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--header-height));
+  width: 100%;
   background: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 2rem;
-  border: none;
-  margin-bottom: 3rem;
+  margin: 0;
+  padding: 0 1rem;
 }
 
 
 .hero h1 {
   font-size: 2.2rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 2rem;
 }
 
 
@@ -88,13 +84,23 @@ section { margin-bottom: 2.5rem; }
   max-width: 650px;
 }
 .btn-cta { 
-  display: inline-block;
-  padding: 0.9rem 1.6rem;
-  background: var(--accent);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 0;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+
+  padding: 12px 24px;
+  font-size: 1rem;
   font-weight: 600;
+
+  border-radius: 12px; /* ← IMPORTANT */
+  text-decoration: none;
+
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
 }
 
 /* --- Grille de Cartes --- */

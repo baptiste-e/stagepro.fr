@@ -1,111 +1,88 @@
-<?php
-/**
- * VUE : Détail d'une offre
- * La variable $offre est fournie par OffreController->show($id)
- */
-?>
+<div style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+    <nav style="margin-bottom: 2rem; font-size: 0.8rem; color: #666;">
+        <a href="index.php?page=offres" style="color: #2563eb; text-decoration: none;">&larr; Retour aux offres</a>
+    </nav>
 
-<nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
-  <p>
-    <a href="index.php?page=home" style="color: var(--accent-blue);">Accueil</a> &gt;
-    <a href="index.php?page=offres" style="color: var(--accent-blue);">Offres</a> &gt;
-    <span style="color: var(--text-muted);">Détail de l’offre</span>
-  </p>
-</nav>
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start;">
+        <article>
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;"><?= htmlspecialchars($offre['titre']) ?></h1>
+            <p style="font-size: 1.25rem; color: #64748b; margin-bottom: 2rem;"><?= htmlspecialchars($offre['entreprise_nom']) ?></p>
 
-<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2.5rem; align-items: start;">
-  
-  <div>
-    <section>
-      <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">
-        <?= htmlspecialchars($offre['titre']) ?>
-      </h1>
+            <section style="margin-bottom: 2.5rem;">
+                <h3 style="border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 1rem;">Description du poste</h3>
+                <p style="line-height: 1.6;"><?= nl2br(htmlspecialchars($offre['description'])) ?></p>
+            </section>
 
-      <p style="font-size: 1.2rem; color: var(--accent-blue); margin-bottom: 2rem;">
-        <?= htmlspecialchars($offre['entreprise_nom']) ?>
-      </p>
-      
-      <div style="margin-bottom: 2rem;">
-        <h2 style="font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
-          Description du poste
-        </h2>
-        <p style="line-height: 1.8; color: var(--text-main);">
-          <?= nl2br(htmlspecialchars($offre['description'] ?? 'Aucune description disponible.')) ?>
-        </p>
-      </div>
+            <section style="margin-bottom: 2.5rem;">
+                <h3 style="border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 1rem;">Compétences recherchées</h3>
+                <p style="line-height: 1.6;"><?= nl2br(htmlspecialchars($offre['competences'] ?: 'Non spécifiées')) ?></p>
+            </section>
 
-      <div style="margin-bottom: 2rem;">
-        <h2 style="font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
-          Compétences requises
-        </h2>
-        <p style="color: var(--text-muted);">
-          Compétences non renseignées pour le moment.
-        </p>
-      </div>
-    </section>
+            <section style="margin-top: 4rem; padding: 2rem; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <?php if (isset($maCandidature) && $maCandidature): ?>
+                    <div style="border-left: 4px solid #2563eb; padding-left: 1.5rem;">
+                        <h2 style="color: #1e293b; margin-bottom: 1rem;">Vous avez déjà postulé</h2>
+                        <p style="margin-bottom: 1rem;"><strong>Votre lettre de motivation :</strong></p>
+                        <blockquote style="font-style: italic; color: #475569; margin-bottom: 1.5rem; background: white; padding: 1rem; border-radius: 6px;">
+                            "<?= nl2br(htmlspecialchars($maCandidature['lettre_motivation'])) ?>"
+                        </blockquote>
+                        <?php if($maCandidature['cv']): ?>
+                            <a href="<?= htmlspecialchars($maCandidature['cv']) ?>" target="_blank" 
+                               style="display: inline-block; background: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                               📄 Voir le CV envoyé
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                <?php else: ?>
+                    <h2 style="margin-bottom: 1.5rem;">Postuler à cette offre</h2>
+                    <form action="index.php?page=postuler" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id_offre" value="<?= $offre['id'] ?>">
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Votre CV (Format PDF)</label>
+                            <input type="file" name="cv" accept=".pdf" required style="width: 100%;">
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Lettre de motivation</label>
+                            <textarea name="lm" rows="6" required style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #cbd5e1;"></textarea>
+                        </div>
+                        <button type="submit" style="background: #1e293b; color: white; padding: 1rem 2rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%;">Envoyer ma candidature</button>
+                    </form>
+                <?php endif; ?>
+            </section>
+        </article>
 
-    <section id="postuler" style="margin-top: 4rem; background: var(--surface); padding: 2rem; border-radius: 8px; border: 1px solid var(--accent-blue);">
-      <h2 style="margin-bottom: 1.5rem;">Postuler à cette offre</h2>
+        <aside>
+            <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 0.875rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Détails du stage</h3>
+                <p style="margin-bottom: 0.75rem;"><strong>📍 Lieu :</strong> <?= htmlspecialchars($offre['localite']) ?></p>
+                <p style="margin-bottom: 0.75rem;"><strong>⏳ Durée :</strong> <?= htmlspecialchars($offre['duree']) ?></p>
+                <p style="margin-bottom: 0.75rem;"><strong>💰 Gratification :</strong> <?= number_format($offre['remuneration'], 2, ',', ' ') ?> €/mois</p>
+                <p><strong>👥 Places :</strong> <?= (int)$offre['nb_places'] ?> poste(s)</p>
+            </div>
 
-      <form action="index.php?page=postuler" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id_offre" value="<?= (int) $offre['id'] ?>">
-        
-        <div class="form-group">
-          <label for="cv">Votre CV (PDF)</label>
-          <input type="file" id="cv" name="cv" accept=".pdf" required>
-        </div>
-
-        <div class="form-group">
-          <label for="lm">Lettre de motivation</label>
-          <textarea id="lm" name="lm" rows="6" placeholder="Exprimez votre intérêt pour ce poste..." required></textarea>
-        </div>
-
-        <button type="submit" style="width: 100%;">Envoyer ma candidature</button>
-      </form>
-    </section>
-  </div>
-
-  <aside>
-    <div style="background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 2rem;">
-      <h3 style="font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.5rem;">
-        Détails financiers
-      </h3>
-
-      <p style="font-size: 1.8rem; font-weight: bold; color: var(--accent-blue);">
-        <?= number_format((float) ($offre['remuneration'] ?? 0), 2, ',', ' ') ?> €
-        <span style="font-size: 0.9rem; color: var(--text-muted);">/ mois</span>
-      </p>
-
-      <p style="margin-top: 1rem; font-size: 0.9rem;">
-        <strong>Date de l'offre :</strong> <?= htmlspecialchars($offre['date_offre'] ?? '-') ?>
-      </p>
-      
-      <form action="index.php?page=wishlist-add" method="post">
-          <input type="hidden" name="id_offre" value="<?= (int) $offre['id'] ?>">
-          <button type="submit" style="width: 100%; margin-top: 1.5rem; background: transparent; border: 1px solid var(--accent-purple); color: var(--accent-purple); cursor: pointer;">
-            ⭐ Ajouter à la wish-list
-          </button>
-      </form>
+            <?php 
+            $role = strtolower($_SESSION['user']['role_nom'] ?? '');
+            if ($role === 'admin' || $role === 'pilote'): 
+            ?>
+                <div style="padding: 1.5rem; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px;">
+                    <h3 style="font-size: 0.875rem; color: #be123c; margin-bottom: 1rem;">Administration</h3>
+                    <a href="index.php?page=offre-edit&id=<?= $offre['id'] ?>" 
+                       style="display: block; text-align: center; background: #1e293b; color: white; padding: 0.75rem; border-radius: 6px; text-decoration: none; margin-bottom: 0.5rem;">Modifier</a>
+                    
+                    <form action="index.php?page=offre-delete" method="post" onsubmit="return confirm('Supprimer définitivement cette offre ?');">
+                        <input type="hidden" name="id" value="<?= $offre['id'] ?>">
+                        <button type="submit" style="width: 100%; background: #e11d48; color: white; padding: 0.75rem; border: none; border-radius: 6px; cursor: pointer;">Supprimer</button>
+                    </form>
+                </div>
+            <?php elseif ($role === 'etudiant' && isset($maCandidature) && $maCandidature): ?>
+                <div style="text-align: center;">
+                    <a href="index.php?page=candidature-cancel&id=<?= $maCandidature['id'] ?>" 
+                       onclick="return confirm('Voulez-vous vraiment retirer votre candidature ?');"
+                       style="display: block; padding: 0.75rem; border: 1px solid #e11d48; color: #e11d48; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                       Annuler ma candidature
+                    </a>
+                </div>
+            <?php endif; ?>
+        </aside>
     </div>
-
-    <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['admin', 'pilote'])): ?>
-    <div style="border: 1px dashed var(--border); padding: 1.5rem; border-radius: 8px;">
-      <h3 style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
-        ADMINISTRATION
-      </h3>
-
-      <a href="index.php?page=offre-edit&id=<?= (int) $offre['id'] ?>" class="btn-cta" style="display: block; text-align: center; font-size: 0.85rem; margin-bottom: 0.5rem;">
-        Modifier l'offre
-      </a>
-
-      <form action="index.php?page=offre-delete" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette offre ?');">
-        <input type="hidden" name="id" value="<?= (int) $offre['id'] ?>">
-        <button type="submit" style="width: 100%; background: #ff4444; color: white; font-size: 0.85rem; cursor: pointer;">
-          Supprimer
-        </button>
-      </form>
-    </div>
-    <?php endif; ?>
-  </aside>
-
 </div>
