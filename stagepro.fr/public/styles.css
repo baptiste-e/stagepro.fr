@@ -6,6 +6,7 @@
   --text-main: #1f2937;     /* Anthracite */
   --text-muted: #6b7280;    /* Gris texte */
   --border: #d1d5db;        /* Bordure grise standard */
+  --header-height: 0px;
 }
 
 /* --- Base --- */
@@ -49,7 +50,6 @@ nav ul li strong { color: var(--text-main); font-weight: bold; }
 
 /* --- Layout --- */
 main {
-  max-width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -58,18 +58,16 @@ section { margin-bottom: 2.5rem; }
 
 /* --- Hero --- */
 .hero {
-  height: 100vh;
+  min-height: calc(100vh - var(--header-height));
   width: 100%;
   background: #ffffff;
-
   display: flex;
   flex-direction: column;
-  justify-content: center; /* centre vertical */
-  align-items: center;     /* centre horizontal */
-
+  justify-content: center;
+  align-items: center;
   text-align: center;
   margin: 0;
-  padding: 0;
+  padding: 0 1rem;
 }
 
 
