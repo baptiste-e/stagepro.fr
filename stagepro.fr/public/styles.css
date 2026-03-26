@@ -249,7 +249,8 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
 .testimonial-track {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  min-height: 280px;
 }
 
 /* --- CARTES --- */
@@ -261,11 +262,12 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
   width: 100%;
   opacity: 0;
   transform: translateX(50px);
-  transition: all 0.5s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease;
   background: white;
   padding: 3rem;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  min-height: 230px;
 }
 
 /* carte active visible */
@@ -273,6 +275,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
   opacity: 1;
   transform: translateX(0);
   position: relative;
+  z-index: 2;
 }
 
 /* --- TEXTE --- */
@@ -286,11 +289,14 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .testimonial-meta strong {
   display: block;
   font-weight: 600;
+  margin-bottom: 0.4rem;
 }
 
 .testimonial-meta span {
-  font-size: 0.9rem;
+  display: block;
+  font-size: 0.95rem;
   color: var(--text-muted);
+  line-height: 1.4;
 }
 
 /* --- BARRE DE PROGRESSION --- */
@@ -320,12 +326,20 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .espaces-section::before {
   content: "";
   position: absolute;
-  top: -140px;
+  top: -180px;
   left: 0;
   width: 100%;
-  height: 140px;
-  background: linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 100%);
+  height: 180px;
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.92) 25%,
+    rgba(255, 255, 255, 0.65) 55%,
+    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
   pointer-events: none;
+  z-index: 1;
 }
 
 .espaces-content {
