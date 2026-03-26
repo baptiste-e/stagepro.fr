@@ -15,7 +15,7 @@ require_once '../app/Controllers/WishlistController.php';
 
 // 2. Récupération des paramètres de l'URL
 $page = $_GET['page'] ?? 'home';
-$id = (int)($_GET['id'] ?? 0);
+$id = (int) ($_GET['id'] ?? 0);
 
 // 3. Aiguillage (Routing) global
 switch ($page) {
@@ -26,23 +26,62 @@ switch ($page) {
         include __DIR__ . '/../app/Views/layout/footer.php';
         break;
 
+    // --- COOKIES ---
+    case 'cookie-accept':
+        setcookie('cookie_consent', 'accepted', [
+            'expires' => time() + 365 * 24 * 60 * 60,
+            'path' => '/',
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+        header('Location: index.php?page=home');
+        exit;
+
+    case 'cookie-refuse':
+        setcookie('cookie_consent', 'refused', [
+            'expires' => time() + 365 * 24 * 60 * 60,
+            'path' => '/',
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+        header('Location: index.php?page=home');
+        exit;
+
+    case 'cookie-reset':
+        setcookie('cookie_consent', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => false,
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+        header('Location: index.php?page=home');
+        exit;
+
     // --- SECTION OFFRES ---
     case 'offres':
         (new OffreController())->index();
         break;
+
     case 'offre-detail':
         (new OffreController())->show($id);
         break;
+
     case 'offre-create':
     case 'offre-edit':
         (new OffreController())->create($id);
         break;
+
     case 'offre-save':
         (new OffreController())->save();
         break;
+
     case 'offre-delete':
         (new OffreController())->delete($id);
         break;
+
     case 'offres-stats':
         (new OffreController())->stats();
         break;
@@ -51,17 +90,27 @@ switch ($page) {
     case 'entreprises':
         (new EntrepriseController())->index();
         break;
+
     case 'entreprise-detail':
         (new EntrepriseController())->show($id);
         break;
+
     case 'entreprise-create':
+        (new EntrepriseController())->create();
+        break;
+
     case 'entreprise-edit':
         (new EntrepriseController())->edit($id);
         break;
-    case 'entreprise-save':   // Création (POST)
-    case 'entreprise-update': // Modification (POST)
-        (new EntrepriseController())->save(); 
+
+    case 'entreprise-save':
+        (new EntrepriseController())->save();
         break;
+
+    case 'entreprise-update':
+        (new EntrepriseController())->update();
+        break;
+
     case 'entreprise-delete':
         (new EntrepriseController())->delete();
         break;
@@ -70,24 +119,28 @@ switch ($page) {
     case 'candidatures':
         (new CandidatureController())->index();
         break;
+
     case 'postuler':
         (new CandidatureController())->postuler();
         break;
-    case 'candidature-cancel': 
+
+    case 'candidature-cancel':
         (new CandidatureController())->cancel($id);
         break;
 
-    case 'candidature-detail': // <--- AJOUT : Nouvelle page spécifique
-    (new CandidatureController())->show($id);
-    break;
+    case 'candidature-detail':
+        (new CandidatureController())->show($id);
+        break;
 
     // --- SECTION WISHLIST ---
     case 'wishlist':
         (new WishlistController())->index();
         break;
+
     case 'wishlist-add':
         (new WishlistController())->add();
         break;
+
     case 'wishlist-remove':
         (new WishlistController())->remove();
         break;
@@ -96,26 +149,60 @@ switch ($page) {
     case 'admin':
         (new AdminController())->dashboard();
         break;
+
     case 'pilotes':
         (new PiloteController())->index();
         break;
+
+    case 'pilote-detail':
+        (new PiloteController())->show($id);
+        break;
+
+    case 'pilote-create':
+        (new PiloteController())->create();
+        break;
+
     case 'pilote-edit':
         (new PiloteController())->edit($id);
         break;
+
     case 'pilote-save':
         (new PiloteController())->save();
         break;
+
     case 'pilote-delete':
         (new PiloteController())->delete();
         break;
+
     case 'etudiants':
         (new EtudiantController())->index();
+        break;
+
+    case 'etudiant-detail':
+        (new EtudiantController())->show($id);
+        break;
+
+    case 'etudiant-create':
+        (new EtudiantController())->create();
+        break;
+
+    case 'etudiant-edit':
+        (new EtudiantController())->edit($id);
+        break;
+
+    case 'etudiant-save':
+        (new EtudiantController())->save();
+        break;
+
+    case 'etudiant-delete':
+        (new EtudiantController())->delete();
         break;
 
     // --- AUTHENTIFICATION ---
     case 'login':
         (new AuthController())->login();
         break;
+
     case 'logout':
         session_destroy();
         header('Location: index.php?page=home');

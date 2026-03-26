@@ -2,6 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+$cookieConsent = $_COOKIE['cookie_consent'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -42,5 +44,20 @@ if (session_status() === PHP_SESSION_NONE) {
       </ul>
     </nav>
   </header>
+
+  <?php if ($cookieConsent === null): ?>
+    <div style="position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 9999; background: #111; color: #fff; padding: 1rem 1.25rem; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.25);">
+      <p style="margin: 0 0 0.75rem 0;">
+        Ce site utilise des cookies pour son bon fonctionnement et pour améliorer votre expérience.
+      </p>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="index.php?page=cookie-accept" class="btn-cta" style="text-decoration: none;">Accepter</a>
+        <a href="index.php?page=cookie-refuse" style="padding: 0.6rem 1rem; border: 1px solid #888; color: white; text-decoration: none; border-radius: 6px;">
+          Refuser
+        </a>
+      </div>
+    </div>
+  <?php endif; ?>
+
   <main id="contenu">
-  
