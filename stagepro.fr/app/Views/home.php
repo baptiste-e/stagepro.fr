@@ -10,30 +10,6 @@
     <a href="index.php?page=offres" class="btn-cta">Explorer les offres</a>
 </section>
 
-<section class="stats-section">
-    <div class="stats-container">
-        <div class="stat">
-            <h3>120+</h3>
-            <p>Offres disponibles</p>
-        </div>
-
-        <div class="stat">
-            <h3>35+</h3>
-            <p>Entreprises partenaires</p>
-        </div>
-
-        <div class="stat">
-            <h3>250+</h3>
-            <p>Candidatures envoyées</p>
-        </div>
-
-        <div class="stat">
-            <h3>80+</h3>
-            <p>Offres en wish-list</p>
-        </div>
-    </div>
-</section>
-
 <section class="entreprise-showcase">
 <div class="entreprise-showcase-header">
   <h2 class="fade-in">Pourquoi les entreprises recrutent des stagiaires</h2>
@@ -88,6 +64,30 @@
       <span class="testimonial-progress-bar"></span>
     </div>
   </div>
+</section>
+
+<section class="stats-section">
+    <div class="stats-container">
+        <div class="stat">
+            <h3>120+</h3>
+            <p>Offres disponibles</p>
+        </div>
+
+        <div class="stat">
+            <h3>35+</h3>
+            <p>Entreprises partenaires</p>
+        </div>
+
+        <div class="stat">
+            <h3>250+</h3>
+            <p>Candidatures envoyées</p>
+        </div>
+
+        <div class="stat">
+            <h3>80+</h3>
+            <p>Offres en wish-list</p>
+        </div>
+    </div>
 </section>
 
 <section class="espaces-section">
