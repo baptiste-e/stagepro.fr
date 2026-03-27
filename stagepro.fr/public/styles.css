@@ -380,7 +380,3 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 section + section {
   margin-top: 70vh; /* espace vide énorme entre chaque section */
 }
-
-section {
-  background: #ffffff;
-}
