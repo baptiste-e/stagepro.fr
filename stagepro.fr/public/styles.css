@@ -243,8 +243,9 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .testimonial-slider {
   max-width: 700px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1rem 2rem 1rem;
   position: relative;
+  z-index: 2;
 }
 
 .testimonial-track {
@@ -308,17 +309,20 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .testimonial-progress {
   margin-top: 2rem;
   width: 100%;
-  height: 3px;
-  background: #e5e7eb;
+  height: 4px;
+  background: #dcdfe4;
+  border-radius: 999px;
   overflow: hidden;
-  border-radius: 2px;
+  position: relative;
+  z-index: 3;
 }
 
 .testimonial-progress-bar {
   display: block;
-  height: 100%;
   width: 0%;
-  background: var(--accent);
+  height: 100%;
+  background: #eb2525;
+  border-radius: 999px;
 }
 
 .espaces-section {
