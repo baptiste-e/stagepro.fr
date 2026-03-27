@@ -13,11 +13,19 @@ class Candidature {
      * Récupère une candidature avec tous les détails de l'offre associée
      */
     public function findByIdFull($id) {
-        $sql = "SELECT c.*, o.titre AS offre_titre, o.description AS offre_desc, 
-                       o.localite, o.remuneration, e.nom AS entreprise_nom
+        $sql = "SELECT c.*, 
+                       o.titre AS offre_titre, 
+                       o.description AS offre_desc, 
+                       o.localite, 
+                       o.remuneration, 
+                       e.nom AS entreprise_nom,
+                       u.nom AS etudiant_nom,
+                       u.prenom AS etudiant_prenom,
+                       u.email AS etudiant_email
                 FROM candidatures c
                 JOIN offres o ON c.offre_id = o.id
                 JOIN entreprises e ON o.entreprise_id = e.id
+                JOIN utilisateurs u ON c.utilisateur_id = u.id
                 WHERE c.id = :id
                 LIMIT 1";
 
@@ -30,7 +38,9 @@ class Candidature {
      * Récupère la liste des candidatures d'un étudiant
      */
     public function findByEtudiant($userId) {
-        $sql = "SELECT c.*, o.titre AS offre_titre, e.nom AS entreprise_nom
+        $sql = "SELECT c.*, 
+                       o.titre AS offre_titre, 
+                       e.nom AS entreprise_nom
                 FROM candidatures c
                 JOIN offres o ON c.offre_id = o.id
                 JOIN entreprises e ON o.entreprise_id = e.id
@@ -39,6 +49,48 @@ class Candidature {
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupère la liste des candidatures des étudiants rattachés à un pilote
+     */
+    public function findByPilote($piloteId) {
+        $sql = "SELECT c.*, 
+                       o.titre AS offre_titre, 
+                       e.nom AS entreprise_nom,
+                       u.nom AS etudiant_nom,
+                       u.prenom AS etudiant_prenom,
+                       u.email AS etudiant_email
+                FROM candidatures c
+                JOIN utilisateurs u ON c.utilisateur_id = u.id
+                JOIN offres o ON c.offre_id = o.id
+                JOIN entreprises e ON o.entreprise_id = e.id
+                WHERE u.pilote_id = :pilote_id
+                ORDER BY c.created_at DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['pilote_id' => $piloteId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupère toutes les candidatures (admin)
+     */
+    public function findAll() {
+        $sql = "SELECT c.*, 
+                       o.titre AS offre_titre, 
+                       e.nom AS entreprise_nom,
+                       u.nom AS etudiant_nom,
+                       u.prenom AS etudiant_prenom,
+                       u.email AS etudiant_email
+                FROM candidatures c
+                JOIN utilisateurs u ON c.utilisateur_id = u.id
+                JOIN offres o ON c.offre_id = o.id
+                JOIN entreprises e ON o.entreprise_id = e.id
+                ORDER BY c.created_at DESC";
+
+        $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
