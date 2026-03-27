@@ -376,3 +376,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .fade-in:nth-child(3) { transition-delay: 0.5s; }
 .fade-in:nth-child(4) { transition-delay: 0.7s; }
 
+/* ESPACE ENTRE LES "PAGES" */
+section + section {
+  margin-top: 40vh; /* espace vide énorme entre chaque section */
+}
