@@ -6,15 +6,12 @@ class PiloteController
 {
     private $model;
 
-    /**
-     * CONSTRUCTEUR UNIQUE : Initialise le modèle et protège l'accès
-     */
     public function __construct()
     {
         $this->model = new Utilisateur();
         $this->startSessionIfNeeded();
 
-        // SÉCURITÉ : Redirige vers le login si l'utilisateur n'est pas connecté
+        // Si pas connecté, on redirige vers login
         if (!isset($_SESSION['user'])) {
             header('Location: index.php?page=login');
             exit;
@@ -30,12 +27,14 @@ class PiloteController
 
     private function requireRoles(array $roles): void
     {
-        // On récupère le rôle de la session
-        $userRole = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+        $userRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role_nom'] ?? '';
+        $userRole = strtolower(trim($userRole));
 
-        // Si l'utilisateur n'a pas un des rôles autorisés, on le renvoie à l'accueil
-        if (!in_array(strtolower(trim($userRole)), $roles, true)) {
-            header('Location: index.php?page=home&error=access_denied');
+        // Si le rôle n'est pas autorisé, on déconnecte et on renvoie au login
+        if (!in_array($userRole, $roles, true)) {
+            session_unset();
+            session_destroy();
+            header('Location: index.php?page=login');
             exit;
         }
     }
@@ -43,6 +42,7 @@ class PiloteController
     public function index()
     {
         $this->requireRoles(['admin', 'pilote']);
+
         $pilotes = $this->model->findByRole('pilote');
         $titre_page = "Annuaire des pilotes | StagePro";
 
@@ -54,6 +54,7 @@ class PiloteController
     public function show($id)
     {
         $this->requireRoles(['admin', 'pilote']);
+
         $pilote = $this->model->findById($id);
 
         if (!$pilote) {
@@ -70,6 +71,7 @@ class PiloteController
     public function create()
     {
         $this->requireRoles(['admin']);
+
         $titre_page = "Ajouter un pilote | StagePro";
         $modeEdition = false;
 
@@ -81,15 +83,17 @@ class PiloteController
     public function edit($id)
     {
         $this->requireRoles(['admin']);
+
         $pilote = $this->model->findById($id);
+
         if (!$pilote) {
             header('Location: index.php?page=pilotes');
             exit;
         }
-        
+
         $titre_page = "Modifier le pilote : " . htmlspecialchars($pilote['nom']);
         $modeEdition = true;
-        
+
         include __DIR__ . '/../Views/layout/header.php';
         include __DIR__ . '/../Views/pilotes/formulaire.php';
         include __DIR__ . '/../Views/layout/footer.php';
@@ -98,17 +102,19 @@ class PiloteController
     public function save()
     {
         $this->requireRoles(['admin']);
+
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: index.php?page=pilotes');
             exit;
         }
 
-        $id = (int)($_POST['id'] ?? 0);
+        $id = (int) ($_POST['id'] ?? 0);
+
         $data = [
             'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
             'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
             'email'   => htmlspecialchars($_POST['email'] ?? ''),
-            'role_id' => 2 
+            'role_id' => 2
         ];
 
         if (!empty($_POST['password'])) {
@@ -130,10 +136,13 @@ class PiloteController
     public function delete()
     {
         $this->requireRoles(['admin']);
-        $id = (int)($_POST['id'] ?? 0);
+
+        $id = (int) ($_POST['id'] ?? 0);
+
         if ($id > 0) {
             $this->model->delete($id);
         }
+
         header('Location: index.php?page=pilotes&message=deleted');
         exit;
     }
