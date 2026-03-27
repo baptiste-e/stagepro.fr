@@ -201,10 +201,9 @@ footer {
 }
 
 section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  max-width: 1000px;
+  margin: 0 auto 2.5rem auto;
+  padding: 0 1rem;
 }
 
 /* --- SECTION ENTREPRISES --- */
@@ -376,15 +375,4 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .fade-in:nth-child(2) { transition-delay: 0.3s; }
 .fade-in:nth-child(3) { transition-delay: 0.5s; }
 .fade-in:nth-child(4) { transition-delay: 0.7s; }
-
-.espaces-section + section {
-  padding-top: 4rem;
-}
-
-section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 
