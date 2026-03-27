@@ -427,6 +427,36 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   color: var(--text-muted);
 }
 
+/* --- APPARITION AU SCROLL : CHIFFRES CLÉS --- */
+
+.stat-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.stat-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* délai progressif : un par un */
+.stat-reveal:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.stat-reveal:nth-child(2) {
+  transition-delay: 0.3s;
+}
+
+.stat-reveal:nth-child(3) {
+  transition-delay: 0.5s;
+}
+
+.stat-reveal:nth-child(4) {
+  transition-delay: 0.7s;
+}
+
 /* --- RESPONSIVE --- */
 
 @media (max-width: 768px) {
