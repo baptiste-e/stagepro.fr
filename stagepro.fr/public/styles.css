@@ -328,22 +328,20 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .espaces-section {
   position: relative;
   width: 100%;
-  padding: 12rem 0 6rem 0;
+  padding: 6rem 0 6rem 0;
 }
 
 .espaces-section::before {
   content: "";
   position: absolute;
-  top: -120px;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 220px;
+  height: 120px;
   background: linear-gradient(
     to bottom,
     #ffffff 0%,
-    #ffffff 35%,
-    rgba(255, 255, 255, 0.9) 55%,
-    rgba(255, 255, 255, 0.45) 80%,
+    rgba(255, 255, 255, 0.7) 60%,
     rgba(255, 255, 255, 0) 100%
   );
   pointer-events: none;
@@ -380,20 +378,20 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
 .stats-section {
   width: 100%;
-  padding: 10rem 1rem 6rem 1rem; /* GROS espace au-dessus */
   background: #ffffff;
-  margin-top: 4rem;
+  padding: 5rem 1rem 5rem 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 .stats-container {
   max-width: 1000px;
   margin: 0 auto;
-
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
-
   text-align: center;
+  background: #ffffff;
 }
 
 .stat {
