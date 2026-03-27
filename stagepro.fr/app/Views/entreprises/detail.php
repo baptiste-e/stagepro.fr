@@ -47,8 +47,8 @@
         </div>
 
         <div>
-            <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Création</h3>
-            <p><?= !empty($entreprise['created_at']) ? date('d/m/Y à H:i', strtotime($entreprise['created_at'])) : 'Non renseignée' ?></p>
+            <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Offres publiées</h3>
+            <p><?= (int)($entreprise['nb_offres'] ?? 0) ?> offre(s)</p>
         </div>
     </div>
 

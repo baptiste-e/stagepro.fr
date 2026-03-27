@@ -7,7 +7,9 @@ class EntrepriseController {
 
     public function __construct() {
         $this->model = new Entreprise();
-        if (session_status() === PHP_SESSION_NONE) { session_start(); }
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     /**
@@ -23,6 +25,12 @@ class EntrepriseController {
 
     public function index() {
         $entreprises = $this->model->findAll();
+
+        foreach ($entreprises as &$entreprise) {
+            $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
+        }
+        unset($entreprise);
+
         $titre_page = "Annuaire des Entreprises | StagePro";
         
         include __DIR__ . '/../Views/layout/header.php';
@@ -31,11 +39,13 @@ class EntrepriseController {
     }
 
     public function show($id) {
-        $entreprise = $this->model->findById($id);
+        $entreprise = $this->model->findById((int)$id);
         if (!$entreprise) {
             header('Location: index.php?page=entreprises');
             exit;
         }
+
+        $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
         
         $titre_page = "Fiche " . htmlspecialchars($entreprise['nom']) . " | StagePro";
         
@@ -47,7 +57,6 @@ class EntrepriseController {
     public function create() {
         $this->checkAuth();
         $titre_page = "Ajouter une entreprise | StagePro";
-        // $entreprise reste vide pour le mode création
         
         include __DIR__ . '/../Views/layout/header.php';
         include __DIR__ . '/../Views/entreprises/formulaire.php';
@@ -56,7 +65,7 @@ class EntrepriseController {
 
     public function edit($id) {
         $this->checkAuth();
-        $entreprise = $this->model->findById($id);
+        $entreprise = $this->model->findById((int)$id);
 
         if (!$entreprise) {
             header('Location: index.php?page=entreprises');
@@ -72,6 +81,7 @@ class EntrepriseController {
 
     public function save() {
         $this->checkAuth();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->model->create(
                 trim($_POST['nom'] ?? ''),
@@ -79,6 +89,7 @@ class EntrepriseController {
                 trim($_POST['email_contact'] ?? ''),
                 trim($_POST['telephone_contact'] ?? '')
             );
+
             header('Location: index.php?page=entreprises&status=created');
             exit;
         }
@@ -86,8 +97,10 @@ class EntrepriseController {
 
     public function update() {
         $this->checkAuth();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)($_POST['id'] ?? 0);
+
             $data = [
                 'nom' => trim($_POST['nom'] ?? ''),
                 'description' => trim($_POST['description'] ?? ''),
@@ -103,11 +116,14 @@ class EntrepriseController {
 
     public function delete() {
         $this->checkAuth();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)($_POST['id'] ?? 0);
+
             if ($id > 0) {
                 $this->model->delete($id);
             }
+
             header('Location: index.php?page=entreprises&status=deleted');
             exit;
         }
