@@ -10,7 +10,7 @@ $cookieConsent = $_COOKIE['cookie_consent'] ?? null;
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?php echo $titre_page ?? 'StagePro'; ?></title>
+  <title><?= $titre_page ?? 'StagePro'; ?></title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -45,102 +45,136 @@ $cookieConsent = $_COOKIE['cookie_consent'] ?? null;
     </nav>
   </header>
 
-  <?php if (!isset($_COOKIE['cookie_consent'])): ?>
-<div id="cookie-banner" style="
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #f5f5f5;
-    padding: 1.5rem;
-    border-top: 2px solid #ccc;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    z-index: 9999;
-">
-    <div style="max-width: 1200px; margin: auto;">
-        <p style="font-size: 0.9rem; margin-bottom: 1rem; color: #333;">
-            Ce site utilise des cookies permettant de visualiser des contenus et d'améliorer le fonctionnement grâce aux statistiques de navigation.
-            Vous pouvez accepter, refuser ou personnaliser vos choix.
+  <?php if ($cookieConsent === null): ?>
+    <div id="cookie-banner" style="
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #f3f3f3;
+      border-top: 1px solid #d0d0d0;
+      padding: 20px 24px 16px 24px;
+      z-index: 9999;
+      box-sizing: border-box;
+      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08);
+    ">
+      <div style="max-width: 1200px; margin: 0 auto;">
+        <p style="
+          margin: 0 0 16px 0;
+          font-size: 0.95rem;
+          line-height: 1.8;
+          color: #1f2937;
+        ">
+          Ce site utilise des cookies permettant de visualiser des contenus et d’améliorer le fonctionnement grâce aux statistiques de navigation.
+          Si vous cliquez sur « Accepter », StagePro et ses partenaires déposeront ces cookies sur votre terminal lors de votre navigation.
+          Si vous cliquez sur « Refuser », ces cookies ne seront pas déposés.
+          Votre choix est conservé pendant 6 mois et vous pouvez être informé et modifier vos préférences à tout moment.
         </p>
 
-        <div style="display: flex; gap: 10px;">
-            <a href="index.php?page=cookie-accept" style="
-                background: #1e2bb8;
-                color: white;
-                padding: 10px 20px;
-                text-decoration: none;
-                font-weight: bold;
-            ">Accepter</a>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <a href="index.php?page=cookie-accept" style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            padding: 11px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            min-width: 120px;
+            box-sizing: border-box;
+          ">
+            Accepter
+          </a>
 
-            <a href="index.php?page=cookie-refuse" style="
-                background: #1e2bb8;
-                color: white;
-                padding: 10px 20px;
-                text-decoration: none;
-                font-weight: bold;
-            ">Refuser</a>
+          <a href="index.php?page=cookie-refuse" style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            padding: 11px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            min-width: 120px;
+            box-sizing: border-box;
+          ">
+            Refuser
+          </a>
 
-            <button onclick="toggleCookiesSettings()" style="
-                border: 2px solid #1e2bb8;
-                background: white;
-                color: #1e2bb8;
-                padding: 10px 20px;
-                cursor: pointer;
+          <button type="button" onclick="toggleCookiesSettings()" style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            color: #2563eb;
+            padding: 11px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            cursor: pointer;
+            min-width: 140px;
+            box-sizing: border-box;
+          ">
+            Personnaliser
+          </button>
+        </div>
+
+        <div id="cookie-settings" style="
+          display: none;
+          margin-top: 16px;
+          padding: 14px;
+          background: #ffffff;
+          border: 1px solid #d0d0d0;
+          border-radius: 6px;
+        ">
+          <form method="get" action="index.php">
+            <input type="hidden" name="page" value="cookie-accept">
+
+            <div style="margin-bottom: 10px; font-size: 0.95rem; color: #1f2937;">
+              <label>
+                <input type="checkbox" checked disabled>
+                Cookies essentiels (obligatoires)
+              </label>
+            </div>
+
+            <div style="margin-bottom: 14px; font-size: 0.95rem; color: #1f2937;">
+              <label>
+                <input type="checkbox" name="stats">
+                Cookies statistiques
+              </label>
+            </div>
+
+            <button type="submit" style="
+              background: #2563eb;
+              color: #ffffff;
+              padding: 10px 18px;
+              border: 1px solid #2563eb;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 0.95rem;
+              font-weight: 600;
             ">
-                Personnaliser
+              Enregistrer mes choix
             </button>
+          </form>
         </div>
-
-        <!-- Zone personnalisation -->
-        <div id="cookie-settings" style="display:none; margin-top:1rem;">
-            <form method="get" action="index.php">
-                <input type="hidden" name="page" value="cookie-accept">
-
-                <label>
-                    <input type="checkbox" checked disabled>
-                    Cookies essentiels (obligatoires)
-                </label><br>
-
-                <label>
-                    <input type="checkbox" name="stats">
-                    Cookies statistiques
-                </label><br><br>
-
-                <button type="submit" style="
-                    background:#1e2bb8;
-                    color:white;
-                    padding:8px 15px;
-                    border:none;
-                    cursor:pointer;
-                ">
-                    Enregistrer mes choix
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-function toggleCookiesSettings() {
-    const el = document.getElementById('cookie-settings');
-    el.style.display = el.style.display === 'none' ? 'block' : 'none';
-}
-</script>
-<?php endif; ?>
-
-  <?php if ($cookieConsent === null): ?>
-    <div style="position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 9999; background: #111; color: #fff; padding: 1rem 1.25rem; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.25);">
-      <p style="margin: 0 0 0.75rem 0;">
-        Ce site utilise des cookies pour son bon fonctionnement et pour améliorer votre expérience.
-      </p>
-
-      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-        <a href="index.php?page=cookie-accept" class="btn-cta" style="text-decoration: none;">Accepter</a>
-        <a href="index.php?page=cookie-refuse" style="padding: 0.6rem 1rem; border: 1px solid #888; color: white; text-decoration: none; border-radius: 6px;">
-          Refuser
-        </a>
       </div>
     </div>
+
+    <script>
+      function toggleCookiesSettings() {
+        const el = document.getElementById('cookie-settings');
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+      }
+    </script>
   <?php endif; ?>
 
   <main id="contenu">
