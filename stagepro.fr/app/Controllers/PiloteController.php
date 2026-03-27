@@ -1,40 +1,35 @@
 <?php
 // app/Controllers/PiloteController.php
+
 require_once __DIR__ . '/../Models/Utilisateur.php';
+require_once __DIR__ . '/../Models/Role.php';
 
 class PiloteController
 {
     private $model;
+    private $roleModel;
 
     public function __construct()
     {
         $this->model = new Utilisateur();
-        $this->startSessionIfNeeded();
+        $this->roleModel = new Role();
 
-        // Si pas connecté, on redirige vers login
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if (!isset($_SESSION['user'])) {
             header('Location: index.php?page=login');
             exit;
         }
     }
 
-    private function startSessionIfNeeded(): void
-    {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    }
-
     private function requireRoles(array $roles): void
     {
-        $userRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role_nom'] ?? '';
-        $userRole = strtolower(trim($userRole));
+        $userRole = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
 
-        // Si le rôle n'est pas autorisé, on déconnecte et on renvoie au loginn
-        if (!in_array($userRole, $roles, true)) {
-            session_unset();
-            session_destroy();
-            header('Location: index.php?page=login');
+        if (!in_array(strtolower(trim($userRole)), $roles, true)) {
+            header('Location: index.php?page=home&error=access_denied');
             exit;
         }
     }
@@ -42,7 +37,6 @@ class PiloteController
     public function index()
     {
         $this->requireRoles(['admin', 'pilote']);
-
         $pilotes = $this->model->findByRole('pilote');
         $titre_page = "Annuaire des pilotes | StagePro";
 
@@ -54,8 +48,7 @@ class PiloteController
     public function show($id)
     {
         $this->requireRoles(['admin', 'pilote']);
-
-        $pilote = $this->model->findById($id);
+        $pilote = $this->model->findById((int)$id);
 
         if (!$pilote) {
             header('Location: index.php?page=pilotes');
@@ -63,6 +56,7 @@ class PiloteController
         }
 
         $titre_page = "Profil Pilote : " . htmlspecialchars($pilote['nom']);
+
         include __DIR__ . '/../Views/layout/header.php';
         include __DIR__ . '/../Views/pilotes/detail.php';
         include __DIR__ . '/../Views/layout/footer.php';
@@ -71,7 +65,6 @@ class PiloteController
     public function create()
     {
         $this->requireRoles(['admin']);
-
         $titre_page = "Ajouter un pilote | StagePro";
         $modeEdition = false;
 
@@ -83,8 +76,7 @@ class PiloteController
     public function edit($id)
     {
         $this->requireRoles(['admin']);
-
-        $pilote = $this->model->findById($id);
+        $pilote = $this->model->findById((int)$id);
 
         if (!$pilote) {
             header('Location: index.php?page=pilotes');
@@ -108,13 +100,18 @@ class PiloteController
             exit;
         }
 
-        $id = (int) ($_POST['id'] ?? 0);
+        $id = (int)($_POST['id'] ?? 0);
+
+        $rolePilote = $this->roleModel->findByNom('pilote');
+        if (!$rolePilote) {
+            die("Le rôle 'pilote' est introuvable.");
+        }
 
         $data = [
             'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
             'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
             'email'   => htmlspecialchars($_POST['email'] ?? ''),
-            'role_id' => 2
+            'role_id' => (int)$rolePilote['id']
         ];
 
         if (!empty($_POST['password'])) {
@@ -129,7 +126,7 @@ class PiloteController
             $this->model->create($data);
         }
 
-        header('Location: index.php?page=pilotes&status=success');
+        header('Location: index.php?page=pilotes');
         exit;
     }
 
@@ -137,13 +134,13 @@ class PiloteController
     {
         $this->requireRoles(['admin']);
 
-        $id = (int) ($_POST['id'] ?? 0);
+        $id = (int)($_POST['id'] ?? 0);
 
         if ($id > 0) {
             $this->model->delete($id);
         }
 
-        header('Location: index.php?page=pilotes&message=deleted');
+        header('Location: index.php?page=pilotes');
         exit;
     }
 }
