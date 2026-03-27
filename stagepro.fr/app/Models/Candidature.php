@@ -13,83 +13,48 @@ class Candidature {
      * Récupère une candidature avec tous les détails de l'offre associée
      */
     public function findByIdFull($id) {
-        $sql = "SELECT c.*, 
-                       o.titre AS offre_titre, 
-                       o.description AS offre_desc, 
-                       o.localite, 
-                       o.remuneration, 
-                       e.nom AS entreprise_nom,
-                       u.nom AS etudiant_nom,
-                       u.prenom AS etudiant_prenom,
-                       u.email AS etudiant_email
+        $sql = "SELECT c.*, o.titre AS offre_titre, o.description AS offre_desc,
+                       o.localite, o.remuneration, e.nom AS entreprise_nom
                 FROM candidatures c
                 JOIN offres o ON c.offre_id = o.id
                 JOIN entreprises e ON o.entreprise_id = e.id
-                JOIN utilisateurs u ON c.utilisateur_id = u.id
                 WHERE c.id = :id
                 LIMIT 1";
-
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
-     * Récupère la liste des candidatures d'un étudiant
+     * Récupère les candidatures d'un étudiant
      */
     public function findByEtudiant($userId) {
-        $sql = "SELECT c.*, 
-                       o.titre AS offre_titre, 
-                       e.nom AS entreprise_nom
+        $sql = "SELECT c.*, o.titre AS offre_titre, e.nom AS entreprise_nom
                 FROM candidatures c
                 JOIN offres o ON c.offre_id = o.id
                 JOIN entreprises e ON o.entreprise_id = e.id
                 WHERE c.utilisateur_id = :id
                 ORDER BY c.created_at DESC";
-
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
-     * Récupère la liste des candidatures des étudiants rattachés à un pilote
+     * Récupère toutes les candidatures (admin / pilote)
      */
-    public function findByPilote($piloteId) {
+    public function findAllFull() {
         $sql = "SELECT c.*, 
-                       o.titre AS offre_titre, 
+                       o.titre AS offre_titre,
                        e.nom AS entreprise_nom,
                        u.nom AS etudiant_nom,
                        u.prenom AS etudiant_prenom,
                        u.email AS etudiant_email
                 FROM candidatures c
-                JOIN utilisateurs u ON c.utilisateur_id = u.id
                 JOIN offres o ON c.offre_id = o.id
                 JOIN entreprises e ON o.entreprise_id = e.id
-                WHERE u.pilote_id = :pilote_id
-                ORDER BY c.created_at DESC";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['pilote_id' => $piloteId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Récupère toutes les candidatures (admin)
-     */
-    public function findAll() {
-        $sql = "SELECT c.*, 
-                       o.titre AS offre_titre, 
-                       e.nom AS entreprise_nom,
-                       u.nom AS etudiant_nom,
-                       u.prenom AS etudiant_prenom,
-                       u.email AS etudiant_email
-                FROM candidatures c
                 JOIN utilisateurs u ON c.utilisateur_id = u.id
-                JOIN offres o ON c.offre_id = o.id
-                JOIN entreprises e ON o.entreprise_id = e.id
                 ORDER BY c.created_at DESC";
-
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -117,15 +82,35 @@ class Candidature {
      * Crée une candidature
      */
     public function create($userId, $offreId, $cvPath, $lettre) {
-        $sql = "INSERT INTO candidatures (utilisateur_id, offre_id, cv, lettre_motivation)
-                VALUES (:user, :offre, :cv, :lettre)";
-
+        $sql = "INSERT INTO candidatures (utilisateur_id, offre_id, cv, lettre_motivation, statut)
+                VALUES (:user, :offre, :cv, :lettre, :statut)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             'user'   => $userId,
             'offre'  => $offreId,
             'cv'     => $cvPath,
-            'lettre' => $lettre
+            'lettre' => $lettre,
+            'statut' => 'en_attente'
+        ]);
+    }
+
+    /**
+     * Met à jour le statut d'une candidature
+     */
+    public function updateStatut($id, $statut) {
+        $statutsAutorises = ['en_attente', 'acceptee', 'refusee'];
+
+        if (!in_array($statut, $statutsAutorises, true)) {
+            return false;
+        }
+
+        $sql = "UPDATE candidatures
+                SET statut = :statut
+                WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            'id' => (int)$id,
+            'statut' => $statut
         ]);
     }
 
@@ -136,10 +121,9 @@ class Candidature {
         $sql = "DELETE FROM candidatures
                 WHERE id = :id
                   AND utilisateur_id = :user_id";
-
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
-            'id'      => (int)$id_candidature,
+            'id' => (int)$id_candidature,
             'user_id' => (int)$userId
         ]);
     }

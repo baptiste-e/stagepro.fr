@@ -7,16 +7,20 @@ class CandidatureController {
 
     public function __construct() {
         $this->model = new Candidature();
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
 
+    private function getRole(): string {
+        return strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
+    }
+
     /**
-     * Affiche la liste des candidatures selon le rôle :
+     * Liste des candidatures
      * - étudiant : ses candidatures
-     * - pilote : candidatures de ses étudiants
-     * - admin : toutes les candidatures
+     * - admin/pilote : toutes les candidatures
      */
     public function index() {
         if (!isset($_SESSION['user'])) {
@@ -24,21 +28,15 @@ class CandidatureController {
             exit;
         }
 
-        $userId = (int) $_SESSION['user']['id'];
-        $role = $_SESSION['user']['role'] ?? '';
+        $role = $this->getRole();
 
-        if ($role === 'etudiant') {
+        if (in_array($role, ['admin', 'pilote'], true)) {
+            $candidatures = $this->model->findAllFull();
+            $titre_page = "Gestion des candidatures | StagePro";
+        } else {
+            $userId = (int)$_SESSION['user']['id'];
             $candidatures = $this->model->findByEtudiant($userId);
             $titre_page = "Mes Candidatures | StagePro";
-        } elseif ($role === 'pilote') {
-            $candidatures = $this->model->findByPilote($userId);
-            $titre_page = "Candidatures de mes étudiants | StagePro";
-        } elseif ($role === 'admin') {
-            $candidatures = $this->model->findAll();
-            $titre_page = "Toutes les candidatures | StagePro";
-        } else {
-            header('Location: index.php?page=home');
-            exit;
         }
 
         include __DIR__ . '/../Views/layout/header.php';
@@ -47,7 +45,7 @@ class CandidatureController {
     }
 
     /**
-     * Affiche le détail d'une candidature précise
+     * Détail d'une candidature
      */
     public function show($id) {
         if (!isset($_SESSION['user'])) {
@@ -56,29 +54,16 @@ class CandidatureController {
         }
 
         $candidature = $this->model->findByIdFull((int)$id);
-        $role = $_SESSION['user']['role'] ?? '';
-        $userId = (int) $_SESSION['user']['id'];
-
         if (!$candidature) {
             header('Location: index.php?page=candidatures');
             exit;
         }
 
-        // Étudiant : seulement sa propre candidature
-        if ($role === 'etudiant' && (int)$candidature['utilisateur_id'] !== $userId) {
+        $role = $this->getRole();
+
+        if ($role === 'etudiant' && (int)$candidature['utilisateur_id'] !== (int)$_SESSION['user']['id']) {
             header('Location: index.php?page=candidatures');
             exit;
-        }
-
-        // Pilote : seulement les candidatures de ses étudiants
-        if ($role === 'pilote') {
-            $listePilote = $this->model->findByPilote($userId);
-            $idsAutorises = array_column($listePilote, 'id');
-
-            if (!in_array((int)$id, array_map('intval', $idsAutorises), true)) {
-                header('Location: index.php?page=candidatures');
-                exit;
-            }
         }
 
         $titre_page = "Détail candidature | StagePro";
@@ -98,16 +83,9 @@ class CandidatureController {
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $offreId = (int) ($_POST['id_offre'] ?? 0);
+            $offreId = (int)($_POST['id_offre'] ?? 0);
             $lettre = htmlspecialchars($_POST['lm'] ?? '');
-            $userId = (int) $_SESSION['user']['id'];
-
-            // empêcher double candidature
-            $existing = $this->model->findSpecific($userId, $offreId);
-            if ($existing) {
-                header("Location: index.php?page=candidatures&status=already_exists");
-                exit;
-            }
+            $userId = (int)$_SESSION['user']['id'];
 
             $cvPath = null;
             if (!empty($_FILES['cv']['tmp_name'])) {
@@ -126,7 +104,31 @@ class CandidatureController {
     }
 
     /**
-     * Annulation de candidature
+     * Mise à jour du statut (admin / pilote)
+     */
+    public function updateStatus($id) {
+        if (!isset($_SESSION['user'])) {
+            header('Location: index.php?page=login');
+            exit;
+        }
+
+        $role = $this->getRole();
+        if (!in_array($role, ['admin', 'pilote'], true)) {
+            header('Location: index.php?page=home');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $statut = $_POST['statut'] ?? 'en_attente';
+            $this->model->updateStatut((int)$id, $statut);
+        }
+
+        header('Location: index.php?page=candidature-detail&id=' . (int)$id);
+        exit;
+    }
+
+    /**
+     * Annulation de candidature (étudiant uniquement)
      */
     public function cancel($id_candidature) {
         if (!isset($_SESSION['user'])) {
@@ -134,11 +136,17 @@ class CandidatureController {
             exit;
         }
 
-        $userId = (int) $_SESSION['user']['id'];
-        $idCand = (int) $id_candidature;
+        $role = $this->getRole();
+        if ($role !== 'etudiant') {
+            header('Location: index.php?page=candidatures');
+            exit;
+        }
 
-        if ($idCand > 0) {
-            $this->model->deleteByIdentifiers($idCand, $userId);
+        $userId = (int)$_SESSION['user']['id'];
+        $id_cand = (int)$id_candidature;
+
+        if ($id_cand > 0) {
+            $this->model->deleteByIdentifiers($id_cand, $userId);
         }
 
         header("Location: index.php?page=candidatures&status=canceled");
