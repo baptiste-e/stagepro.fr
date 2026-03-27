@@ -381,7 +381,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   max-width: none;
   margin: 0;
   background: #ffffff;
-  padding: 40vh 1rem;
+  padding: 30vh 1rem;
   position: relative;
   z-index: 2;
 }
