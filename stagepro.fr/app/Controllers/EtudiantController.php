@@ -1,12 +1,19 @@
 <?php
 // app/Controllers/EtudiantController.php
 require_once __DIR__ . '/../Models/Utilisateur.php';
+require_once __DIR__ . '/../Models/Role.php';
 
 class EtudiantController {
     private $model;
+    private $roleModel;
 
     public function __construct() {
         $this->model = new Utilisateur();
+        $this->roleModel = new Role();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     /**
@@ -25,15 +32,17 @@ class EtudiantController {
      * Affiche le profil détaillé d'un étudiant
      */
     public function show($id) {
-        $etudiant = $this->model->findById($id);
+        $etudiant = $this->model->findById((int)$id);
+
         if (!$etudiant) {
             header('Location: index.php?page=etudiants');
             exit;
         }
+
         $titre_page = "Profil de " . htmlspecialchars($etudiant['nom']) . " | StagePro";
 
         include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/detail.php'; 
+        include __DIR__ . '/../Views/etudiants/detail.php';
         include __DIR__ . '/../Views/layout/footer.php';
     }
 
@@ -42,15 +51,17 @@ class EtudiantController {
      */
     public function create() {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+
         if (!isset($_SESSION['user']) || $role === 'etudiant') {
             header('Location: index.php?page=home');
             exit;
         }
+
         $titre_page = "Ajouter un étudiant | StagePro";
         $modeEdition = false;
 
         include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/formulaire.php'; 
+        include __DIR__ . '/../Views/etudiants/formulaire.php';
         include __DIR__ . '/../Views/layout/footer.php';
     }
 
@@ -59,12 +70,14 @@ class EtudiantController {
      */
     public function edit($id) {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=home');
             exit;
         }
 
-        $etudiant = $this->model->findById($id);
+        $etudiant = $this->model->findById((int)$id);
+
         if (!$etudiant) {
             header('Location: index.php?page=etudiants');
             exit;
@@ -74,7 +87,7 @@ class EtudiantController {
         $modeEdition = true;
 
         include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/formulaire.php'; 
+        include __DIR__ . '/../Views/etudiants/formulaire.php';
         include __DIR__ . '/../Views/layout/footer.php';
     }
 
@@ -83,17 +96,24 @@ class EtudiantController {
      */
     public function save() {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=home');
             exit;
         }
 
         $id = (int)($_POST['id'] ?? 0);
+
+        $roleEtudiant = $this->roleModel->findByNom('etudiant');
+        if (!$roleEtudiant) {
+            die("Le rôle 'etudiant' est introuvable dans la base.");
+        }
+
         $data = [
             'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
             'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
             'email'   => htmlspecialchars($_POST['email'] ?? ''),
-            'role_id' => 3 
+            'role_id' => (int)$roleEtudiant['id']
         ];
 
         if (!empty($_POST['password'])) {
@@ -117,14 +137,17 @@ class EtudiantController {
      */
     public function delete() {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             die("Accès refusé.");
         }
 
         $id = (int)($_POST['id'] ?? 0);
+
         if ($id > 0) {
             $this->model->delete($id);
         }
+
         header('Location: index.php?page=etudiants&message=deleted');
         exit;
     }
