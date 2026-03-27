@@ -41,12 +41,12 @@ class Wishlist {
                     o.*, 
                     e.nom AS entreprise_nom,
                     w.created_at AS wishlist_created_at
-                FROM wishlist w
-                JOIN offres o ON w.offre_id = o.id
-                JOIN entreprises e ON o.entreprise_id = e.id
+                FROM wishlist w 
+                JOIN offres o ON w.offre_id = o.id 
+                JOIN entreprises e ON o.entreprise_id = e.id 
                 WHERE w.utilisateur_id = :u
                 ORDER BY w.created_at DESC";
-
+            
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['u' => $id_user]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
