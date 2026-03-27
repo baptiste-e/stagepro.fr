@@ -1,3 +1,7 @@
+<?php
+$role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
+?>
+
 <div style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
     <nav style="margin-bottom: 2rem; font-size: 0.8rem; color: #666;">
         <a href="index.php?page=offres" style="color: #2563eb; text-decoration: none;">&larr; Retour aux offres</a>
@@ -7,9 +11,15 @@
         <article>
             <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;"><?= htmlspecialchars($offre['titre']) ?></h1>
             <p style="font-size: 1.25rem; color: #64748b; margin-bottom: 0.5rem;"><?= htmlspecialchars($offre['entreprise_nom']) ?></p>
-            <p style="font-size: 0.95rem; color: #475569; margin-bottom: 2rem;">
-                📅 Date de publication :
+
+            <p style="font-size: 0.95rem; color: #475569; margin-bottom: 0.5rem;">
+                📅 Date de l'offre :
                 <strong><?= !empty($offre['date_offre']) ? date('d/m/Y', strtotime($offre['date_offre'])) : 'Non renseignée' ?></strong>
+            </p>
+
+            <p style="font-size: 0.95rem; color: #475569; margin-bottom: 2rem;">
+                🕒 Ajoutée sur la plateforme :
+                <strong><?= !empty($offre['created_at']) ? date('d/m/Y à H:i', strtotime($offre['created_at'])) : 'Non renseignée' ?></strong>
             </p>
 
             <section style="margin-bottom: 2.5rem;">
@@ -30,6 +40,7 @@
                         <blockquote style="font-style: italic; color: #475569; margin-bottom: 1.5rem; background: white; padding: 1rem; border-radius: 6px;">
                             "<?= nl2br(htmlspecialchars($maCandidature['lettre_motivation'])) ?>"
                         </blockquote>
+
                         <?php if (!empty($maCandidature['cv'])): ?>
                             <a href="<?= htmlspecialchars($maCandidature['cv']) ?>" target="_blank"
                                style="display: inline-block; background: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600;">
@@ -67,13 +78,11 @@
                 <p style="margin-bottom: 0.75rem;"><strong>⏳ Durée :</strong> <?= htmlspecialchars($offre['duree'] ?: 'Non renseignée') ?></p>
                 <p style="margin-bottom: 0.75rem;"><strong>💰 Gratification :</strong> <?= !empty($offre['remuneration']) ? number_format((float)$offre['remuneration'], 2, ',', ' ') . ' €/mois' : 'Non renseignée' ?></p>
                 <p style="margin-bottom: 0.75rem;"><strong>👥 Places :</strong> <?= (int)$offre['nb_places'] ?> poste(s)</p>
-                <p><strong>📅 Publication :</strong> <?= !empty($offre['date_offre']) ? date('d/m/Y', strtotime($offre['date_offre'])) : 'Non renseignée' ?></p>
+                <p style="margin-bottom: 0.75rem;"><strong>📅 Date de l'offre :</strong> <?= !empty($offre['date_offre']) ? date('d/m/Y', strtotime($offre['date_offre'])) : 'Non renseignée' ?></p>
+                <p><strong>🕒 Ajout plateforme :</strong> <?= !empty($offre['created_at']) ? date('d/m/Y à H:i', strtotime($offre['created_at'])) : 'Non renseignée' ?></p>
             </div>
 
-            <?php
-            $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
-            if ($role === 'admin' || $role === 'pilote'):
-            ?>
+            <?php if ($role === 'admin' || $role === 'pilote'): ?>
                 <div style="padding: 1.5rem; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px;">
                     <h3 style="font-size: 0.875rem; color: #be123c; margin-bottom: 1rem;">Administration</h3>
                     <a href="index.php?page=offre-edit&id=<?= (int)$offre['id'] ?>"

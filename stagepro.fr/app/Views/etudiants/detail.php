@@ -3,7 +3,7 @@
  * VUE : Détail d'un étudiant
  * La variable $etudiant est fournie par EtudiantController->show($id)
  */
-$u = $etudiant ?? $utilisateur; 
+$u = $etudiant ?? $utilisateur;
 
 // Sécurité : Si l'utilisateur n'existe pas dans la base
 if (!$u) {
@@ -28,7 +28,7 @@ $sessionRole = strtolower(trim($sessionRoleRaw));
 </nav>
 
 <div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 2rem; align-items: start;">
-  
+
   <aside>
     <section style="background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
       <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -40,18 +40,24 @@ $sessionRole = strtolower(trim($sessionRoleRaw));
       </div>
 
       <ul style="list-style: none; font-size: 0.9rem; line-height: 2; padding: 0;">
-        <li><strong style="color: var(--text-muted);">Email :</strong><br> 
+        <li>
+            <strong style="color: var(--text-muted);">Email :</strong><br>
             <?= htmlspecialchars($u['email'] ?? 'Non renseigné') ?>
         </li>
-        <li><strong style="color: var(--text-muted);">Centre :</strong><br> 
+        <li>
+            <strong style="color: var(--text-muted);">Centre :</strong><br>
             <?= htmlspecialchars($u['centre_nom'] ?? 'Non assigné') ?>
+        </li>
+        <li>
+            <strong style="color: var(--text-muted);">Compte créé le :</strong><br>
+            <?= !empty($u['created_at']) ? date('d/m/Y à H:i', strtotime($u['created_at'])) : 'Non renseignée' ?>
         </li>
       </ul>
 
       <?php if ($sessionRole === 'admin' || $sessionRole === 'pilote'): ?>
       <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-        
-        <a href="index.php?page=etudiant-edit&id=<?= (int)$u['id'] ?>" 
+
+        <a href="index.php?page=etudiant-edit&id=<?= (int)$u['id'] ?>"
            style="display: block; text-align: center; margin-bottom: 0.7rem; font-size: 0.85rem; text-decoration: none; background: #2563eb; color: white; padding: 0.6rem; border-radius: 4px; font-weight: bold;">
             Modifier le compte
         </a>
@@ -71,14 +77,15 @@ $sessionRole = strtolower(trim($sessionRoleRaw));
   <main-content>
     <section style="background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
       <h2 style="margin-bottom: 1.5rem; color: #333;">Candidatures / Activité</h2>
-      
+
       <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
           <article class="card" style="border: 1px solid var(--border); padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.02);">
-            <h3 style="font-size: 1rem; color: var(--accent-blue); margin-bottom: 0.5rem;">Candidatures en cours</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">Aucune candidature active pour le moment.</p>
+            <h3 style="font-size: 1rem; color: var(--accent-blue);">Activité</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">
+              Cette section pourra afficher l'historique détaillé des candidatures de l'étudiant.
+            </p>
           </article>
       </div>
     </section>
   </main-content>
-
 </div>

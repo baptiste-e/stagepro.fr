@@ -40,7 +40,12 @@ if (session_status() === PHP_SESSION_NONE) {
             <p><strong>Téléphone :</strong> <?= htmlspecialchars($entreprise['telephone_contact']) ?></p>
           <?php endif; ?>
 
-          <a href="index.php?page=entreprise-detail&id=<?= (int) $entreprise['id'] ?>" class="lien-etendu"></a>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            <strong>Créée le :</strong>
+            <?= !empty($entreprise['created_at']) ? date('d/m/Y à H:i', strtotime($entreprise['created_at'])) : 'Non renseignée' ?>
+          </p>
+
+          <a href="index.php?page=entreprise-detail&id=<?= (int)$entreprise['id'] ?>" class="lien-etendu"></a>
         </article>
       <?php endforeach; ?>
     <?php else: ?>
