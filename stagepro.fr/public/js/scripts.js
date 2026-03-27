@@ -109,23 +109,42 @@ document.addEventListener('DOMContentLoaded', () => {
             observer.observe(element);
         });
     }
+const statsSection = document.querySelector('.stats-section');
+const stats = document.querySelectorAll('.stats-container .stat');
 
-    const statElements = document.querySelectorAll('.stat-reveal');
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
 
-if (statElements.length > 0) {
-    const statsObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.2
-    });
+function updateStatsOnScroll() {
+    if (!statsSection || stats.length === 0) return;
 
-    statElements.forEach((element) => {
-        statsObserver.observe(element);
+    const rect = statsSection.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    // progression de la section dans l'écran
+    const start = windowHeight * 0.85;
+    const end = windowHeight * 0.15;
+    const total = start - end;
+
+    const progress = clamp((start - rect.top) / total, 0, 1);
+
+    stats.forEach((stat, index) => {
+        const itemStart = index / stats.length;
+        const itemEnd = (index + 1) / stats.length;
+
+        let itemProgress = (progress - itemStart) / (itemEnd - itemStart);
+        itemProgress = clamp(itemProgress, 0, 1);
+
+        const opacity = itemProgress;
+        const translateY = 60 * (1 - itemProgress);
+
+        stat.style.opacity = opacity;
+        stat.style.transform = `translateY(${translateY}px)`;
     });
 }
+
+window.addEventListener('scroll', updateStatsOnScroll);
+window.addEventListener('resize', updateStatsOnScroll);
+updateStatsOnScroll();
 });
