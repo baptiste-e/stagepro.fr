@@ -4,60 +4,36 @@ require_once __DIR__ . '/../Models/Wishlist.php';
 
 class WishlistController {
     private $model;
+    private $twig;
 
-    public function __construct() {
+    public function __construct($twig) {
         $this->model = new Wishlist();
+        $this->twig = $twig;
     }
 
-    // Affiche la liste des favoris
     public function index() {
-        if (!isset($_SESSION['user'])) { 
-            header('Location: index.php?page=login'); 
-            exit; 
-        }
-        
-        $id_user = $_SESSION['user']['id'];
-        
-        // --- CHANGEMENT ICI : On utilise les noms attendus par la vue ---
-        $wishlist = $this->model->getUserWishlist($id_user);
-        $wishlist_est_vide = empty($wishlist);
-        
-        $titre_page = "Ma Wish-list | StagePro";
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/wishlist/liste.php'; 
-        include __DIR__ . '/../Views/layout/footer.php';
+        if (!isset($_SESSION['user'])) { header('Location: index.php?page=login'); exit; }
+        $wishlist = $this->model->getUserWishlist($_SESSION['user']['id']);
+        echo $this->twig->render('wishlist/liste.html.twig', [
+            'wishlist' => $wishlist,
+            'titre_page' => "Ma Wish-list | StagePro"
+        ]);
     }
 
-    // Ajoute une offre aux favoris
     public function add() {
-        if (!isset($_SESSION['user'])) { header('Location: index.php?page=login'); exit; }
-
         $id_offre = (int)($_POST['id_offre'] ?? 0);
-        $id_user = $_SESSION['user']['id'];
-
-        if ($id_offre > 0) {
-            $this->model->add($id_user, $id_offre);
+        if ($id_offre > 0 && isset($_SESSION['user'])) {
+            $this->model->add($_SESSION['user']['id'], $id_offre);
         }
-
-        // Redirection vers la page précédente
         header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php?page=offres'));
         exit;
     }
 
-    // Supprime une offre des favoris
     public function remove() {
-        if (!isset($_SESSION['user'])) { header('Location: index.php?page=login'); exit; }
-
-        // On accepte POST (depuis le bouton de la liste) ou REQUEST
         $id_offre = (int)($_REQUEST['id_offre'] ?? 0);
-        $id_user = $_SESSION['user']['id'];
-
-        if ($id_offre > 0) {
-            $this->model->remove($id_user, $id_offre);
+        if ($id_offre > 0 && isset($_SESSION['user'])) {
+            $this->model->remove($_SESSION['user']['id'], $id_offre);
         }
-
-        // Si on vient de la liste, on y retourne, sinon page précédente
         header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php?page=wishlist'));
         exit;
     }

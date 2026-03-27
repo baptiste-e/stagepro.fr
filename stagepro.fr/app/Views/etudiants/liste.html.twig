@@ -1,0 +1,34 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Annuaire des étudiants | StagePro{% endblock %}
+
+{% block content %}
+<section>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h1>Annuaire des étudiants</h1>
+      <p style="color: var(--text-muted);">Gérez les comptes et suivez l'avancement des recherches.</p>
+    </div>
+
+    {# Vérification du rôle via la session globale #}
+    {% if session.user and session.user.role in ['admin', 'pilote'] %}
+      <a href="index.php?page=etudiant-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer un étudiant</a>
+    {% endif %}
+  </div>
+</section>
+
+<section style="margin-top: 3rem;">
+  <h2>Liste des étudiants</h2>
+  <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+    {% for etudiant in etudiants %}
+        <article class="card" style="position: relative;">
+          <h3>{{ etudiant.prenom }} {{ etudiant.nom }}</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">{{ etudiant.email }}</p>
+          <a href="index.php?page=etudiant-detail&id={{ etudiant.id }}" class="lien-etendu"></a>
+        </article>
+    {% else %}
+        <p>Aucun étudiant inscrit pour le moment.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

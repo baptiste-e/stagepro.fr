@@ -6,11 +6,16 @@ require_once __DIR__ . '/../Models/Candidature.php';
 
 class OffreController {
     private $model;
+    private $twig;
 
-    public function __construct() {
+    public function __construct($twig) {
         $this->model = new Offre();
+        $this->twig = $twig;
     }
 
+    /**
+     * Liste des offres avec filtres
+     */
     public function index() {
         $filters = [
             'titre' => trim($_GET['titre'] ?? ''),
@@ -22,16 +27,21 @@ class OffreController {
         $hasFilters = !empty(array_filter($filters));
         $offres = $hasFilters ? $this->model->search($filters) : $this->model->findAll();
         
-        $titre_page = "Offres de stage | StagePro";
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/offres/liste.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('offres/liste.html.twig', [
+            'offres' => $offres,
+            'filters' => $filters,
+            'titre_page' => "Offres de stage | StagePro"
+        ]);
     }
 
+    /**
+     * Détail d'une offre
+     */
     public function show($id) {
         $offre = $this->model->findById($id);
-        if (!$offre) {
-            die("Offre introuvable.");
+        if (!$offre) { 
+            header('Location: index.php?page=offres');
+            exit;
         }
 
         $maCandidature = null;
@@ -40,14 +50,20 @@ class OffreController {
             $maCandidature = $candModel->findSpecific($_SESSION['user']['id'], $id);
         }
 
-        $titre_page = htmlspecialchars($offre['titre']) . " | StagePro";
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/offres/detail.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('offres/detail.html.twig', [
+            'offre' => $offre,
+            'maCandidature' => $maCandidature,
+            'titre_page' => $offre['titre'] . " | StagePro"
+        ]);
     }
 
+    /**
+     * Formulaire Création / Édition (La méthode qui te manquait !)
+     */
     public function create($id = 0) {
-        if (!isset($_SESSION['user']) || strtolower($_SESSION['user']['role_nom'] ?? '') === 'etudiant') {
+        // Sécurité : Seuls Admin et Pilote peuvent accéder
+        $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
+        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=login');
             exit;
         }
@@ -56,14 +72,23 @@ class OffreController {
         $offre = $modeEdition ? $this->model->findById($id) : null;
         $entreprises = (new Entreprise())->findAll();
 
-        $titre_page = $modeEdition ? "Modifier l'offre" : "Publier une offre";
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/offres/formulaire.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('offres/formulaire.html.twig', [
+            'modeEdition' => $modeEdition,
+            'offre' => $offre,
+            'entreprises' => $entreprises,
+            'titre_page' => $modeEdition ? "Modifier l'offre" : "Publier une offre"
+        ]);
     }
 
+    /**
+     * Enregistrement en base de données
+     */
     public function save() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?page=offres');
+            exit;
+        }
+
         $id = (int)($_POST['id'] ?? 0);
         $data = [
             'titre' => htmlspecialchars($_POST['titre']),
@@ -71,35 +96,45 @@ class OffreController {
             'competences' => htmlspecialchars($_POST['competences']),
             'localite' => htmlspecialchars($_POST['localite']),
             'duree' => htmlspecialchars($_POST['duree']),
-            'remuneration' => $_POST['remuneration'] ?: null,
+            'remuneration' => !empty($_POST['remuneration']) ? $_POST['remuneration'] : null,
             'nb_places' => (int)$_POST['nb_places'],
             'id_entreprise' => (int)$_POST['id_entreprise']
         ];
 
-        $id > 0 ? $this->model->update($id, $data) : $this->model->create($data);
-        header('Location: index.php?page=offres');
+        if ($id > 0) {
+            $this->model->update($id, $data);
+        } else {
+            $this->model->create($data);
+        }
+
+        header('Location: index.php?page=offres&status=success');
         exit;
     }
 
+    /**
+     * Suppression d'une offre
+     */
     public function delete($id) {
-        // Correction : Récupération de l'ID en POST si non présent en GET
-        if ($id <= 0) {
-            $id = (int)($_POST['id'] ?? 0);
+        // On récupère l'ID soit par l'argument, soit par le POST
+        $id_to_delete = ($id > 0) ? $id : (int)($_POST['id'] ?? 0);
+
+        if ($id_to_delete > 0) {
+            $this->model->delete($id_to_delete);
         }
 
-        if ($id > 0) {
-            $this->model->delete($id);
-        }
         header('Location: index.php?page=offres&msg=deleted');
         exit;
     }
 
+    /**
+     * Statistiques
+     */
     public function stats() {
-        $statsLocalite = $this->model->getStatsByLocalite();
-        $statsEntreprise = $this->model->getStatsByEntreprise();
-        $titre_page = "Statistiques | StagePro";
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/offres/stats.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('offres/stats.html.twig', [
+            'statsLocalite' => $this->model->getStatsByLocalite(),
+            'statsEntreprise' => $this->model->getStatsByEntreprise(),
+            'totalOffres' => $this->model->countAll(),
+            'titre_page' => "Statistiques | StagePro"
+        ]);
     }
 }

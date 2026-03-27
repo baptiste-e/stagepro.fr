@@ -1,6 +1,8 @@
-<?php
-?>
+{% extends "layout.html.twig" %}
 
+{% block title %}Fiche {{ entreprise.nom }} | StagePro{% endblock %}
+
+{% block content %}
 <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
     <a href="index.php?page=home" style="color: var(--accent-blue);">Accueil</a> &gt;
@@ -9,33 +11,26 @@
   </p>
 </nav>
 
-<?php if (!empty($_SESSION['error'])): ?>
+{# Gestion des messages Flash (Erreur/Succès) via la session #}
+{% if session.error %}
   <div style="max-width: 900px; margin: 0 auto 1.5rem auto; padding: 1rem; border: 1px solid #fecaca; background: #fef2f2; color: #b91c1c; border-radius: 8px;">
-    <?= htmlspecialchars($_SESSION['error']) ?>
+    {{ session.error }}
   </div>
-  <?php unset($_SESSION['error']); ?>
-<?php endif; ?>
-
-<?php if (!empty($_SESSION['success'])): ?>
-  <div style="max-width: 900px; margin: 0 auto 1.5rem auto; padding: 1rem; border: 1px solid #bbf7d0; background: #f0fdf4; color: #166534; border-radius: 8px;">
-    <?= htmlspecialchars($_SESSION['success']) ?>
-  </div>
-  <?php unset($_SESSION['success']); ?>
-<?php endif; ?>
+{% endif %}
 
 <article style="background: var(--surface); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); max-width: 900px; margin: 0 auto;">
     <header style="border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
         <div>
             <h1 style="font-size: 2.2rem; color: var(--accent-purple); margin-bottom: 0.5rem;">
-                <?= htmlspecialchars($entreprise['nom']) ?>
+                {{ entreprise.nom }}
             </h1>
             <p style="color: var(--text-muted);">
-                Email : <?= htmlspecialchars($entreprise['email_contact'] ?? 'Non renseigné') ?>
+                Email : {{ entreprise.email_contact|default('Non renseigné') }}
             </p>
         </div>
         <div style="text-align: right;">
              <span style="background: rgba(129, 140, 248, 0.1); color: var(--accent-blue); padding: 5px 15px; border-radius: 20px; font-weight: bold;">
-                ID #<?= (int)$entreprise['id'] ?>
+                ID #{{ entreprise.id }}
              </span>
         </div>
     </header>
@@ -43,27 +38,29 @@
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
         <div>
             <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Téléphone</h3>
-            <p><?= htmlspecialchars($entreprise['telephone_contact'] ?? 'Non renseigné') ?></p>
+            <p>{{ entreprise.telephone_contact|default('Non renseigné') }}</p>
         </div>
     </div>
 
     <div style="line-height: 1.8;">
         <h3 style="color: var(--text-main); margin-bottom: 1rem;">À propos de l'entreprise</h3>
         <p style="color: var(--text-muted);">
-            <?= nl2br(htmlspecialchars($entreprise['description'] ?? 'Aucune description disponible pour cette entreprise.')) ?>
+            {{ entreprise.description|default('Aucune description disponible pour cette entreprise.')|nl2br }}
         </p>
     </div>
 
-    <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'] ?? '', ['admin', 'pilote'])): ?>
+    {# Actions d'administration #}
+    {% if session.user and session.user.role in ['admin', 'pilote'] %}
     <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed var(--border); display: flex; gap: 1rem;">
-        <a href="index.php?page=entreprise-edit&id=<?= $entreprise['id'] ?>" class="btn-cta">Modifier la fiche</a>
+        <a href="index.php?page=entreprise-edit&id={{ entreprise.id }}" class="btn-cta">Modifier la fiche</a>
 
         <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette entreprise ?');">
-            <input type="hidden" name="id" value="<?= (int)$entreprise['id'] ?>">
+            <input type="hidden" name="id" value="{{ entreprise.id }}">
             <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer;">
                 Supprimer l'entreprise
             </button>
         </form>
     </div>
-    <?php endif; ?>
+    {% endif %}
 </article>
+{% endblock %}

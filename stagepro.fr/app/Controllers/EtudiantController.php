@@ -4,90 +4,60 @@ require_once __DIR__ . '/../Models/Utilisateur.php';
 
 class EtudiantController {
     private $model;
+    private $twig;
 
-    public function __construct() {
+    public function __construct($twig) {
         $this->model = new Utilisateur();
+        $this->twig = $twig;
     }
 
-    /**
-     * Affiche l'annuaire des étudiants
-     */
     public function index() {
         $etudiants = $this->model->findByRole('etudiant');
-        $titre_page = "Annuaire des étudiants | StagePro";
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/liste.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('etudiants/liste.html.twig', [
+            'etudiants' => $etudiants,
+            'titre_page' => "Annuaire des étudiants | StagePro"
+        ]);
     }
 
-    /**
-     * Affiche le profil détaillé d'un étudiant
-     */
     public function show($id) {
         $etudiant = $this->model->findById($id);
         if (!$etudiant) {
             header('Location: index.php?page=etudiants');
             exit;
         }
-        $titre_page = "Profil de " . htmlspecialchars($etudiant['nom']) . " | StagePro";
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/detail.php'; 
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('etudiants/detail.html.twig', [
+            'etudiant' => $etudiant,
+            'titre_page' => "Profil de " . $etudiant['nom'] . " | StagePro"
+        ]);
     }
 
-    /**
-     * Formulaire de création
-     */
     public function create() {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
-        if (!isset($_SESSION['user']) || $role === 'etudiant') {
+        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=home');
             exit;
         }
-        $titre_page = "Ajouter un étudiant | StagePro";
-        $modeEdition = false;
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/formulaire.php'; 
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('etudiants/formulaire.html.twig', [
+            'titre_page' => "Ajouter un étudiant | StagePro",
+            'etudiant' => null
+        ]);
     }
 
-    /**
-     * Formulaire de modification
-     */
     public function edit($id) {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=home');
             exit;
         }
-
         $etudiant = $this->model->findById($id);
-        if (!$etudiant) {
-            header('Location: index.php?page=etudiants');
-            exit;
-        }
-
-        $titre_page = "Modifier l'étudiant | StagePro";
-        $modeEdition = true;
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/formulaire.php'; 
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('etudiants/formulaire.html.twig', [
+            'etudiant' => $etudiant,
+            'titre_page' => "Modifier l'étudiant | StagePro"
+        ]);
     }
 
-    /**
-     * Sauvegarde (Create ou Update)
-     */
     public function save() {
-        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
-        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
-            header('Location: index.php?page=home');
-            exit;
-        }
-
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
         $id = (int)($_POST['id'] ?? 0);
         $data = [
             'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
@@ -95,37 +65,22 @@ class EtudiantController {
             'email'   => htmlspecialchars($_POST['email'] ?? ''),
             'role_id' => 3 
         ];
-
         if (!empty($_POST['password'])) {
             $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         } elseif ($id === 0) {
             $data['mot_de_passe'] = password_hash('Cesi2026!', PASSWORD_DEFAULT);
         }
-
-        if ($id > 0) {
-            $this->model->update($id, $data);
-        } else {
-            $this->model->create($data);
-        }
-
+        $id > 0 ? $this->model->update($id, $data) : $this->model->create($data);
         header('Location: index.php?page=etudiants');
         exit;
     }
 
-    /**
-     * Suppression
-     */
     public function delete() {
-        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
-        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
-            die("Accès refusé.");
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = (int)($_POST['id'] ?? 0);
+            if ($id > 0) { $this->model->delete($id); }
+            header('Location: index.php?page=etudiants&message=deleted');
+            exit;
         }
-
-        $id = (int)($_POST['id'] ?? 0);
-        if ($id > 0) {
-            $this->model->delete($id);
-        }
-        header('Location: index.php?page=etudiants&message=deleted');
-        exit;
     }
 }

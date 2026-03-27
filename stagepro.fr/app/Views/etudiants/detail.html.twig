@@ -1,0 +1,67 @@
+{% extends "layout.html.twig" %}
+
+{# Normalisation du rôle pour la vue #}
+{% set userRole = session.user.role_nom|default(session.user.role)|lower|trim %}
+
+{% block title %}Profil de {{ etudiant.prenom }} {{ etudiant.nom }} | StagePro{% endblock %}
+
+{% block content %}
+<nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
+  <p>
+    <a href="index.php?page=home" style="color: var(--accent-blue);">Accueil</a> &gt;
+    <a href="index.php?page=etudiants" style="color: var(--accent-blue);">Étudiants</a> &gt;
+    <span style="color: var(--text-muted);">Détail profil</span>
+  </p>
+</nav>
+
+<div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 2rem; align-items: start;">
+  
+  <aside>
+    <section style="background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        {# Génération des initiales via les filtres slice et upper #}
+        <div style="width: 80px; height: 80px; background: var(--accent-blue); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white;">
+          {{ etudiant.prenom|slice(0,1)|upper }}{{ etudiant.nom|slice(0,1)|upper }}
+        </div>
+        <h2 style="font-size: 1.2rem; color: #333;">{{ etudiant.prenom }} {{ etudiant.nom }}</h2>
+        <p style="font-size: 0.8rem; color: var(--accent-purple); font-weight: bold; text-transform: uppercase;">Étudiant</p>
+      </div>
+
+      <ul style="list-style: none; font-size: 0.9rem; line-height: 2; padding: 0;">
+        <li><strong style="color: var(--text-muted);">Email :</strong><br> {{ etudiant.email|default('Non renseigné') }}</li>
+        <li><strong style="color: var(--text-muted);">Centre :</strong><br> {{ etudiant.centre_nom|default('Non assigné') }}</li>
+      </ul>
+
+      {% if userRole == 'admin' or userRole == 'pilote' %}
+      <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+        <a href="index.php?page=etudiant-edit&id={{ etudiant.id }}" 
+           style="display: block; text-align: center; margin-bottom: 0.7rem; font-size: 0.85rem; text-decoration: none; background: #2563eb; color: white; padding: 0.6rem; border-radius: 4px; font-weight: bold;">
+            Modifier le compte
+        </a>
+
+        <form action="index.php?page=etudiant-delete" method="post" onsubmit="return confirm('Confirmer la suppression ?');">
+            <input type="hidden" name="id" value="{{ etudiant.id }}">
+            <button type="submit" style="width: 100%; background: white; border: 1px solid #ff4444; color: #ff4444; font-size: 0.85rem; cursor: pointer; padding: 0.5rem; border-radius: 4px;">
+                Supprimer l'étudiant
+            </button>
+        </form>
+      </div>
+      {% endif %}
+    </section>
+  </aside>
+
+  <main>
+    <section style="background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
+      <h2 style="margin-bottom: 1.5rem; color: #333;">Candidatures / Activité</h2>
+      
+      <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+          <article class="card" style="border: 1px solid var(--border); padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.02);">
+            <h3 style="font-size: 1rem; color: var(--accent-blue); margin-bottom: 0.5rem;">Candidatures en cours</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Aucune candidature active pour le moment.</p>
+          </article>
+      </div>
+    </section>
+  </main>
+
+</div>
+{% endblock %}

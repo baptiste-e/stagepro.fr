@@ -1,0 +1,53 @@
+{% extends "layout.html.twig" %}
+
+{% set isEdit = modeEdition %}
+
+{% block title %}{{ isEdit ? "Modifier" : "Publier" }} une offre | StagePro{% endblock %}
+
+{% block content %}
+<section style="margin-top: 2rem;">
+  <form action="index.php?page=offre-save" method="post" style="max-width: 900px; background: var(--surface); padding: 2.5rem; border-radius: 8px; border: 1px solid var(--border);">
+
+    {% if isEdit %}
+      <input type="hidden" name="id" value="{{ offre.id }}">
+    {% endif %}
+    
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+        
+        <div class="form-group" style="grid-column: span 2;">
+          <label for="titre">Intitulé du poste</label>
+          <input type="text" id="titre" name="titre" value="{{ offre.titre|default('') }}" placeholder="Ex: Développeur Web..." required>
+        </div>
+
+        <div class="form-group">
+          <label for="id_entreprise">Entreprise</label>
+          <select id="id_entreprise" name="id_entreprise" required>
+            <option value="">-- Sélectionnez --</option>
+            {% for entreprise in entreprises %}
+              <option value="{{ entreprise.id }}" {{ offre.entreprise_id == entreprise.id ? 'selected' : '' }}>
+                {{ entreprise.nom }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        {# ... Champs suivants identiques avec syntaxe {{ offre.champ|default('') }} ... #}
+        <div class="form-group">
+          <label for="localite">Ville</label>
+          <input type="text" id="localite" name="localite" value="{{ offre.localite|default('') }}" required>
+        </div>
+        
+        <div class="form-group" style="grid-column: span 2;">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="8" required>{{ offre.description|default('') }}</textarea>
+        </div>
+    </div>
+
+    <div style="margin-top: 2.5rem; display: flex; align-items: center; gap: 2rem;">
+      <button type="submit">{{ isEdit ? "Mettre à jour" : "Enregistrer" }}</button>
+      <a href="index.php?page=offres" style="color: var(--text-muted); text-decoration: none;">Annuler</a>
+    </div>
+
+  </form>
+</section>
+{% endblock %}

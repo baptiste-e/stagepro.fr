@@ -1,0 +1,49 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Annuaire des entreprises | StagePro{% endblock %}
+
+{% block content %}
+<section>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h1>Annuaire des entreprises</h1>
+      <p style="color: var(--text-muted);">Trouvez votre futur lieu de stage parmi nos partenaires.</p>
+    </div>
+
+    {# Restriction d'accès au bouton de création #}
+    {% if session.user and session.user.role in ['admin', 'pilote'] %}
+      <a href="index.php?page=entreprise-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer une entreprise</a>
+    {% endif %}
+  </div>
+</section>
+
+<section style="margin-top: 3rem;">
+  <h2>Entreprises partenaires</h2>
+
+  <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+    {% for entreprise in entreprises %}
+        <article class="card" style="position: relative;">
+          <h3 style="color: var(--accent-blue);">
+            {{ entreprise.nom }}
+          </h3>
+
+          <p>
+            {{ entreprise.description|default('Aucune description disponible.')|slice(0, 150) }}
+          </p>
+
+          {% if entreprise.email_contact %}
+            <p><strong>Email :</strong> {{ entreprise.email_contact }}</p>
+          {% endif %}
+
+          {% if entreprise.telephone_contact %}
+            <p><strong>Téléphone :</strong> {{ entreprise.telephone_contact }}</p>
+          {% endif %}
+
+          <a href="index.php?page=entreprise-detail&id={{ entreprise.id }}" class="lien-etendu"></a>
+        </article>
+    {% else %}
+      <p>Aucune entreprise trouvée.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Annuaire des pilotes | StagePro{% endblock %}
+
+{% block content %}
+<section>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h1>Annuaire des pilotes</h1>
+      <p style="color: var(--text-muted);">Gérez les comptes des tuteurs et responsables de promotion.</p>
+    </div>
+    
+    {# Seul l'admin peut créer un pilote #}
+    {% if session.user and session.user.role == 'admin' %}
+      <a href="index.php?page=pilote-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer un pilote</a>
+    {% endif %}
+  </div>
+</section>
+
+<section style="margin-top: 3rem;">
+  <h2>Pilotes enregistrés</h2>
+  <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+    {% for p in pilotes %}
+        <article class="card" style="position: relative;">
+          <h3>{{ p.prenom }} {{ p.nom }}</h3>
+          <p><strong>Email :</strong> {{ p.email }}</p>
+          <a href="index.php?page=pilote-detail&id={{ p.id }}" class="lien-etendu"></a>
+        </article>
+    {% else %}
+        <p>Aucun pilote enregistré.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
