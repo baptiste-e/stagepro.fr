@@ -67,7 +67,7 @@ section { margin-bottom: 5rem; }
   align-items: center;
   text-align: center;
   margin: 0;
-  padding: 0 1rem;
+  padding: 0 1rem 4rem 1rem;
 }
 
 
@@ -210,7 +210,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
 .entreprise-showcase {
   width: 100%;
-  padding: 6rem 0 0 0;
+  padding: 10rem 0 4rem 0;
   background: #ffffff;
   text-align: center;
 }
@@ -328,7 +328,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .espaces-section {
   position: relative;
   width: 100%;
-  padding: 8rem 0 4rem 0;
+  padding: 12rem 0 6rem 0;
 }
 
 .espaces-section::before {
@@ -375,3 +375,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .fade-in:nth-child(2) { transition-delay: 0.3s; }
 .fade-in:nth-child(3) { transition-delay: 0.5s; }
 .fade-in:nth-child(4) { transition-delay: 0.7s; }
+
+.espaces-section + section {
+  padding-top: 4rem;
+}
