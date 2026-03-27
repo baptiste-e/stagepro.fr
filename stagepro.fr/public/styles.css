@@ -249,8 +249,8 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
 .testimonial-track {
   position: relative;
-  overflow: visible;
-  min-height: 280px;
+  overflow: hidden;
+  min-height: 320px;
 }
 
 /* --- CARTES --- */
@@ -267,7 +267,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
   padding: 3rem;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  min-height: 230px;
+  min-height: 260px;
 }
 
 /* carte active visible */
@@ -286,17 +286,21 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
   margin-bottom: 2rem;
 }
 
+.testimonial-meta {
+  margin-top: 2rem;
+}
+
 .testimonial-meta strong {
   display: block;
   font-weight: 600;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .testimonial-meta span {
   display: block;
   font-size: 0.95rem;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 /* --- BARRE DE PROGRESSION --- */
@@ -320,22 +324,22 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .espaces-section {
   position: relative;
   width: 100%;
-  padding: 5rem 0 4rem 0;
+  padding: 8rem 0 4rem 0;
 }
 
 .espaces-section::before {
   content: "";
   position: absolute;
-  top: -180px;
+  top: -120px;
   left: 0;
   width: 100%;
-  height: 180px;
+  height: 220px;
   background: linear-gradient(
     to bottom,
     #ffffff 0%,
-    rgba(255, 255, 255, 0.92) 25%,
-    rgba(255, 255, 255, 0.65) 55%,
-    rgba(255, 255, 255, 0.2) 80%,
+    #ffffff 35%,
+    rgba(255, 255, 255, 0.9) 55%,
+    rgba(255, 255, 255, 0.45) 80%,
     rgba(255, 255, 255, 0) 100%
   );
   pointer-events: none;
