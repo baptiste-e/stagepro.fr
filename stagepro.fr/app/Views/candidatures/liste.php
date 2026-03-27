@@ -15,8 +15,7 @@
 </nav>
 
 <section>
-<<<<<<< HEAD
-    <h1>Mes candidatures</h1>
+<h1>Mes candidatures</h1>
     <p style="color: var(--text-muted); margin-bottom: 2rem;">
         Suivez ici l’ensemble des offres auxquelles vous avez postulé.
     </p>
@@ -58,7 +57,6 @@
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
-=======
   <h1><?= htmlspecialchars($titre_page ?? 'Candidatures') ?></h1>
   <p style="color: var(--text-muted);">
     Consultez les candidatures envoyées sur la plateforme.
@@ -122,5 +120,4 @@
       <?php endforeach; ?>
     </div>
   <?php endif; ?>
->>>>>>> 905e39fe3f5f46264e0d2852c5a5f0edc6fff017
 </section>
