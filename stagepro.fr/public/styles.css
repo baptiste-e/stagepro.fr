@@ -386,6 +386,17 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   z-index: 2;
 }
 
+.stats-section::before {
+  content: "";
+  position: absolute;
+  top: -30vh;
+  left: 0;
+  width: 100%;
+  height: 30vh;
+  background: #ffffff;
+  z-index: -1;
+}
+
 .stats-container {
   max-width: 1000px;
   margin: 0 auto;
@@ -405,14 +416,14 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 .stat h3 {
-  font-size: 2.2rem;
+  font-size: 3rem;
   color: var(--accent);
   margin-bottom: 0.5rem;
   font-weight: 700;
 }
 
 .stat p {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   color: var(--text-muted);
 }
 
