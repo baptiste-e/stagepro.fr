@@ -88,7 +88,7 @@
                     <?php if (isset($_SESSION['user']) && strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role']) === 'etudiant'): ?>
                         <form action="index.php?page=wishlist-add" method="post" style="margin: 0;">
                             <input type="hidden" name="id_offre" value="<?= (int)$offre['id'] ?>">
-                            <button type="submit" style="background: transparent; border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 5px 10px; font-size: 0.8rem; cursor: pointer; border-radius: 4px;">
+                            <button type="submit" class="btn-cta" style="font-size: 0.75rem;">
                                 ☆ Ajouter
                             </button>
                         </form>

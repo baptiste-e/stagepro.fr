@@ -69,7 +69,7 @@
                     <h3 style="font-size: 0.875rem; color: #334155; margin-bottom: 1rem;">Favoris</h3>
                     <form action="index.php?page=wishlist-add" method="post" style="margin: 0;">
                         <input type="hidden" name="id_offre" value="<?= (int)$offre['id'] ?>">
-                        <button type="submit" style="width: 100%; background: transparent; border: 1px solid #2563eb; color: #2563eb; padding: 0.75rem; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                        <button type="submit" class="btn-cta" style="width: 100%;">
                             ☆ Ajouter à ma wish-list
                         </button>
                     </form>
