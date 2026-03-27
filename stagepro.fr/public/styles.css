@@ -210,7 +210,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
 .entreprise-showcase {
   width: 100%;
-  padding: 10rem 0 4rem 0;
+  padding: 10rem 0 8rem 0; /* plus d’espace en bas */
   background: #ffffff;
   text-align: center;
 }
@@ -376,3 +376,60 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .fade-in:nth-child(3) { transition-delay: 0.5s; }
 .fade-in:nth-child(4) { transition-delay: 0.7s; }
 
+/* --- SECTION CHIFFRES CLÉS --- */
+
+.stats-section {
+  width: 100%;
+  padding: 10rem 1rem 6rem 1rem; /* GROS espace au-dessus */
+  background: #ffffff;
+  margin-top: 4rem;
+}
+
+.stats-container {
+  max-width: 1000px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+
+  text-align: center;
+}
+
+.stat {
+  padding: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.stat:hover {
+  transform: translateY(-3px);
+}
+
+.stat h3 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.stat p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* --- RESPONSIVE --- */
+
+@media (max-width: 768px) {
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .stat h3 {
+    font-size: 1.8rem;
+  }
+
+  .stat p {
+    font-size: 0.9rem;
+  }
+}

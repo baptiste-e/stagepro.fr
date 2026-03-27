@@ -66,6 +66,30 @@
   </div>
 </section>
 
+<section class="stats-section">
+    <div class="stats-container">
+        <div class="stat">
+            <h3>120+</h3>
+            <p>Offres disponibles</p>
+        </div>
+
+        <div class="stat">
+            <h3>35+</h3>
+            <p>Entreprises partenaires</p>
+        </div>
+
+        <div class="stat">
+            <h3>250+</h3>
+            <p>Candidatures envoyées</p>
+        </div>
+
+        <div class="stat">
+            <h3>80+</h3>
+            <p>Offres en wish-list</p>
+        </div>
+    </div>
+</section>
+
 <section class="espaces-section">
     <div class="espaces-content">
     <h2>Espaces utilisateurs</h2>

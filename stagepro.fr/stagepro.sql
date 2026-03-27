@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 25 mars 2026 à 14:21
+-- Généré le : ven. 27 mars 2026 à 14:05
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -129,6 +129,7 @@ CREATE TABLE `utilisateurs` (
   `email` varchar(150) NOT NULL,
   `mot_de_passe` varchar(255) NOT NULL,
   `role_id` int(11) NOT NULL,
+  `pilote_id` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -136,10 +137,10 @@ CREATE TABLE `utilisateurs` (
 -- Déchargement des données de la table `utilisateurs`
 --
 
-INSERT INTO `utilisateurs` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `role_id`, `created_at`) VALUES
-(1, 'Admin', 'StagePro', 'admin@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 1, '2026-03-24 13:54:36'),
-(2, 'Pilote', 'Paul', 'pilote@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 2, '2026-03-24 13:54:36'),
-(3, 'Etudiant', 'Emma', 'etudiant@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 3, '2026-03-24 13:54:36');
+INSERT INTO `utilisateurs` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `role_id`, `pilote_id`, `created_at`) VALUES
+(1, 'Admin', 'StagePro', 'admin@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 1, NULL, '2026-03-24 13:54:36'),
+(2, 'Pilote', 'Paul', 'pilote@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 2, NULL, '2026-03-24 13:54:36'),
+(3, 'Etudiant', 'Emma', 'etudiant@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 3, 2, '2026-03-24 13:54:36');
 
 -- --------------------------------------------------------
 
@@ -153,13 +154,6 @@ CREATE TABLE `wishlist` (
   `offre_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `wishlist`
---
-
-INSERT INTO `wishlist` (`id`, `utilisateur_id`, `offre_id`, `created_at`) VALUES
-(6, 2, 3, '2026-03-25 07:52:25');
 
 --
 -- Index pour les tables déchargées
@@ -199,7 +193,8 @@ ALTER TABLE `roles`
 ALTER TABLE `utilisateurs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `role_id` (`role_id`);
+  ADD KEY `role_id` (`role_id`),
+  ADD KEY `fk_utilisateurs_pilote` (`pilote_id`);
 
 --
 -- Index pour la table `wishlist`
@@ -217,13 +212,13 @@ ALTER TABLE `wishlist`
 -- AUTO_INCREMENT pour la table `candidatures`
 --
 ALTER TABLE `candidatures`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `entreprises`
 --
 ALTER TABLE `entreprises`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `offres`
@@ -241,13 +236,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Contraintes pour les tables déchargées
@@ -270,6 +265,7 @@ ALTER TABLE `offres`
 -- Contraintes pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
+  ADD CONSTRAINT `fk_utilisateurs_pilote` FOREIGN KEY (`pilote_id`) REFERENCES `utilisateurs` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `utilisateurs_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 
 --
