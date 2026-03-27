@@ -45,6 +45,89 @@ $cookieConsent = $_COOKIE['cookie_consent'] ?? null;
     </nav>
   </header>
 
+  <?php if (!isset($_COOKIE['cookie_consent'])): ?>
+<div id="cookie-banner" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #f5f5f5;
+    padding: 1.5rem;
+    border-top: 2px solid #ccc;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 9999;
+">
+    <div style="max-width: 1200px; margin: auto;">
+        <p style="font-size: 0.9rem; margin-bottom: 1rem; color: #333;">
+            Ce site utilise des cookies permettant de visualiser des contenus et d'améliorer le fonctionnement grâce aux statistiques de navigation.
+            Vous pouvez accepter, refuser ou personnaliser vos choix.
+        </p>
+
+        <div style="display: flex; gap: 10px;">
+            <a href="index.php?page=cookie-accept" style="
+                background: #1e2bb8;
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                font-weight: bold;
+            ">Accepter</a>
+
+            <a href="index.php?page=cookie-refuse" style="
+                background: #1e2bb8;
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                font-weight: bold;
+            ">Refuser</a>
+
+            <button onclick="toggleCookiesSettings()" style="
+                border: 2px solid #1e2bb8;
+                background: white;
+                color: #1e2bb8;
+                padding: 10px 20px;
+                cursor: pointer;
+            ">
+                Personnaliser
+            </button>
+        </div>
+
+        <!-- Zone personnalisation -->
+        <div id="cookie-settings" style="display:none; margin-top:1rem;">
+            <form method="get" action="index.php">
+                <input type="hidden" name="page" value="cookie-accept">
+
+                <label>
+                    <input type="checkbox" checked disabled>
+                    Cookies essentiels (obligatoires)
+                </label><br>
+
+                <label>
+                    <input type="checkbox" name="stats">
+                    Cookies statistiques
+                </label><br><br>
+
+                <button type="submit" style="
+                    background:#1e2bb8;
+                    color:white;
+                    padding:8px 15px;
+                    border:none;
+                    cursor:pointer;
+                ">
+                    Enregistrer mes choix
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleCookiesSettings() {
+    const el = document.getElementById('cookie-settings');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+<?php endif; ?>
+
   <?php if ($cookieConsent === null): ?>
     <div style="position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 9999; background: #111; color: #fff; padding: 1rem 1.25rem; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.25);">
       <p style="margin: 0 0 0.75rem 0;">
