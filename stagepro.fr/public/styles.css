@@ -201,9 +201,10 @@ footer {
 }
 
 section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
-  max-width: 1000px;
-  margin: 0 auto 2.5rem auto;
-  padding: 0 1rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* --- SECTION ENTREPRISES --- */
@@ -378,4 +379,19 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
 .espaces-section + section {
   padding-top: 4rem;
+}
+
+section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+section {
+  scroll-snap-align: start;
+}
+
+html {
+  scroll-snap-type: y mandatory;
 }
