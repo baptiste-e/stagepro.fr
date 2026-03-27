@@ -17,16 +17,13 @@ class OffreController {
 
     public function index() {
         $filters = [
-            'titre'        => trim($_GET['titre'] ?? ''),
-            'entreprise'   => trim($_GET['entreprise'] ?? ''),
-            'competences'  => trim($_GET['competences'] ?? ''),
-            'remuneration' => trim($_GET['remuneration'] ?? ''),
-            'date_offre'   => trim($_GET['date_offre'] ?? ''),
-            'date_debut'   => trim($_GET['date_debut'] ?? ''),
-            'date_fin'     => trim($_GET['date_fin'] ?? '')
+            'titre' => trim($_GET['titre'] ?? ''),
+            'entreprise' => trim($_GET['entreprise'] ?? ''),
+            'competences' => trim($_GET['competences'] ?? ''),
+            'remuneration' => trim($_GET['remuneration'] ?? '')
         ];
 
-        $hasFilters = !empty(array_filter($filters, fn($value) => $value !== ''));
+        $hasFilters = !empty(array_filter($filters));
         $offres = $hasFilters ? $this->model->search($filters) : $this->model->findAll();
 
         $titre_page = "Offres de stage | StagePro";
@@ -42,13 +39,7 @@ class OffreController {
         }
 
         $maCandidature = null;
-
-        // Cette méthode n'existe peut-être pas encore dans ton modèle Candidature.
-        // On garde ici un garde-fou pour éviter de casser l'affichage.
-        if (
-            isset($_SESSION['user']) &&
-            strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '') === 'etudiant'
-        ) {
+        if (isset($_SESSION['user']) && strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '') === 'etudiant') {
             $candModel = new Candidature();
 
             if (method_exists($candModel, 'findSpecific')) {
@@ -63,9 +54,7 @@ class OffreController {
     }
 
     public function create($id = 0) {
-        $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
-
-        if (!isset($_SESSION['user']) || $role === 'etudiant') {
+        if (!isset($_SESSION['user']) || strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '') === 'etudiant') {
             header('Location: index.php?page=login');
             exit;
         }
@@ -82,33 +71,19 @@ class OffreController {
 
     public function save() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: index.php?page=offres');
-            exit;
-        }
-
-        $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
-        if (!isset($_SESSION['user']) || $role === 'etudiant') {
-            header('Location: index.php?page=login');
             exit;
         }
 
         $id = (int)($_POST['id'] ?? 0);
-
-        $dateOffre = trim($_POST['date_offre'] ?? '');
-        if ($dateOffre === '') {
-            $dateOffre = date('Y-m-d');
-        }
-
         $data = [
-            'titre'         => htmlspecialchars(trim($_POST['titre'] ?? '')),
-            'description'   => htmlspecialchars(trim($_POST['description'] ?? '')),
-            'competences'   => htmlspecialchars(trim($_POST['competences'] ?? '')),
-            'localite'      => htmlspecialchars(trim($_POST['localite'] ?? '')),
-            'duree'         => htmlspecialchars(trim($_POST['duree'] ?? '')),
-            'remuneration'  => ($_POST['remuneration'] ?? '') !== '' ? (float)$_POST['remuneration'] : null,
-            'nb_places'     => (int)($_POST['nb_places'] ?? 1),
-            'id_entreprise' => (int)($_POST['id_entreprise'] ?? 0),
-            'date_offre'    => $dateOffre
+            'titre' => htmlspecialchars($_POST['titre'] ?? ''),
+            'description' => htmlspecialchars($_POST['description'] ?? ''),
+            'competences' => htmlspecialchars($_POST['competences'] ?? ''),
+            'localite' => htmlspecialchars($_POST['localite'] ?? ''),
+            'duree' => htmlspecialchars($_POST['duree'] ?? ''),
+            'remuneration' => ($_POST['remuneration'] ?? '') !== '' ? (float)$_POST['remuneration'] : null,
+            'nb_places' => (int)($_POST['nb_places'] ?? 1),
+            'id_entreprise' => (int)($_POST['id_entreprise'] ?? 0)
         ];
 
         if ($id > 0) {
@@ -137,6 +112,21 @@ class OffreController {
     public function stats() {
         $statsLocalite = $this->model->getStatsByLocalite();
         $statsEntreprise = $this->model->getStatsByEntreprise();
+        $totalOffres = $this->model->countAll();
+
+        $topLocalite = !empty($statsLocalite) ? $statsLocalite[0] : null;
+        $topEntreprise = null;
+        $nbEntreprisesAvecOffres = 0;
+
+        foreach ($statsEntreprise as $ligne) {
+            if ((int)($ligne['nb'] ?? 0) > 0) {
+                $nbEntreprisesAvecOffres++;
+
+                if ($topEntreprise === null) {
+                    $topEntreprise = $ligne;
+                }
+            }
+        }
 
         $titre_page = "Statistiques | StagePro";
         include __DIR__ . '/../Views/layout/header.php';
