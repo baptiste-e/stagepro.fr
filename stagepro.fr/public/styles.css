@@ -210,7 +210,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
 .entreprise-showcase {
   width: 100%;
-  padding: 10rem 0 4rem 0;
+  padding: 10rem 0 8rem 0; /* plus d’espace en bas */
   background: #ffffff;
   text-align: center;
 }
@@ -380,8 +380,9 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
 .stats-section {
   width: 100%;
-  padding: 2rem 1rem 5rem 1rem;
-  background: transparent;
+  padding: 10rem 1rem 6rem 1rem; /* GROS espace au-dessus */
+  background: #ffffff;
+  margin-top: 4rem;
 }
 
 .stats-container {
