@@ -12,7 +12,8 @@ class Offre {
         $sql = "SELECT o.*, e.nom AS entreprise_nom
                 FROM offres o
                 LEFT JOIN entreprises e ON o.entreprise_id = e.id
-                ORDER BY o.id DESC";
+                ORDER BY o.date_offre DESC, o.id DESC";
+
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -41,10 +42,25 @@ class Offre {
 
         if (isset($filters['remuneration']) && $filters['remuneration'] !== '') {
             $sql .= " AND o.remuneration >= :remuneration";
-            $params[':remuneration'] = (float) $filters['remuneration'];
+            $params[':remuneration'] = (float)$filters['remuneration'];
         }
 
-        $sql .= " ORDER BY o.id DESC";
+        if (!empty($filters['date_offre'])) {
+            $sql .= " AND o.date_offre = :date_offre";
+            $params[':date_offre'] = $filters['date_offre'];
+        }
+
+        if (!empty($filters['date_debut'])) {
+            $sql .= " AND o.date_offre >= :date_debut";
+            $params[':date_debut'] = $filters['date_debut'];
+        }
+
+        if (!empty($filters['date_fin'])) {
+            $sql .= " AND o.date_offre <= :date_fin";
+            $params[':date_fin'] = $filters['date_fin'];
+        }
+
+        $sql .= " ORDER BY o.date_offre DESC, o.id DESC";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
@@ -57,6 +73,7 @@ class Offre {
                 FROM offres o
                 LEFT JOIN entreprises e ON o.entreprise_id = e.id
                 WHERE o.id = :id";
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -73,7 +90,8 @@ class Offre {
                     duree,
                     remuneration,
                     nb_places,
-                    entreprise_id
+                    entreprise_id,
+                    date_offre
                 ) VALUES (
                     :titre,
                     :description,
@@ -82,20 +100,22 @@ class Offre {
                     :duree,
                     :remuneration,
                     :nb_places,
-                    :id_entreprise
+                    :id_entreprise,
+                    :date_offre
                 )";
 
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([
-            ':titre' => $data['titre'],
-            ':description' => $data['description'],
-            ':competences' => $data['competences'],
-            ':localite' => $data['localite'],
-            ':duree' => $data['duree'],
-            ':remuneration' => $data['remuneration'] !== '' ? $data['remuneration'] : null,
-            ':nb_places' => $data['nb_places'],
-            ':id_entreprise' => $data['id_entreprise']
+            ':titre'         => $data['titre'],
+            ':description'   => $data['description'],
+            ':competences'   => $data['competences'],
+            ':localite'      => $data['localite'] !== '' ? $data['localite'] : null,
+            ':duree'         => $data['duree'] !== '' ? $data['duree'] : null,
+            ':remuneration'  => $data['remuneration'] !== '' ? $data['remuneration'] : null,
+            ':nb_places'     => $data['nb_places'],
+            ':id_entreprise' => $data['id_entreprise'],
+            ':date_offre'    => $data['date_offre']
         ]);
     }
 
@@ -108,41 +128,36 @@ class Offre {
                     duree = :duree,
                     remuneration = :remuneration,
                     nb_places = :nb_places,
-                    entreprise_id = :id_entreprise
+                    entreprise_id = :id_entreprise,
+                    date_offre = :date_offre
                 WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([
-            ':titre' => $data['titre'],
-            ':description' => $data['description'],
-            ':competences' => $data['competences'],
-            ':localite' => $data['localite'],
-            ':duree' => $data['duree'],
-            ':remuneration' => $data['remuneration'] !== '' ? $data['remuneration'] : null,
-            ':nb_places' => $data['nb_places'],
+            ':titre'         => $data['titre'],
+            ':description'   => $data['description'],
+            ':competences'   => $data['competences'],
+            ':localite'      => $data['localite'] !== '' ? $data['localite'] : null,
+            ':duree'         => $data['duree'] !== '' ? $data['duree'] : null,
+            ':remuneration'  => $data['remuneration'] !== '' ? $data['remuneration'] : null,
+            ':nb_places'     => $data['nb_places'],
             ':id_entreprise' => $data['id_entreprise'],
-            ':id' => $id
+            ':date_offre'    => $data['date_offre'],
+            ':id'            => $id
         ]);
     }
 
-    /**
-     * Suppression sécurisée avec nettoyage des dépendances
-     */
     public function delete(int $id): bool {
         try {
-            // Début d'une transaction pour être sûr que tout soit supprimé ou rien du tout
             $this->pdo->beginTransaction();
 
-            // 1. Supprimer les candidatures liées
             $stmt1 = $this->pdo->prepare("DELETE FROM candidatures WHERE offre_id = :id");
             $stmt1->execute([':id' => $id]);
 
-            // 2. Supprimer de la wishlist (si la table existe)
             $stmt2 = $this->pdo->prepare("DELETE FROM wishlist WHERE offre_id = :id");
             $stmt2->execute([':id' => $id]);
 
-            // 3. Supprimer l'offre elle-même
             $stmt3 = $this->pdo->prepare("DELETE FROM offres WHERE id = :id");
             $stmt3->execute([':id' => $id]);
 
@@ -155,7 +170,7 @@ class Offre {
     }
 
     public function countAll(): int {
-        return (int) $this->pdo->query("SELECT COUNT(*) FROM offres")->fetchColumn();
+        return (int)$this->pdo->query("SELECT COUNT(*) FROM offres")->fetchColumn();
     }
 
     public function getStatsByLocalite(): array {
@@ -163,6 +178,7 @@ class Offre {
                 FROM offres
                 GROUP BY localite
                 ORDER BY nb DESC, localite ASC";
+
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -173,6 +189,7 @@ class Offre {
                 LEFT JOIN offres o ON e.id = o.entreprise_id
                 GROUP BY e.id, e.nom
                 ORDER BY nb DESC, e.nom ASC";
+
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

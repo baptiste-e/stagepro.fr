@@ -18,7 +18,9 @@ class Candidature {
                 FROM candidatures c
                 JOIN offres o ON c.offre_id = o.id
                 JOIN entreprises e ON o.entreprise_id = e.id
-                WHERE c.id = :id LIMIT 1";
+                WHERE c.id = :id
+                LIMIT 1";
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -34,9 +36,29 @@ class Candidature {
                 JOIN entreprises e ON o.entreprise_id = e.id
                 WHERE c.utilisateur_id = :id
                 ORDER BY c.created_at DESC";
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Vérifie si un étudiant a déjà postulé à une offre précise
+     */
+    public function findSpecific($userId, $offreId) {
+        $sql = "SELECT *
+                FROM candidatures
+                WHERE utilisateur_id = :user_id
+                  AND offre_id = :offre_id
+                LIMIT 1";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'user_id'  => (int)$userId,
+            'offre_id' => (int)$offreId
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -45,11 +67,12 @@ class Candidature {
     public function create($userId, $offreId, $cvPath, $lettre) {
         $sql = "INSERT INTO candidatures (utilisateur_id, offre_id, cv, lettre_motivation)
                 VALUES (:user, :offre, :cv, :lettre)";
+
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
-            'user' => $userId,
-            'offre' => $offreId,
-            'cv' => $cvPath,
+            'user'   => $userId,
+            'offre'  => $offreId,
+            'cv'     => $cvPath,
             'lettre' => $lettre
         ]);
     }
@@ -58,10 +81,13 @@ class Candidature {
      * Supprime une candidature (sécurisé par userId)
      */
     public function deleteByIdentifiers($id_candidature, $userId) {
-        $sql = "DELETE FROM candidatures WHERE id = :id AND utilisateur_id = :user_id";
+        $sql = "DELETE FROM candidatures
+                WHERE id = :id
+                  AND utilisateur_id = :user_id";
+
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
-            'id' => (int)$id_candidature,
+            'id'      => (int)$id_candidature,
             'user_id' => (int)$userId
         ]);
     }
