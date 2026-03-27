@@ -99,7 +99,3 @@ $titre_page = "Indicateurs & Statistiques | StagePro";
     <p style="color: var(--text-muted);">Aucune donnée disponible.</p>
   <?php endif; ?>
 </section>
-
-<div style="margin-top: 3rem; text-align: center;">
-  <a href="index.php?page=offres" class="btn-cta">Retour à la liste des offres</a>
-</div>
