@@ -11,15 +11,15 @@
 </section>
 
 <section class="entreprise-showcase">
-  <div class="entreprise-showcase-header">
-    <h2>Pourquoi les entreprises recrutent des stagiaires</h2>
-    <p class="showcase-intro">
+<div class="entreprise-showcase-header">
+  <h2 class="fade-in">Pourquoi les entreprises recrutent des stagiaires</h2>
+  <p class="showcase-intro fade-in">
       Découvrez comment les stages permettent aux entreprises de transmettre,
       d’innover et de préparer les talents de demain.
     </p>
   </div>
 
-  <div class="testimonial-slider">
+  <div class="testimonial-slider fade-in">
     <div class="testimonial-track">
 
       <article class="testimonial-card active">
@@ -60,7 +60,7 @@
 
     </div>
 
-    <div class="testimonial-progress">
+    <div class="testimonial-progress fade-in">
       <span class="testimonial-progress-bar"></span>
     </div>
   </div>
