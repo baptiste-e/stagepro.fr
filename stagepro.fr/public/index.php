@@ -2,22 +2,20 @@
 // public/index.php
 session_start();
 
-// 1. Imports de tous les contrôleurs
-require_once '../config/Database.php';
-require_once '../app/Controllers/OffreController.php';
-require_once '../app/Controllers/EntrepriseController.php';
-require_once '../app/Controllers/EtudiantController.php';
-require_once '../app/Controllers/PiloteController.php';
-require_once '../app/Controllers/AdminController.php';
-require_once '../app/Controllers/AuthController.php';
-require_once '../app/Controllers/CandidatureController.php';
-require_once '../app/Controllers/WishlistController.php';
+require_once __DIR__ . '/../config/Database.php';
 
-// 2. Récupération des paramètres de l'URL
+require_once __DIR__ . '/../app/Controllers/OffreController.php';
+require_once __DIR__ . '/../app/Controllers/EntrepriseController.php';
+require_once __DIR__ . '/../app/Controllers/EtudiantController.php';
+require_once __DIR__ . '/../app/Controllers/PiloteController.php';
+require_once __DIR__ . '/../app/Controllers/AdminController.php';
+require_once __DIR__ . '/../app/Controllers/AuthController.php';
+require_once __DIR__ . '/../app/Controllers/CandidatureController.php';
+require_once __DIR__ . '/../app/Controllers/WishlistController.php';
+
 $page = $_GET['page'] ?? 'home';
-$id = (int) ($_GET['id'] ?? 0);
+$id = (int)($_GET['id'] ?? 0);
 
-// 3. Aiguillage (Routing) global
 switch ($page) {
     case 'home':
         $titre_page = "Accueil | StagePro";
@@ -26,7 +24,6 @@ switch ($page) {
         include __DIR__ . '/../app/Views/layout/footer.php';
         break;
 
-    // --- COOKIES ---
     case 'cookie-accept':
         setcookie('cookie_consent', 'accepted', [
             'expires' => time() + 365 * 24 * 60 * 60,
@@ -60,7 +57,7 @@ switch ($page) {
         header('Location: index.php?page=home');
         exit;
 
-    // --- SECTION OFFRES ---
+    // OFFRES
     case 'offres':
         (new OffreController())->index();
         break;
@@ -86,7 +83,7 @@ switch ($page) {
         (new OffreController())->stats();
         break;
 
-    // --- SECTION ENTREPRISES ---
+    // ENTREPRISES
     case 'entreprises':
         (new EntrepriseController())->index();
         break;
@@ -115,7 +112,7 @@ switch ($page) {
         (new EntrepriseController())->delete();
         break;
 
-    // --- SECTION CANDIDATURES ---
+    // CANDIDATURES
     case 'candidatures':
         (new CandidatureController())->index();
         break;
@@ -132,7 +129,11 @@ switch ($page) {
         (new CandidatureController())->show($id);
         break;
 
-    // --- SECTION WISHLIST ---
+    case 'candidature-update-status':
+        (new CandidatureController())->updateStatus($id);
+        break;
+
+    // WISHLIST
     case 'wishlist':
         (new WishlistController())->index();
         break;
@@ -145,7 +146,7 @@ switch ($page) {
         (new WishlistController())->remove();
         break;
 
-    // --- ADMINISTRATION UTILISATEURS ---
+    // ADMIN / UTILISATEURS
     case 'admin':
         (new AdminController())->dashboard();
         break;
@@ -198,7 +199,7 @@ switch ($page) {
         (new EtudiantController())->delete();
         break;
 
-    // --- AUTHENTIFICATION ---
+    // AUTH
     case 'login':
         (new AuthController())->login();
         break;
@@ -208,7 +209,7 @@ switch ($page) {
         header('Location: index.php?page=home');
         exit;
 
-    // --- DIVERS ---
+    // DIVERS
     case 'mentions':
         $titre_page = "Mentions Légales | StagePro";
         include __DIR__ . '/../app/Views/layout/header.php';
