@@ -379,7 +379,13 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 .stats-section {
   width: 100%;
   background: #ffffff;
-  padding: 5rem 1rem 5rem 1rem;
+
+  padding-top: 40vh;
+  padding-bottom: 40vh;
+
+  padding-left: 1rem;
+  padding-right: 1rem;
+
   position: relative;
   z-index: 2;
 }
@@ -429,5 +435,10 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 
   .stat p {
     font-size: 0.9rem;
+  }
+
+    .stats-section {
+    padding-top: 20vh;
+    padding-bottom: 20vh;
   }
 }
