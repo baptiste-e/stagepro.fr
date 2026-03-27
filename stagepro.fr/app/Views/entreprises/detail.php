@@ -1,11 +1,14 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
 <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
     <a href="index.php?page=home" style="color: var(--accent-blue);">Accueil</a> &gt;
     <a href="index.php?page=entreprises" style="color: var(--accent-blue);">Entreprises</a> &gt;
-    <span style="color: var(--text-muted);">Fiche Entreprise</span>
+    <span style="color: var(--text-muted);">Fiche entreprise</span>
   </p>
 </nav>
 
@@ -24,51 +27,58 @@
 <?php endif; ?>
 
 <article style="background: var(--surface); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); max-width: 900px; margin: 0 auto;">
-    <header style="border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <h1 style="font-size: 2.2rem; color: var(--accent-purple); margin-bottom: 0.5rem;">
-                <?= htmlspecialchars($entreprise['nom']) ?>
-            </h1>
-            <p style="color: var(--text-muted);">
-                Email : <?= htmlspecialchars($entreprise['email_contact'] ?? 'Non renseigné') ?>
-            </p>
-        </div>
-        <div style="text-align: right;">
-             <span style="background: rgba(129, 140, 248, 0.1); color: var(--accent-blue); padding: 5px 15px; border-radius: 20px; font-weight: bold;">
-                ID #<?= (int)$entreprise['id'] ?>
-             </span>
-        </div>
-    </header>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-        <div>
-            <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Téléphone</h3>
-            <p><?= htmlspecialchars($entreprise['telephone_contact'] ?? 'Non renseigné') ?></p>
-        </div>
-
-        <div>
-            <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Offres publiées</h3>
-            <p><?= (int)($entreprise['nb_offres'] ?? 0) ?> offre(s)</p>
-        </div>
+  <header style="border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+    <div>
+      <h1 style="font-size: 2.2rem; color: var(--accent-purple); margin-bottom: 0.5rem;">
+        <?= htmlspecialchars($entreprise['nom']) ?>
+      </h1>
+      <p style="color: var(--text-muted);">
+        Email : <?= htmlspecialchars($entreprise['email_contact'] ?? 'Non renseigné') ?>
+      </p>
     </div>
 
-    <div style="line-height: 1.8;">
-        <h3 style="color: var(--text-main); margin-bottom: 1rem;">À propos de l'entreprise</h3>
-        <p style="color: var(--text-muted);">
-            <?= nl2br(htmlspecialchars($entreprise['description'] ?? 'Aucune description disponible pour cette entreprise.')) ?>
-        </p>
+    <div style="text-align: right;">
+      <span style="background: rgba(129, 140, 248, 0.1); color: var(--accent-blue); padding: 5px 15px; border-radius: 20px; font-weight: bold;">
+        ID #<?= (int)$entreprise['id'] ?>
+      </span>
+    </div>
+  </header>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+    <div>
+      <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Téléphone</h3>
+      <p><?= htmlspecialchars($entreprise['telephone_contact'] ?? 'Non renseigné') ?></p>
     </div>
 
-    <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'] ?? '', ['admin', 'pilote'])): ?>
-    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed var(--border); display: flex; gap: 1rem;">
-        <a href="index.php?page=entreprise-edit&id=<?= (int)$entreprise['id'] ?>" class="btn-cta">Modifier la fiche</a>
-
-        <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette entreprise ?');">
-            <input type="hidden" name="id" value="<?= (int)$entreprise['id'] ?>">
-            <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 6px; cursor: pointer;">
-                Supprimer
-            </button>
-        </form>
+    <div>
+      <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Offres publiées</h3>
+      <p><?= (int)($entreprise['nb_offres'] ?? 0) ?> offre(s)</p>
     </div>
-    <?php endif; ?>
+  </div>
+
+  <div style="line-height: 1.8;">
+    <h3 style="color: var(--text-main); margin-bottom: 1rem;">À propos de l'entreprise</h3>
+    <p style="color: var(--text-muted);">
+      <?= nl2br(htmlspecialchars($entreprise['description'] ?? 'Aucune description disponible pour cette entreprise.')) ?>
+    </p>
+  </div>
+
+  <div style="margin-top: 2rem;">
+    <a href="index.php?page=entreprises" style="color: var(--accent-blue); text-decoration: none; font-weight: 600;">
+      ← Retour à la liste des entreprises
+    </a>
+  </div>
+
+  <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'] ?? '', ['admin', 'pilote'], true)): ?>
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed var(--border); display: flex; gap: 1rem; flex-wrap: wrap;">
+      <a href="index.php?page=entreprise-edit&id=<?= (int)$entreprise['id'] ?>" class="btn-cta">Modifier la fiche</a>
+
+      <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette entreprise ?');">
+        <input type="hidden" name="id" value="<?= (int)$entreprise['id'] ?>">
+        <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 6px; cursor: pointer;">
+          Supprimer
+        </button>
+      </form>
+    </div>
+  <?php endif; ?>
 </article>
