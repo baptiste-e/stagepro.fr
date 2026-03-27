@@ -379,7 +379,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 /* ESPACE ENTRE LES "PAGES" */
 section + section {
   margin-top: 70vh; /* espace vide énorme entre chaque section */
-  padding-top: 2rem;
 }
 
 section {
