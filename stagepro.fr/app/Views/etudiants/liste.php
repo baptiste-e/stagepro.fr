@@ -18,7 +18,11 @@
         <article class="card">
           <h3><?= htmlspecialchars($etudiant['prenom'] . ' ' . $etudiant['nom']) ?></h3>
           <p><?= htmlspecialchars($etudiant['email']) ?></p>
-          <a href="index.php?page=etudiant-detail&id=<?= $etudiant['id'] ?>" class="lien-etendu"></a>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            <strong>Compte créé le :</strong>
+            <?= !empty($etudiant['created_at']) ? date('d/m/Y à H:i', strtotime($etudiant['created_at'])) : 'Non renseignée' ?>
+          </p>
+          <a href="index.php?page=etudiant-detail&id=<?= (int)$etudiant['id'] ?>" class="lien-etendu"></a>
         </article>
     <?php endforeach; ?>
   </div>

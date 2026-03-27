@@ -14,7 +14,7 @@
 </nav>
 
 <div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 2rem; align-items: start;">
-  
+
   <aside>
     <section style="background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
       <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -28,6 +28,7 @@
       <ul style="list-style: none; font-size: 0.9rem; line-height: 2;">
         <li><strong style="color: var(--text-muted);">Email :</strong><br> <?= htmlspecialchars($pilote['email']) ?></li>
         <li><strong style="color: var(--text-muted);">Centre :</strong><br> <?= htmlspecialchars($pilote['centre_nom'] ?? 'Non assigné') ?></li>
+        <li><strong style="color: var(--text-muted);">Compte créé le :</strong><br> <?= !empty($pilote['created_at']) ? date('d/m/Y à H:i', strtotime($pilote['created_at'])) : 'Non renseignée' ?></li>
       </ul>
 
       <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
@@ -49,17 +50,15 @@
   <div>
     <section>
       <h2 style="margin-bottom: 1.5rem;">Candidatures des étudiants rattachés</h2>
-      
+
       <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
           <p style="color: var(--text-muted);">Cette fonctionnalité (liste des étudiants du pilote) sera bientôt disponible.</p>
-          
+
           <article class="card" style="position: relative; border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
             <h3 style="font-size: 1rem; color: var(--accent-blue);">Exemple Étudiant</h3>
-            <p style="font-size: 0.85rem;">Dernière offre consultée : <strong>Développeur PHP</strong></p>
-            <a href="index.php?page=etudiant-detail&id=1" class="lien-etendu"></a>
+            <p style="font-size: 0.85rem;">Dernière offre consultée : Développeur Web</p>
           </article>
       </div>
     </section>
   </div>
-
 </div>

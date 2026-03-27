@@ -80,22 +80,27 @@
 
             <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
                 <h3 style="font-size: 1.1rem; color: var(--accent-purple); margin: 0;"><?= htmlspecialchars($offre['titre']) ?></h3>
-                <?php if (strtotime($offre['created_at'] ?? '') > strtotime('-3 days')): ?>
+                <?php if (!empty($offre['created_at']) && strtotime($offre['created_at']) > strtotime('-3 days')): ?>
                     <span style="font-size: 0.7rem; background: #4ade8020; color: #4ade80; padding: 2px 8px; border-radius: 4px; font-weight: bold;">Récent</span>
                 <?php endif; ?>
             </div>
 
-            <p style="font-weight: 600; font-size: 0.9rem; margin: 0;">🏢 <?= htmlspecialchars($offre['entreprise_nom'] ?? 'Entreprise inconnue') ?></p>
+            <p style="font-weight: 600; font-size: 0.9rem; margin: 0;">
+              🏢 <?= htmlspecialchars($offre['entreprise_nom'] ?? 'Entreprise inconnue') ?>
+            </p>
 
             <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
-              📅 Offre publiée le :
-              <strong>
-                <?= !empty($offre['date_offre']) ? date('d/m/Y', strtotime($offre['date_offre'])) : 'Non renseignée' ?>
-              </strong>
+              <strong>Date de l'offre :</strong>
+              <?= !empty($offre['date_offre']) ? date('d/m/Y', strtotime($offre['date_offre'])) : 'Non renseignée' ?>
+            </p>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+              <strong>Ajoutée sur la plateforme :</strong>
+              <?= !empty($offre['created_at']) ? date('d/m/Y à H:i', strtotime($offre['created_at'])) : 'Non renseignée' ?>
             </p>
 
             <p style="font-size: 0.85rem; color: var(--text-muted); flex-grow: 1; line-height: 1.5;">
-                <?= substr(htmlspecialchars($offre['description']), 0, 120) ?>...
+                <?= substr(htmlspecialchars($offre['description'] ?? ''), 0, 120) ?>...
             </p>
 
             <div style="border-top: 1px solid var(--border); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
@@ -104,13 +109,13 @@
                 </span>
 
                 <div style="display: flex; gap: 12px; align-items: center;">
-                    <a href="index.php?page=offre-detail&id=<?= $offre['id'] ?>" style="color: var(--accent-purple); font-size: 0.9rem; text-decoration: none; font-weight: 500;">Détails →</a>
+                    <a href="index.php?page=offre-detail&id=<?= (int)$offre['id'] ?>" style="color: var(--accent-purple); font-size: 0.9rem; text-decoration: none; font-weight: 500;">Détails →</a>
 
                     <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'], ['admin', 'pilote'])): ?>
                         <div style="display: flex; gap: 8px; margin-left: 5px; border-left: 1px solid var(--border); padding-left: 10px;">
-                            <a href="index.php?page=offre-edit&id=<?= $offre['id'] ?>" title="Modifier" style="text-decoration: none; font-size: 1rem;">✏️</a>
+                            <a href="index.php?page=offre-edit&id=<?= (int)$offre['id'] ?>" title="Modifier" style="text-decoration: none; font-size: 1rem;">✏️</a>
 
-                            <a href="index.php?page=offre-delete&id=<?= $offre['id'] ?>"
+                            <a href="index.php?page=offre-delete&id=<?= (int)$offre['id'] ?>"
                                style="text-decoration: none; font-size: 1rem;"
                                onclick="return confirm('Supprimer définitivement cette offre ?')"
                                title="Supprimer">

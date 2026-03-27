@@ -45,6 +45,11 @@
             <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Téléphone</h3>
             <p><?= htmlspecialchars($entreprise['telephone_contact'] ?? 'Non renseigné') ?></p>
         </div>
+
+        <div>
+            <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Création</h3>
+            <p><?= !empty($entreprise['created_at']) ? date('d/m/Y à H:i', strtotime($entreprise['created_at'])) : 'Non renseignée' ?></p>
+        </div>
     </div>
 
     <div style="line-height: 1.8;">
@@ -56,12 +61,12 @@
 
     <?php if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'] ?? '', ['admin', 'pilote'])): ?>
     <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed var(--border); display: flex; gap: 1rem;">
-        <a href="index.php?page=entreprise-edit&id=<?= $entreprise['id'] ?>" class="btn-cta">Modifier la fiche</a>
+        <a href="index.php?page=entreprise-edit&id=<?= (int)$entreprise['id'] ?>" class="btn-cta">Modifier la fiche</a>
 
         <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette entreprise ?');">
             <input type="hidden" name="id" value="<?= (int)$entreprise['id'] ?>">
-            <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer;">
-                Supprimer l'entreprise
+            <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 6px; cursor: pointer;">
+                Supprimer
             </button>
         </form>
     </div>

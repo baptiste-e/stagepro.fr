@@ -1,58 +1,60 @@
+<?php
+/**
+ * VUE : Liste des candidatures
+ * Variables attendues :
+ * - $candidatures
+ * - $titre_page
+ */
+?>
+
+<nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
+  <p>
+    <a href="index.php?page=home" style="color: var(--accent-blue);">Accueil</a> &gt;
+    <span style="color: var(--text-muted);">Mes candidatures</span>
+  </p>
+</nav>
+
 <section>
-  <h1>Mes candidatures</h1>
-  <p style="color: var(--text-muted);">Retrouvez ici les offres auxquelles vous avez postulé et le détail de vos dossiers envoyés.</p>
+    <h1>Mes candidatures</h1>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">
+        Suivez ici l’ensemble des offres auxquelles vous avez postulé.
+    </p>
+
+    <?php if (empty($candidatures)): ?>
+        <div style="background: var(--surface); padding: 2rem; border-radius: 12px; border: 1px dashed var(--border);">
+            <p style="margin: 0;">Vous n’avez encore envoyé aucune candidature.</p>
+        </div>
+    <?php else: ?>
+        <div class="container-espaces">
+            <?php foreach ($candidatures as $candidature): ?>
+                <article class="card">
+                    <h3 style="color: var(--accent-blue);">
+                        <?= htmlspecialchars($candidature['offre_titre'] ?? 'Offre non renseignée') ?>
+                    </h3>
+
+                    <p>
+                        <strong>Entreprise :</strong>
+                        <?= htmlspecialchars($candidature['entreprise_nom'] ?? 'Entreprise non renseignée') ?>
+                    </p>
+
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem;">
+                        <strong>Candidature envoyée le :</strong>
+                        <?= !empty($candidature['created_at']) ? date('d/m/Y à H:i', strtotime($candidature['created_at'])) : 'Non renseigné' ?>
+                    </p>
+
+                    <div style="margin-top: 1rem; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <a href="index.php?page=candidature-detail&id=<?= (int)($candidature['id'] ?? 0) ?>" class="btn-cta" style="font-size: 0.8rem;">
+                            Voir le détail
+                        </a>
+
+                        <form action="index.php?page=candidature-cancel&id=<?= (int)($candidature['id'] ?? 0) ?>" method="post" onsubmit="return confirm('Annuler cette candidature ?');">
+                            <button type="submit" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 6px 12px; font-size: 0.8rem; cursor: pointer;">
+                                Annuler
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </section>
-
-<section style="margin-top: 2rem;">
-  <?php if (empty($candidatures)): ?>
-    <div style="background: var(--surface); padding: 2rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
-      <p>Vous n'avez encore postulé à aucune offre.</p>
-      <a href="index.php?page=offres" class="btn-cta" style="display: inline-block; margin-top: 1rem; text-decoration: none;">Voir les offres disponibles</a>
-    </div>
-  <?php else: ?>
-    <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
-      <?php foreach ($candidatures as $c): ?>
-        <article class="card" style="position: relative; transition: transform 0.2s; border: 1px solid var(--border); padding: 1.5rem; border-radius: 12px; background: var(--surface);">
-          
-          <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem;">
-            <?= htmlspecialchars($c['offre_titre']) ?>
-          </h3>
-          
-          <p style="margin-bottom: 0.5rem;">
-            <strong>Entreprise :</strong> <?= htmlspecialchars($c['entreprise_nom']) ?>
-          </p>
-          
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-            📅 Envoyée le <?= date('d/m/Y à H:i', strtotime($c['created_at'])) ?>
-          </p>
-
-          <div style="display: flex; justify-content:建设-between; align-items: center; margin-top: 1rem;">
-            <span style="font-size: 0.8rem; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">
-              Voir mon dossier &rarr;
-            </span>
-          </div>
-
-          <a href="index.php?page=candidature-detail&id=<?= (int)$c['id'] ?>" class="lien-etendu" title="Voir les détails de ma candidature"></a>
-        </article>
-      <?php endforeach; ?>
-    </div>
-  <?php endif; ?>
-</section>
-
-<style>
-/* Style pour rendre toute la carte cliquable proprement */
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border-color: var(--accent-blue);
-}
-
-.lien-etendu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-</style>

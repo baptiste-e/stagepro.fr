@@ -17,7 +17,11 @@
         <article class="card">
           <h3><?= htmlspecialchars($p['prenom'] . ' ' . $p['nom']) ?></h3>
           <p><strong>Email :</strong> <?= htmlspecialchars($p['email']) ?></p>
-          <a href="index.php?page=pilote-detail&id=<?= $p['id'] ?>" class="lien-etendu"></a>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            <strong>Compte créé le :</strong>
+            <?= !empty($p['created_at']) ? date('d/m/Y à H:i', strtotime($p['created_at'])) : 'Non renseignée' ?>
+          </p>
+          <a href="index.php?page=pilote-detail&id=<?= (int)$p['id'] ?>" class="lien-etendu"></a>
         </article>
     <?php endforeach; ?>
   </div>
