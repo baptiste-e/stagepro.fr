@@ -123,8 +123,8 @@ function updateStatsOnScroll() {
     const windowHeight = window.innerHeight;
 
     // progression de la section dans l'écran
-    const start = windowHeight * 1.05;
-    const end = windowHeight * -0.25;
+    const start = windowHeight * 0.95;
+    const end = windowHeight * 0;
     const total = start - end;
 
     const progress = clamp((start - rect.top) / total, 0, 1);
