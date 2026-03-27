@@ -347,3 +347,23 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
   margin: 0 auto;
   padding: 0 1rem;
 }
+
+/* --- ANIMATIONS FADE IN --- */
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease;
+}
+
+/* état visible */
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* effet décalé (cascade) */
+.fade-in:nth-child(1) { transition-delay: 0.1s; }
+.fade-in:nth-child(2) { transition-delay: 0.3s; }
+.fade-in:nth-child(3) { transition-delay: 0.5s; }
+.fade-in:nth-child(4) { transition-delay: 0.7s; }

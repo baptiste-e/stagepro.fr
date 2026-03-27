@@ -10,6 +10,61 @@
     <a href="index.php?page=offres" class="btn-cta">Explorer les offres</a>
 </section>
 
+<section class="entreprise-showcase">
+<div class="entreprise-showcase-header">
+  <h2 class="fade-in">Pourquoi les entreprises recrutent des stagiaires</h2>
+  <p class="showcase-intro fade-in">
+      Découvrez comment les stages permettent aux entreprises de transmettre,
+      d’innover et de préparer les talents de demain.
+    </p>
+  </div>
+
+  <div class="testimonial-slider fade-in">
+    <div class="testimonial-track">
+
+      <article class="testimonial-card active">
+        <p class="testimonial-quote">
+          “Accueillir des stagiaires nous permet de transmettre notre savoir-faire,
+          d’identifier de nouveaux talents et d’apporter un regard neuf sur nos projets.”
+        </p>
+
+        <div class="testimonial-meta">
+          <strong>Sophie Martin</strong>
+          <span>Responsable RH · TechCorp</span>
+        </div>
+      </article>
+
+      <article class="testimonial-card">
+        <p class="testimonial-quote">
+          “Les stagiaires apportent de nouvelles idées, une vraie énergie d’apprentissage
+          et deviennent souvent des profils que nous souhaitons accompagner sur le long terme.”
+        </p>
+
+        <div class="testimonial-meta">
+          <strong>Lucas Bernard</strong>
+          <span>Directeur de création · CreativeLab</span>
+        </div>
+      </article>
+
+      <article class="testimonial-card">
+        <p class="testimonial-quote">
+          “Recruter un stagiaire, c’est investir dans l’avenir de l’entreprise tout en
+          renforçant nos équipes sur des missions concrètes et utiles.”
+        </p>
+
+        <div class="testimonial-meta">
+          <strong>Nadia El Amrani</strong>
+          <span>Manager Data · DataFlow</span>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="testimonial-progress fade-in">
+      <span class="testimonial-progress-bar"></span>
+    </div>
+  </div>
+</section>
 
 <section class="espaces-section">
     <div class="espaces-content">
@@ -56,60 +111,4 @@
             <a href="index.php?page=offres" class="lien-etendu"></a>
         </article>
     </div>
-</section>
-
-<section class="entreprise-showcase">
-  <div class="entreprise-showcase-header">
-    <h2>Pourquoi les entreprises recrutent des stagiaires</h2>
-    <p class="showcase-intro">
-      Découvrez comment les stages permettent aux entreprises de transmettre,
-      d’innover et de préparer les talents de demain.
-    </p>
-  </div>
-
-  <div class="testimonial-slider">
-    <div class="testimonial-track">
-
-      <article class="testimonial-card active">
-        <p class="testimonial-quote">
-          “Accueillir des stagiaires nous permet de transmettre notre savoir-faire,
-          d’identifier de nouveaux talents et d’apporter un regard neuf sur nos projets.”
-        </p>
-
-        <div class="testimonial-meta">
-          <strong>Sophie Martin</strong>
-          <span>Responsable RH · TechCorp</span>
-        </div>
-      </article>
-
-      <article class="testimonial-card">
-        <p class="testimonial-quote">
-          “Les stagiaires apportent de nouvelles idées, une vraie énergie d’apprentissage
-          et deviennent souvent des profils que nous souhaitons accompagner sur le long terme.”
-        </p>
-
-        <div class="testimonial-meta">
-          <strong>Lucas Bernard</strong>
-          <span>Directeur de création · CreativeLab</span>
-        </div>
-      </article>
-
-      <article class="testimonial-card">
-        <p class="testimonial-quote">
-          “Recruter un stagiaire, c’est investir dans l’avenir de l’entreprise tout en
-          renforçant nos équipes sur des missions concrètes et utiles.”
-        </p>
-
-        <div class="testimonial-meta">
-          <strong>Nadia El Amrani</strong>
-          <span>Manager Data · DataFlow</span>
-        </div>
-      </article>
-
-    </div>
-
-    <div class="testimonial-progress">
-      <span class="testimonial-progress-bar"></span>
-    </div>
-  </div>
 </section>
