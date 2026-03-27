@@ -30,7 +30,7 @@ class PiloteController
         $userRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role_nom'] ?? '';
         $userRole = strtolower(trim($userRole));
 
-        // Si le rôle n'est pas autorisé, on déconnecte et on renvoie au login
+        // Si le rôle n'est pas autorisé, on déconnecte et on renvoie au loginn
         if (!in_array($userRole, $roles, true)) {
             session_unset();
             session_destroy();
