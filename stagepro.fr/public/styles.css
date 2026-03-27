@@ -388,10 +388,3 @@ section {
   justify-content: center;
 }
 
-section {
-  scroll-snap-align: start;
-}
-
-html {
-  scroll-snap-type: y mandatory;
-}
