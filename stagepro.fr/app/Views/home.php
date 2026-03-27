@@ -68,25 +68,50 @@
 
 <section class="stats-section">
     <div class="stats-container">
-        <div class="stat stat-reveal">
+        <div class="stat">
             <h3>120+</h3>
             <p>Offres disponibles</p>
         </div>
 
-        <div class="stat stat-reveal">
+        <div class="stat">
             <h3>35+</h3>
             <p>Entreprises partenaires</p>
         </div>
 
-        <div class="stat stat-reveal">
+        <div class="stat">
             <h3>250+</h3>
             <p>Candidatures envoyées</p>
         </div>
 
-        <div class="stat stat-reveal">
+        <div class="stat">
             <h3>80+</h3>
             <p>Offres en wish-list</p>
         </div>
+    </div>
+</section>
+
+
+<section class="espaces-section">
+    <div class="espaces-content">
+    <h2>Espaces utilisateurs</h2>
+    <div class="container-espaces">
+        <article class="card card-etudiant">
+            <h3>Espace étudiant</h3>
+            <p>Consulter les offres, postuler et suivre vos candidatures.</p>
+            <a href="index.php?page=etudiants" class="lien-etendu"></a>
+        </article>
+
+        <article class="card card-pilote">
+            <h3>Espace pilote</h3>
+            <p>Suivre les candidatures, consulter les offres et accompagner les étudiants.</p>
+            <a href="index.php?page=pilotes" class="lien-etendu"></a>
+        </article>
+
+        <article class="card card-admin">
+            <h3>Espace Admin</h3>
+            <p>Gestion des comptes, des entreprises et administration globale.</p>
+            <a href="index.php?page=admin" class="lien-etendu"></a>
+        </article>
     </div>
 </section>
 
