@@ -4,13 +4,13 @@
 
 {% block content %}
 <section>
-  <div style="display: flex; justify-content: space-between; align-items: center;">
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
     <div>
       <h1>Annuaire des pilotes</h1>
       <p style="color: var(--text-muted);">Gérez les comptes des tuteurs et responsables de promotion.</p>
     </div>
     
-    {# Seul l'admin peut créer un pilote #}
+    {# Seul l'administrateur a les droits de création pour les pilotes #}
     {% if session.user and session.user.role == 'admin' %}
       <a href="index.php?page=pilote-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer un pilote</a>
     {% endif %}
@@ -19,16 +19,59 @@
 
 <section style="margin-top: 3rem;">
   <h2>Pilotes enregistrés</h2>
+  
   <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
     {% for p in pilotes %}
-        <article class="card" style="position: relative;">
-          <h3>{{ p.prenom }} {{ p.nom }}</h3>
-          <p><strong>Email :</strong> {{ p.email }}</p>
-          <a href="index.php?page=pilote-detail&id={{ p.id }}" class="lien-etendu"></a>
+        <article class="card pilote-card">
+          <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem;">
+            {{ p.prenom }} {{ p.nom }}
+          </h3>
+          
+          <p style="margin-bottom: 0.5rem; font-size: 0.95rem;">
+            <strong>Email :</strong> {{ p.email }}
+          </p>
+          
+          {# On réintègre la date de création issue de la version PHP pour un meilleur suivi #}
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: auto;">
+            <strong>Compte créé le :</strong><br>
+            {{ p.created_at ? p.created_at|date("d/m/Y à H:i") : 'Non renseignée' }}
+          </p>
+
+          {# Lien invisible qui rend toute la carte cliquable pour une meilleure UX #}
+          <a href="index.php?page=pilote-detail&id={{ p.id }}" class="lien-etendu" title="Voir le profil de {{ p.prenom }}"></a>
         </article>
     {% else %}
-        <p>Aucun pilote enregistré.</p>
+        {# Affichage si la liste est vide #}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: var(--surface); border-radius: 8px; border: 1px dashed var(--border);">
+            <p style="color: var(--text-muted);">Aucun pilote n'est actuellement enregistré dans le système.</p>
+        </div>
     {% endfor %}
   </div>
 </section>
+
+<style>
+/* Animation et styles spécifiques pour les cartes pilotes */
+.pilote-card {
+    position: relative; 
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+}
+
+.pilote-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-blue);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.lien-etendu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+</style>
 {% endblock %}

@@ -3,13 +3,14 @@
 {% block title %}Accueil | StagePro{% endblock %}
 
 {% block content %}
-{# Section Hero #}
+{# --- SECTION HERO --- #}
 <section class="hero">
     <h1>Trouvez le stage qui propulsera votre carrière</h1>
+    <p style="margin-bottom: 2rem; font-size: 1.2rem; opacity: 0.9;">La plateforme de mise en relation entre étudiants ambitieux et entreprises innovantes.</p>
     <a href="index.php?page=offres" class="btn-cta">Explorer les offres</a>
 </section>
 
-{# Section Témoignages / Showcase Entreprises #}
+{# --- SECTION TÉMOIGNAGES / SHOWCASE --- #}
 <section class="entreprise-showcase">
     <div class="entreprise-showcase-header">
         <h2 class="fade-in">Pourquoi les entreprises recrutent des stagiaires</h2>
@@ -21,7 +22,6 @@
 
     <div class="testimonial-slider fade-in">
         <div class="testimonial-track">
-
             <article class="testimonial-card active">
                 <p class="testimonial-quote">
                     “Accueillir des stagiaires nous permet de transmettre notre savoir-faire,
@@ -54,7 +54,6 @@
                     <span>Manager Data · DataFlow</span>
                 </div>
             </article>
-
         </div>
 
         <div class="testimonial-progress fade-in">
@@ -63,25 +62,49 @@
     </div>
 </section>
 
-{# Section Espaces Utilisateurs #}
+{# --- SECTION STATISTIQUES (Réintégrée) --- #}
+<section class="stats-section">
+    <div class="stats-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center; padding: 4rem 0;">
+        <div class="stat">
+            <h3 style="font-size: 2.5rem; color: var(--accent-blue);">120+</h3>
+            <p style="color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;">Offres disponibles</p>
+        </div>
+
+        <div class="stat">
+            <h3 style="font-size: 2.5rem; color: var(--accent-purple);">35+</h3>
+            <p style="color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;">Entreprises partenaires</p>
+        </div>
+
+        <div class="stat">
+            <h3 style="font-size: 2.5rem; color: #4ade80;">250+</h3>
+            <p style="color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;">Candidatures envoyées</p>
+        </div>
+
+        <div class="stat">
+            <h3 style="font-size: 2.5rem; color: #fbbf24;">80+</h3>
+            <p style="color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;">Offres en wish-list</p>
+        </div>
+    </div>
+</section>
+
+{# --- SECTION ESPACES UTILISATEURS --- #}
 <section class="espaces-section">
     <div class="espaces-content">
         <h2>Espaces utilisateurs</h2>
         <div class="container-espaces">
-            <article class="card card-etudiant">
+            <article class="card card-etudiant" style="position: relative;">
                 <h3>Espace étudiant</h3>
                 <p>Consulter les offres, postuler et suivre vos candidatures.</p>
-                {# Ici on peut conditionner le lien selon la session si besoin #}
                 <a href="index.php?page=etudiants" class="lien-etendu"></a>
             </article>
 
-            <article class="card card-pilote">
+            <article class="card card-pilote" style="position: relative;">
                 <h3>Espace pilote</h3>
                 <p>Suivre les candidatures, consulter les offres et accompagner les étudiants.</p>
                 <a href="index.php?page=pilotes" class="lien-etendu"></a>
             </article>
 
-            <article class="card card-admin">
+            <article class="card card-admin" style="position: relative;">
                 <h3>Espace Admin</h3>
                 <p>Gestion des comptes, des entreprises et administration globale.</p>
                 <a href="index.php?page=admin" class="lien-etendu"></a>
@@ -90,26 +113,28 @@
     </div>
 </section>
 
-{# Section Offres à la une #}
-<section>
+{# --- SECTION OFFRES À LA UNE --- #}
+<section style="margin-bottom: 5rem;">
     <h2>Offres à la une</h2>
     <div class="grid-offres">
-        {# On garde tes articles statiques pour le moment #}
-        <article class="card card-dev_web">
-            <h3>Développeur Web</h3>
-            <p>Entreprise : TechCorp</p>
+        <article class="card card-dev_web" style="position: relative;">
+            <h3 style="color: var(--accent-blue);">Développeur Web</h3>
+            <p>Entreprise : <strong>TechCorp</strong></p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">Lieu : Paris (75)</p>
             <a href="index.php?page=offres" class="lien-etendu"></a>
         </article>
 
-        <article class="card card-data_analyst">
-            <h3>Data Analyst</h3>
-            <p>Entreprise : DataFlow</p>
+        <article class="card card-data_analyst" style="position: relative;">
+            <h3 style="color: var(--accent-purple);">Data Analyst</h3>
+            <p>Entreprise : <strong>DataFlow</strong></p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">Lieu : Lyon (69)</p>
             <a href="index.php?page=offres" class="lien-etendu"></a>
         </article>
 
-        <article class="card card-UI_UX_designer">
-            <h3>UI/UX Designer</h3>
-            <p>Entreprise : CreativeLab</p>
+        <article class="card card-UI_UX_designer" style="position: relative;">
+            <h3 style="color: #fbbf24;">UI/UX Designer</h3>
+            <p>Entreprise : <strong>CreativeLab</strong></p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">Lieu : Bordeaux (33)</p>
             <a href="index.php?page=offres" class="lien-etendu"></a>
         </article>
     </div>

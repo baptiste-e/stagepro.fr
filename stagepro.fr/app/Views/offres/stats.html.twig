@@ -1,29 +1,118 @@
 {% extends "layout.html.twig" %}
 
+{% block title %}Indicateurs & Statistiques | StagePro{% endblock %}
+
 {% block content %}
-{# ... Header Stats ... #}
+{# Fil d’ariane #}
+<nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
+  <p>
+    <a href="index.php?page=home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
+    <a href="index.php?page=offres" style="color: var(--accent-blue); text-decoration: none;">Offres</a> &gt;
+    <span style="color: var(--text-muted);">Statistiques</span>
+  </p>
+</nav>
+
+<section>
+  <h1 style="margin-bottom: 0.5rem;">Tableau de bord des offres</h1>
+  <p style="color: var(--text-muted);">Analyse globale des indicateurs de la plateforme en temps réel.</p>
+</section>
+
+{# --- CARTES DE RÉSUMÉ --- #}
 <section style="margin-top: 3rem;">
-  <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
-    <article class="card" style="border-top: 4px solid var(--accent);">
-      <h3>Offres</h3>
-      <p style="font-size: 2.5rem;">{{ totalOffres|default(0) }}</p>
+  <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+    
+    {# Total des offres #}
+    <article class="card" style="border-top: 4px solid var(--accent-blue); padding: 1.5rem; background: var(--surface); border-radius: 8px;">
+      <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Offres disponibles</h3>
+      <p style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: var(--text-main);">
+        {{ totalOffres|default(0) }}
+      </p>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Total des offres enregistrées</p>
     </article>
-    {# ... Autres cards ... #}
+
+    {# Top Localité #}
+    <article class="card" style="border-top: 4px solid #7c3aed; padding: 1.5rem; background: var(--surface); border-radius: 8px;">
+      <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Localité la plus active</h3>
+      <p style="font-size: 1.3rem; font-weight: 700; margin: 1rem 0; color: var(--text-main);">
+        {{ topLocalite.localite|default('Aucune donnée') }}
+      </p>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">
+        {{ topLocalite.nb|default(0) }} offre(s) répertoriée(s)
+      </p>
+    </article>
+
+    {# Top Entreprise #}
+    <article class="card" style="border-top: 4px solid #f59e0b; padding: 1.5rem; background: var(--surface); border-radius: 8px;">
+      <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Entreprise la plus active</h3>
+      <p style="font-size: 1.2rem; font-weight: 700; margin: 1rem 0; color: var(--text-main);">
+        {{ topEntreprise.nom|default('Aucune donnée') }}
+      </p>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">
+        {{ topEntreprise.nb|default(0) }} offre(s) publiée(s)
+      </p>
+    </article>
+
+    {# Ratio Entreprises #}
+    <article class="card" style="border-top: 4px solid #ef4444; padding: 1.5rem; background: var(--surface); border-radius: 8px;">
+      <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Entreprises avec offres</h3>
+      <p style="font-size: 2.5rem; font-weight: 800; margin: 1rem 0; color: var(--text-main);">
+        {{ nbEntreprisesAvecOffres|default(0) }}
+      </p>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Sur {{ statsEntreprise|length }} entreprise(s) inscrite(s)</p>
+    </article>
+
   </div>
 </section>
 
-<section style="margin-top: 4rem; background: var(--surface); padding: 2rem; border-radius: 8px;">
-  <h2>Répartition par localité</h2>
-  {% for ligne in statsLocalite %}
-    <div style="display: grid; grid-template-columns: 180px 1fr 60px; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-      <div>{{ ligne.localite|default('Inconnu') }}</div>
-      <div style="background: #e5e7eb; height: 14px; border-radius: 999px;">
-        {# Calcul du % en Twig #}
+{# --- RÉPARTITION PAR LOCALITÉ (AVEC BARRES DE PROGRESSION) --- #}
+<section style="margin-top: 4rem; background: var(--surface); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+  <h2 style="margin-bottom: 2rem; font-size: 1.3rem; color: var(--text-main);">Répartition géographique</h2>
+
+  {% if statsLocalite is not empty %}
+    <div style="display: grid; gap: 1.5rem;">
+      {% for ligne in statsLocalite %}
+        {# Calcul dynamique du pourcentage en Twig #}
         {% set percent = totalOffres > 0 ? (ligne.nb / totalOffres * 100)|round : 0 %}
-        <div style="height: 14px; width: {{ percent }}%; background: var(--accent); border-radius: 999px;"></div>
-      </div>
-      <div style="text-align: right;">{{ ligne.nb }}</div>
+        
+        <div style="display: grid; grid-template-columns: 200px 1fr 60px; gap: 1.5rem; align-items: center;">
+          <div style="font-weight: 600; color: var(--text-main); font-size: 0.95rem;">
+            {{ ligne.localite|default('Non renseigné') }}
+          </div>
+          
+          <div style="background: rgba(0,0,0,0.05); height: 12px; border-radius: 999px; overflow: hidden; position: relative;" title="{{ percent }}%">
+            <div style="height: 100%; width: {{ percent }}%; background: var(--accent-blue); border-radius: 999px; transition: width 0.5s ease-out;"></div>
+          </div>
+          
+          <div style="text-align: right; color: var(--text-muted); font-size: 0.9rem; font-weight: 700;">
+            {{ ligne.nb }}
+          </div>
+        </div>
+      {% endfor %}
     </div>
-  {% endfor %}
+  {% else %}
+    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Aucune statistique géographique disponible.</p>
+  {% endif %}
+</section>
+
+{# --- RÉPARTITION PAR ENTREPRISE (LISTE DÉTAILLÉE) --- #}
+<section style="margin-top: 3rem; margin-bottom: 5rem; background: var(--surface); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+  <h2 style="margin-bottom: 2rem; font-size: 1.3rem; color: var(--text-main);">Offres par partenaire</h2>
+
+  {% if statsEntreprise is not empty %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+      {% for ligne in statsEntreprise %}
+        {% if ligne.nb > 0 %}
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--background);">
+            <span style="font-weight: 600; color: var(--text-main);">{{ ligne.nom }}</span>
+            <span style="background: var(--accent-purple); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">
+                {{ ligne.nb }}
+            </span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Aucune donnée par entreprise.</p>
+  {% endif %}
 </section>
 {% endblock %}

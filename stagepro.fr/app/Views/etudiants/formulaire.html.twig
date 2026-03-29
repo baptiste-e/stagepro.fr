@@ -1,55 +1,80 @@
 {% extends "layout.html.twig" %}
 
-{% set isEdit = etudiant is defined and etudiant.id is not empty %}
+{# Détection du mode : Création ou Édition #}
+{% set isEdit = etudiant.id is defined and etudiant.id is not empty %}
 
-{% block title %}{{ isEdit ? "Modifier" : "Créer" }} un étudiant | StagePro{% endblock %}
+{% block title %}
+    {{ isEdit ? "Modifier" : "Créer" }} un compte étudiant | StagePro
+{% endblock %}
 
 {% block content %}
 <section>
+  {# Fil d’ariane #}
   <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
     <p>
-      <a href="index.php?page=home" style="color: var(--accent-blue);">Accueil</a> &gt;
-      <a href="index.php?page=etudiants" style="color: var(--accent-blue);">Étudiants</a> &gt;
+      <a href="index.php?page=home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
+      <a href="index.php?page=etudiants" style="color: var(--accent-blue); text-decoration: none;">Étudiants</a> &gt;
       <span style="color: var(--text-muted);">{{ isEdit ? 'Édition' : 'Création' }}</span>
     </p>
   </nav>
 
   <h1>{{ isEdit ? "Modifier l'étudiant" : "Créer un étudiant" }}</h1>
-  <p style="color: var(--text-muted);">{{ isEdit ? "Modifiez les informations de ce compte." : "Ajoutez un nouveau compte étudiant." }}</p>
+  <p style="color: var(--text-muted);">
+    {{ isEdit ? "Modifiez les informations de ce compte étudiant." : "Ajoutez un nouveau compte étudiant à la plateforme." }}
+  </p>
 </section>
 
 <section style="margin-top: 2rem;">
-  <form action="index.php?page=etudiant-save" method="post" style="max-width: 800px; background: var(--surface); padding: 2rem; border-radius: 8px; border: 1px solid var(--border);">
+  <form action="index.php?page=etudiant-save" method="post" 
+        style="max-width: 800px; background: var(--surface); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
     
+    {# Champ caché pour l'ID en cas de modification #}
     <input type="hidden" name="id" value="{{ isEdit ? etudiant.id : 0 }}">
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+    {# Grille pour Nom et Prénom #}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
         <div class="form-group">
-          <label for="nom" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nom</label>
-          <input type="text" id="nom" name="nom" value="{{ etudiant.nom|default('') }}" required style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 4px;">
+          <label for="nom" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main);">Nom</label>
+          <input type="text" id="nom" name="nom" value="{{ etudiant.nom|default('') }}" required 
+                 placeholder="Ex: Martin"
+                 style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--background); color: var(--text); box-sizing: border-box;">
         </div>
 
         <div class="form-group">
-          <label for="prenom" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Prénom</label>
-          <input type="text" id="prenom" name="prenom" value="{{ etudiant.prenom|default('') }}" required style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 4px;">
+          <label for="prenom" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main);">Prénom</label>
+          <input type="text" id="prenom" name="prenom" value="{{ etudiant.prenom|default('') }}" required 
+                 placeholder="Ex: Jean"
+                 style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--background); color: var(--text); box-sizing: border-box;">
         </div>
     </div>
 
-    <div class="form-group" style="margin-bottom: 1rem;">
-      <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email</label>
-      <input type="email" id="email" name="email" value="{{ etudiant.email|default('') }}" required style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 4px;">
+    {# Champ Email #}
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+      <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main);">Adresse Email</label>
+      <input type="email" id="email" name="email" value="{{ etudiant.email|default('') }}" required 
+             placeholder="etudiant@exemple.fr"
+             style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--background); color: var(--text); box-sizing: border-box;">
     </div>
 
-    <div class="form-group" style="margin-bottom: 1rem;">
-      <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
-        Mot de passe {{ isEdit ? "(laisser vide pour ne pas changer)" : "" }}
+    {# Champ Mot de passe #}
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+      <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main);">
+        Mot de passe {{ isEdit ? "<span style='font-weight: normal; color: var(--text-muted); font-size: 0.85rem;'>(laisser vide pour ne pas changer)</span>"|raw : "" }}
       </label>
-      <input type="password" id="password" name="password" {{ isEdit ? "" : "required" }} style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 4px;">
+      <input type="password" id="password" name="password" {{ isEdit ? "" : "required" }} 
+             placeholder="{{ isEdit ? '••••••••' : 'Définir un mot de passe' }}"
+             style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--background); color: var(--text); box-sizing: border-box;">
     </div>
 
-    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
-      <button type="submit" class="btn-cta">{{ isEdit ? "Mettre à jour" : "Enregistrer l'étudiant" }}</button>
-      <a href="index.php?page=etudiants" style="margin-left: 1rem; color: var(--text-muted); text-decoration: none;">Annuler</a>
+    {# Pied de formulaire #}
+    <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 1.5rem;">
+      <button type="submit" class="btn-cta" style="padding: 0.8rem 2rem; font-weight: 700;">
+        {{ isEdit ? "Mettre à jour le profil" : "Créer le compte étudiant" }}
+      </button>
+      
+      <a href="index.php?page=etudiants" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;">
+        Annuler et revenir
+      </a>
     </div>
 
   </form>

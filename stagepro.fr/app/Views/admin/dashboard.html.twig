@@ -4,11 +4,11 @@
 
 {% block content %}
 <section>
-  <h1>Console d'administration</h1>
-  <p style="color: var(--text-muted);">Gestion globale des utilisateurs, des entreprises et monitoring du système.</p>
+    <h1>Console d'administration</h1>
+    <p style="color: var(--text-muted);">Gestion globale des utilisateurs, des entreprises et monitoring du système.</p>
 </section>
 
-{# Grille des compteurs de statistiques #}
+{# Grille des compteurs de statistiques - Données issues de l'AdminController #}
 <div class="container-espaces" style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
     <div class="card" style="border-left: 4px solid var(--accent-blue);">
         <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Étudiants</h3>
@@ -73,7 +73,7 @@
         </div>
     </section>
 
-    {# Colonne de droite : Alertes #}
+    {# Colonne de droite : Alertes (Simulation de flux dynamique) #}
     <aside style="background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
         <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent-blue);">Dernières alertes</h2>
         <ul style="list-style: none; font-size: 0.85rem; line-height: 1.6; padding: 0;">

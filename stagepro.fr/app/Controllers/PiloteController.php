@@ -1,81 +1,172 @@
 <?php
 // app/Controllers/PiloteController.php
-require_once __DIR__ . '/../Models/Utilisateur.php';
 
-class PiloteController {
+require_once __DIR__ . '/../Models/Utilisateur.php';
+require_once __DIR__ . '/../Models/Role.php';
+
+class PiloteController
+{
     private $model;
+    private $roleModel;
     private $twig;
 
-    public function __construct($twig) {
+    /**
+     * Le constructeur initialise les modèles, Twig et vérifie l'authentification de base
+     */
+    public function __construct($twig)
+    {
         $this->model = new Utilisateur();
+        $this->roleModel = new Role();
         $this->twig = $twig;
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Sécurité de base : redirige si l'utilisateur n'est pas connecté
+        if (!isset($_SESSION['user'])) {
+            header('Location: index.php?page=login');
+            exit;
+        }
     }
 
-    private function requireRoles(array $roles) {
+    /**
+     * Vérification des permissions spécifiques
+     */
+    private function requireRoles(array $roles): void
+    {
         $userRole = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
-        if (!isset($_SESSION['user']) || !in_array(strtolower(trim($userRole)), $roles, true)) {
+
+        if (!in_array(strtolower(trim($userRole)), $roles, true)) {
             header('Location: index.php?page=home&error=access_denied');
             exit;
         }
     }
 
-    public function index() {
+    /**
+     * Annuaire des pilotes (Admin & Pilote)
+     */
+    public function index()
+    {
         $this->requireRoles(['admin', 'pilote']);
         $pilotes = $this->model->findByRole('pilote');
+        
         echo $this->twig->render('pilotes/liste.html.twig', [
             'pilotes' => $pilotes,
             'titre_page' => "Annuaire des pilotes | StagePro"
         ]);
     }
 
-    public function show($id) {
+    /**
+     * Fiche détaillée d'un pilote (Admin & Pilote)
+     */
+    public function show($id)
+    {
         $this->requireRoles(['admin', 'pilote']);
-        $pilote = $this->model->findById($id);
-        if (!$pilote) { header('Location: index.php?page=pilotes'); exit; }
+        $pilote = $this->model->findById((int)$id);
+
+        if (!$pilote) {
+            header('Location: index.php?page=pilotes');
+            exit;
+        }
+
         echo $this->twig->render('pilotes/detail.html.twig', [
             'pilote' => $pilote,
-            'titre_page' => "Profil Pilote : " . $pilote['nom']
+            'titre_page' => "Profil Pilote : " . htmlspecialchars($pilote['nom'])
         ]);
     }
 
-    public function create() {
+    /**
+     * Formulaire de création (Admin uniquement)
+     */
+    public function create()
+    {
         $this->requireRoles(['admin']);
+        
         echo $this->twig->render('pilotes/formulaire.html.twig', [
             'titre_page' => "Ajouter un pilote | StagePro",
             'modeEdition' => false
         ]);
     }
 
-    public function edit($id) {
+    /**
+     * Formulaire de modification (Admin uniquement)
+     */
+    public function edit($id)
+    {
         $this->requireRoles(['admin']);
-        $pilote = $this->model->findById($id);
+        $pilote = $this->model->findById((int)$id);
+
+        if (!$pilote) {
+            header('Location: index.php?page=pilotes');
+            exit;
+        }
+
         echo $this->twig->render('pilotes/formulaire.html.twig', [
             'pilote' => $pilote,
             'modeEdition' => true,
-            'titre_page' => "Modifier le pilote"
+            'titre_page' => "Modifier le pilote : " . htmlspecialchars($pilote['nom'])
         ]);
     }
 
-    public function save() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
+    /**
+     * Enregistrement en base de données
+     */
+    public function save()
+    {
+        $this->requireRoles(['admin']);
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: index.php?page=pilotes');
+            exit;
+        }
+
         $id = (int)($_POST['id'] ?? 0);
+
+        // Récupération dynamique de l'ID du rôle 'pilote' (logique collègues)
+        $rolePilote = $this->roleModel->findByNom('pilote');
+        if (!$rolePilote) {
+            die("Erreur : Le rôle 'pilote' est introuvable en base de données.");
+        }
+
         $data = [
-            'nom' => htmlspecialchars($_POST['nom']),
-            'prenom' => htmlspecialchars($_POST['prenom']),
-            'email' => htmlspecialchars($_POST['email']),
-            'role_id' => 2 
+            'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
+            'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
+            'email'   => htmlspecialchars($_POST['email'] ?? ''),
+            'role_id' => (int)$rolePilote['id']
         ];
+
+        // Gestion sécurisée du mot de passe
         if (!empty($_POST['password'])) {
             $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        } elseif ($id === 0) {
+            // Mot de passe temporaire par défaut
+            $data['mot_de_passe'] = password_hash('StagePro2026', PASSWORD_DEFAULT);
         }
-        $id > 0 ? $this->model->update($id, $data) : $this->model->create($data);
+
+        if ($id > 0) {
+            $this->model->update($id, $data);
+        } else {
+            $this->model->create($data);
+        }
+
         header('Location: index.php?page=pilotes&status=success');
         exit;
     }
 
-    public function delete() {
+    /**
+     * Suppression (Admin uniquement)
+     */
+    public function delete()
+    {
+        $this->requireRoles(['admin']);
+
         $id = (int)($_POST['id'] ?? 0);
-        if ($id > 0) { $this->model->delete($id); }
+
+        if ($id > 0) {
+            $this->model->delete($id);
+        }
+
         header('Location: index.php?page=pilotes&message=deleted');
         exit;
     }

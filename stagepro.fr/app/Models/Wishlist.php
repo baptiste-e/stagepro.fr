@@ -1,46 +1,62 @@
 <?php
 // app/Models/Wishlist.php
+require_once __DIR__ . '/../../config/Database.php';
 
 class Wishlist {
     private $db;
 
+    /**
+     * Initialise la connexion à la base de données
+     */
     public function __construct() {
         $this->db = Database::getConnection();
     }
 
     /**
      * Ajoute une offre aux favoris
+     * Utilisation de "INSERT IGNORE" pour éviter une erreur si l'utilisateur 
+     * tente d'ajouter une offre déjà présente.
      */
     public function add($id_user, $id_offre) {
-        // On utilise bien utilisateur_id et offre_id ici
         $sql = "INSERT IGNORE INTO wishlist (utilisateur_id, offre_id) VALUES (:u, :o)";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute(['u' => $id_user, 'o' => $id_offre]);
+        return $stmt->execute([
+            'u' => (int)$id_user,
+            'o' => (int)$id_offre
+        ]);
     }
 
     /**
      * Retire une offre des favoris
+     * Correction confirmée : on utilise 'utilisateur_id' et non 'id_utilisateur'
      */
     public function remove($id_user, $id_offre) {
-        // C'est ici que l'erreur Unknown column 'id_utilisateur' se produisait
         $sql = "DELETE FROM wishlist WHERE utilisateur_id = :u AND offre_id = :o";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute(['u' => $id_user, 'o' => $id_offre]);
+        return $stmt->execute([
+            'u' => (int)$id_user,
+            'o' => (int)$id_offre
+        ]);
     }
 
     /**
      * Récupère toutes les offres de la wishlist d'un utilisateur
+     * Inclut le nom de l'entreprise et la date d'ajout
      */
-public function getUserWishlist($id_user) {
-    // On remplace 'o.id_entreprise' par 'o.entreprise_id' (plus probable dans ta base)
-    $sql = "SELECT o.*, e.nom as entreprise_nom 
-            FROM wishlist w 
-            JOIN offres o ON w.offre_id = o.id 
-            JOIN entreprises e ON o.entreprise_id = e.id 
-            WHERE w.utilisateur_id = :u";
+    public function getUserWishlist($id_user) {
+        // Fusion logique : o.entreprise_id est utilisé pour la jointure
+        $sql = "SELECT 
+                    o.*, 
+                    e.nom AS entreprise_nom,
+                    w.created_at AS wishlist_created_at
+                FROM wishlist w 
+                JOIN offres o ON w.offre_id = o.id 
+                JOIN entreprises e ON o.entreprise_id = e.id 
+                WHERE w.utilisateur_id = :u
+                ORDER BY w.created_at DESC";
             
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['u' => $id_user]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['u' => (int)$id_user]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

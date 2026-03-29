@@ -4,46 +4,86 @@
 
 {% block content %}
 <section>
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <div>
-      <h1>Annuaire des entreprises</h1>
-      <p style="color: var(--text-muted);">Trouvez votre futur lieu de stage parmi nos partenaires.</p>
-    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <div>
+            <h1>Annuaire des entreprises</h1>
+            <p style="color: var(--text-muted);">Trouvez votre futur lieu de stage parmi nos partenaires.</p>
+        </div>
 
-    {# Restriction d'accès au bouton de création #}
-    {% if session.user and session.user.role in ['admin', 'pilote'] %}
-      <a href="index.php?page=entreprise-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer une entreprise</a>
-    {% endif %}
-  </div>
+        {# Restriction d'accès : Admin et Pilote uniquement #}
+        {% if session.user and session.user.role in ['admin', 'pilote'] %}
+            <a href="index.php?page=entreprise-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer une entreprise</a>
+        {% endif %}
+    </div>
 </section>
 
 <section style="margin-top: 3rem;">
-  <h2>Entreprises partenaires</h2>
+    <h2>Entreprises partenaires</h2>
 
-  <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
-    {% for entreprise in entreprises %}
-        <article class="card" style="position: relative;">
-          <h3 style="color: var(--accent-blue);">
-            {{ entreprise.nom }}
-          </h3>
+    <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+        {% for entreprise in entreprises %}
+            <article class="card" style="position: relative; min-height: 300px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, border-color 0.2s;">
+                
+                <div>
+                    <h3 style="color: var(--accent-blue); margin-bottom: 1rem;">
+                        {{ entreprise.nom }}
+                    </h3>
 
-          <p>
-            {{ entreprise.description|default('Aucune description disponible.')|slice(0, 150) }}
-          </p>
+                    <p style="line-height: 1.6; color: var(--text-main); margin-bottom: 1rem; font-size: 0.95rem;">
+                        {# Troncation intelligente de la description #}
+                        {% set desc = entreprise.description|default('Aucune description disponible.') %}
+                        {{ desc|length > 150 ? desc|slice(0, 150) ~ '...' : desc }}
+                    </p>
 
-          {% if entreprise.email_contact %}
-            <p><strong>Email :</strong> {{ entreprise.email_contact }}</p>
-          {% endif %}
+                    <div style="font-size: 0.9rem;">
+                        {% if entreprise.email_contact %}
+                            <p style="margin-bottom: 0.4rem;">
+                                <strong>📧 Email :</strong> {{ entreprise.email_contact }}
+                            </p>
+                        {% endif %}
 
-          {% if entreprise.telephone_contact %}
-            <p><strong>Téléphone :</strong> {{ entreprise.telephone_contact }}</p>
-          {% endif %}
+                        {% if entreprise.telephone_contact %}
+                            <p style="margin-bottom: 0.4rem;">
+                                <strong>📞 Tel :</strong> {{ entreprise.telephone_contact }}
+                            </p>
+                        {% endif %}
+                    </div>
 
-          <a href="index.php?page=entreprise-detail&id={{ entreprise.id }}" class="lien-etendu"></a>
-        </article>
-    {% else %}
-      <p>Aucune entreprise trouvée.</p>
-    {% endfor %}
-  </div>
+                    <p style="color: var(--text-muted); margin-top: 1rem; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                        Nombre d’offres : {{ entreprise.nb_offres|default(0) }}
+                    </p>
+                </div>
+
+                <div style="margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    <span style="color: var(--accent-blue); font-weight: 600; font-size: 0.9rem;">Voir la fiche →</span>
+                </div>
+
+                {# Lien invisible qui rend toute la carte cliquable #}
+                <a href="index.php?page=entreprise-detail&id={{ entreprise.id }}" class="lien-etendu" title="Voir la fiche de {{ entreprise.nom }}"></a>
+            </article>
+        {% else %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: var(--surface); border-radius: 8px; border: 1px dashed var(--border);">
+                <p style="color: var(--text-muted);">Aucune entreprise trouvée dans l'annuaire.</p>
+            </div>
+        {% endfor %}
+    </div>
 </section>
+
+<style>
+/* Animation au survol de la carte */
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-blue) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.lien-etendu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+</p>
 {% endblock %}

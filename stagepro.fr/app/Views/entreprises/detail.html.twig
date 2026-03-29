@@ -3,64 +3,94 @@
 {% block title %}Fiche {{ entreprise.nom }} | StagePro{% endblock %}
 
 {% block content %}
+{# Fil d'Ariane #}
 <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
-    <a href="index.php?page=home" style="color: var(--accent-blue);">Accueil</a> &gt;
-    <a href="index.php?page=entreprises" style="color: var(--accent-blue);">Entreprises</a> &gt;
-    <span style="color: var(--text-muted);">Fiche Entreprise</span>
+    <a href="index.php?page=home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
+    <a href="index.php?page=entreprises" style="color: var(--accent-blue); text-decoration: none;">Entreprises</a> &gt;
+    <span style="color: var(--text-muted);">Fiche entreprise</span>
   </p>
 </nav>
 
-{# Gestion des messages Flash (Erreur/Succès) via la session #}
+{# Messages Flash (Succès / Erreur) #}
 {% if session.error %}
   <div style="max-width: 900px; margin: 0 auto 1.5rem auto; padding: 1rem; border: 1px solid #fecaca; background: #fef2f2; color: #b91c1c; border-radius: 8px;">
     {{ session.error }}
   </div>
 {% endif %}
 
-<article style="background: var(--surface); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); max-width: 900px; margin: 0 auto;">
-    <header style="border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <h1 style="font-size: 2.2rem; color: var(--accent-purple); margin-bottom: 0.5rem;">
-                {{ entreprise.nom }}
-            </h1>
-            <p style="color: var(--text-muted);">
-                Email : {{ entreprise.email_contact|default('Non renseigné') }}
-            </p>
-        </div>
-        <div style="text-align: right;">
-             <span style="background: rgba(129, 140, 248, 0.1); color: var(--accent-blue); padding: 5px 15px; border-radius: 20px; font-weight: bold;">
-                ID #{{ entreprise.id }}
-             </span>
-        </div>
-    </header>
+{% if session.success %}
+  <div style="max-width: 900px; margin: 0 auto 1.5rem auto; padding: 1rem; border: 1px solid #bbf7d0; background: #f0fdf4; color: #166534; border-radius: 8px;">
+    {{ session.success }}
+  </div>
+{% endif %}
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-        <div>
-            <h3 style="color: var(--accent-blue); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Téléphone</h3>
-            <p>{{ entreprise.telephone_contact|default('Non renseigné') }}</p>
-        </div>
+<article style="background: var(--surface); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); max-width: 900px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+  
+  {# En-tête de la fiche #}
+  <header style="border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+    <div>
+      <h1 style="font-size: 2.2rem; color: var(--accent-purple); margin: 0 0 0.5rem 0;">
+        {{ entreprise.nom }}
+      </h1>
+      <p style="color: var(--text-muted); margin: 0;">
+        <strong>📧 Contact :</strong> {{ entreprise.email_contact|default('Non renseigné') }}
+      </p>
     </div>
 
-    <div style="line-height: 1.8;">
-        <h3 style="color: var(--text-main); margin-bottom: 1rem;">À propos de l'entreprise</h3>
-        <p style="color: var(--text-muted);">
-            {{ entreprise.description|default('Aucune description disponible pour cette entreprise.')|nl2br }}
-        </p>
+    <div style="text-align: right;">
+      <span style="background: rgba(129, 140, 248, 0.1); color: var(--accent-blue); padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+        ID #{{ entreprise.id }}
+      </span>
+    </div>
+  </header>
+
+  {# Grille d'informations rapides #}
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+    <div>
+      <h3 style="color: var(--accent-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">📞 Téléphone</h3>
+      <p style="font-size: 1.1rem;">{{ entreprise.telephone_contact|default('Non renseigné') }}</p>
     </div>
 
-    {# Actions d'administration #}
-    {% if session.user and session.user.role in ['admin', 'pilote'] %}
-    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed var(--border); display: flex; gap: 1rem;">
-        <a href="index.php?page=entreprise-edit&id={{ entreprise.id }}" class="btn-cta">Modifier la fiche</a>
-
-        <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette entreprise ?');">
-            <input type="hidden" name="id" value="{{ entreprise.id }}">
-            <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer;">
-                Supprimer l'entreprise
-            </button>
-        </form>
+    <div>
+      <h3 style="color: var(--accent-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">💼 Opportunités</h3>
+      <p style="font-size: 1.1rem; font-weight: 600;">{{ entreprise.nb_offres|default(0) }} offre(s) publiée(s)</p>
     </div>
+  </div>
+
+  {# Description détaillée #}
+  <div style="line-height: 1.8; background: var(--background); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+    <h3 style="color: var(--text-main); margin-top: 0; margin-bottom: 1rem; font-size: 1.2rem;">À propos de l'entreprise</h3>
+    <p style="color: var(--text-muted); margin: 0;">
+      {{ entreprise.description|default('Aucune description disponible pour cette entreprise.')|nl2br }}
+    </p>
+  </div>
+
+  <div style="margin-top: 2rem; display: flex; justify-content: space-between; align-items: center;">
+    <a href="index.php?page=entreprises" style="color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+      &larr; Retour à l'annuaire
+    </a>
+    
+    {# Bouton pour voir les offres si l'entreprise en a #}
+    {% if entreprise.nb_offres > 0 %}
+        <a href="index.php?page=offres&entreprise={{ entreprise.nom|url_encode }}" class="btn-cta" style="font-size: 0.8rem; padding: 0.6rem 1rem;">Voir ses offres</a>
     {% endif %}
+  </div>
+
+  {# Zone d'administration (Admin / Pilote uniquement) #}
+  {% if session.user and session.user.role in ['admin', 'pilote'] %}
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed var(--border); display: flex; gap: 1rem; flex-wrap: wrap;">
+      <a href="index.php?page=entreprise-edit&id={{ entreprise.id }}" class="btn-cta" style="background: var(--accent-purple);">
+        Modifier la fiche
+      </a>
+
+      <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Attention : Toutes les offres liées à cette entreprise seront également supprimées. Confirmer ?');" style="display: inline;">
+        <input type="hidden" name="id" value="{{ entreprise.id }}">
+        <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s;">
+          Supprimer l'entreprise
+        </button>
+      </form>
+    </div>
+  {% endif %}
 </article>
 {% endblock %}

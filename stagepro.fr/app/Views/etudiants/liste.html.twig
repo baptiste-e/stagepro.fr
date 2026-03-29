@@ -4,13 +4,13 @@
 
 {% block content %}
 <section>
-  <div style="display: flex; justify-content: space-between; align-items: center;">
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
     <div>
       <h1>Annuaire des étudiants</h1>
       <p style="color: var(--text-muted);">Gérez les comptes et suivez l'avancement des recherches.</p>
     </div>
 
-    {# Vérification du rôle via la session globale #}
+    {# Accès restreint au bouton de création (Admin/Pilote) #}
     {% if session.user and session.user.role in ['admin', 'pilote'] %}
       <a href="index.php?page=etudiant-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer un étudiant</a>
     {% endif %}
@@ -18,17 +18,60 @@
 </section>
 
 <section style="margin-top: 3rem;">
-  <h2>Liste des étudiants</h2>
-  <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+  <h2>Liste des inscrits</h2>
+  
+  <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
     {% for etudiant in etudiants %}
-        <article class="card" style="position: relative;">
-          <h3>{{ etudiant.prenom }} {{ etudiant.nom }}</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">{{ etudiant.email }}</p>
-          <a href="index.php?page=etudiant-detail&id={{ etudiant.id }}" class="lien-etendu"></a>
+        <article class="card etudiant-card">
+          <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem;">
+            {{ etudiant.prenom }} {{ etudiant.nom }}
+          </h3>
+          
+          <p style="margin-bottom: 0.5rem; font-size: 0.95rem;">
+            <strong>📧 Email :</strong> {{ etudiant.email }}
+          </p>
+          
+          {# On réintègre la date de création issue de la version PHP #}
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: auto;">
+            <strong>📅 Inscrit le :</strong><br>
+            {{ etudiant.created_at ? etudiant.created_at|date("d/m/Y à H:i") : 'Non renseignée' }}
+          </p>
+
+          {# Lien étendu pour rendre toute la carte cliquable #}
+          <a href="index.php?page=etudiant-detail&id={{ etudiant.id }}" class="lien-etendu" title="Voir le profil de {{ etudiant.prenom }}"></a>
         </article>
     {% else %}
-        <p>Aucun étudiant inscrit pour le moment.</p>
+        {# État vide si aucun étudiant n'est trouvé #}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: var(--surface); border-radius: 8px; border: 1px dashed var(--border);">
+            <p style="color: var(--text-muted);">Aucun étudiant trouvé dans la base de données.</p>
+        </div>
     {% endfor %}
   </div>
 </section>
+
+<style>
+/* Petits ajouts pour le confort visuel */
+.etudiant-card {
+    position: relative; 
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 160px;
+}
+
+.etudiant-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-blue);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.lien-etendu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+</style>
 {% endblock %}

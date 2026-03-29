@@ -3,67 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {# Le bloc title permet à chaque page de définir son propre titre #}
+    {# Le bloc title permet à chaque page de définir son propre titre, sinon 'StagePro' par défaut #}
     <title>{% block title %}{{ titre_page|default('StagePro') }}{% endblock %}</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1><a href="index.php?page=home">StagePro</a></h1>
-        <nav aria-label="Navigation principale">
-            <ul>
-                <li><a href="index.php?page=home">Accueil</a></li>
-                <li><a href="index.php?page=offres">Offres</a></li>
-                <li><a href="index.php?page=candidatures">Candidatures</a></li>
-                <li><a href="index.php?page=entreprises">Entreprises</a></li>
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <h1><a href="index.php?page=home" style="text-decoration: none; color: inherit;">StagePro</a></h1>
+            
+            <nav aria-label="Navigation principale">
+                <ul style="list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0;">
+                    <li><a href="index.php?page=home">Accueil</a></li>
+                    <li><a href="index.php?page=offres">Offres</a></li>
+                    <li><a href="index.php?page=candidatures">Candidatures</a></li>
+                    <li><a href="index.php?page=entreprises">Entreprises</a></li>
 
-                {# Utilisation de la variable globale session injectée par le Backend #}
-                {% if session.user and session.user.role in ['admin', 'pilote'] %}
-                    <li><a href="index.php?page=etudiants">Étudiants</a></li>
-                    <li><a href="index.php?page=pilotes">Pilotes</a></li>
-                {% endif %}
+                    {# Liens réservés aux administrateurs et pilotes #}
+                    {% if session.user and session.user.role in ['admin', 'pilote'] %}
+                        <li><a href="index.php?page=etudiants">Étudiants</a></li>
+                        <li><a href="index.php?page=pilotes">Pilotes</a></li>
+                    {% endif %}
 
-                <li><a href="index.php?page=wishlist">Wish-List</a></li>
+                    <li><a href="index.php?page=wishlist">Wish-List</a></li>
 
-                {% if session.user %}
-                    <li>
-                        <strong>{{ session.user.prenom }} ({{ session.user.role }})</strong>
-                    </li>
-                    <li><a href="index.php?page=logout">Déconnexion</a></li>
-                {% else %}
-                    <li><a href="index.php?page=login">Connexion</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+                    {# Gestion de la connexion / profil #}
+                    {% if session.user %}
+                        <li style="border-left: 1px solid #ccc; padding-left: 20px; margin-left: 10px;">
+                            <strong>{{ session.user.prenom }} <span style="font-size: 0.8rem; font-weight: normal;">({{ session.user.role }})</span></strong>
+                        </li>
+                        <li><a href="index.php?page=logout" style="color: #dc2626;">Déconnexion</a></li>
+                    {% else %}
+                        <li><a href="index.php?page=login" class="btn-cta" style="padding: 5px 15px;">Connexion</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    {# Gestion de la bannière de cookies (Fragment intégré) #}
+    {# --- BANNIÈRE DE COOKIES --- #}
     {% if cookie_consent is not defined or cookie_consent is null %}
         <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #f3f3f3; border-top: 1px solid #d0d0d0; padding: 20px 24px 16px 24px; z-index: 9999; box-sizing: border-box; box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08);">
             <div style="max-width: 1200px; margin: 0 auto;">
                 <p style="margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.8; color: #1f2937;">
-                    Ce site utilise des cookies permettant de visualiser des contenus et d’améliorer le fonctionnement grâce aux statistiques de navigation...
+                    Ce site utilise des cookies permettant de visualiser des contenus et d’améliorer le fonctionnement grâce aux statistiques de navigation. 
+                    Si vous cliquez sur « Accepter », StagePro et ses partenaires déposeront ces cookies sur votre terminal.
                 </p>
+                
                 <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-                    <a href="index.php?page=cookie-accept" style="display: inline-flex; align-items: center; justify-content: center; background: #2563eb; color: #ffffff; text-decoration: none; padding: 11px 20px; font-size: 0.95rem; font-weight: 600; border: 1px solid #2563eb; border-radius: 6px; min-width: 120px;">Accepter</a>
-                    <a href="index.php?page=cookie-refuse" style="display: inline-flex; align-items: center; justify-content: center; background: #2563eb; color: #ffffff; text-decoration: none; padding: 11px 20px; font-size: 0.95rem; font-weight: 600; border: 1px solid #2563eb; border-radius: 6px; min-width: 120px;">Refuser</a>
+                    <a href="index.php?page=cookie-accept" style="display: inline-flex; align-items: center; justify-content: center; background: #2563eb; color: #ffffff !important; text-decoration: none; padding: 11px 20px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; min-width: 120px;">Accepter</a>
+                    <a href="index.php?page=cookie-refuse" style="display: inline-flex; align-items: center; justify-content: center; background: #2563eb; color: #ffffff !important; text-decoration: none; padding: 11px 20px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; min-width: 120px;">Refuser</a>
                     <button type="button" onclick="toggleCookiesSettings()" style="display: inline-flex; align-items: center; justify-content: center; background: #ffffff; color: #2563eb; padding: 11px 20px; font-size: 0.95rem; font-weight: 600; border: 1px solid #2563eb; border-radius: 6px; cursor: pointer; min-width: 140px;">Personnaliser</button>
                 </div>
                 
+                {# Paramètres détaillés (cachés par défaut) #}
                 <div id="cookie-settings" style="display: none; margin-top: 16px; padding: 14px; background: #ffffff; border: 1px solid #d0d0d0; border-radius: 6px;">
                     <form method="get" action="index.php">
                         <input type="hidden" name="page" value="cookie-accept">
                         <div style="margin-bottom: 10px; font-size: 0.95rem; color: #1f2937;">
-                            <label><input type="checkbox" checked disabled> Cookies essentiels</label>
+                            <label><input type="checkbox" checked disabled> Cookies essentiels (obligatoires)</label>
                         </div>
                         <div style="margin-bottom: 14px; font-size: 0.95rem; color: #1f2937;">
                             <label><input type="checkbox" name="stats"> Cookies statistiques</label>
                         </div>
-                        <button type="submit" style="background: #2563eb; color: #ffffff; padding: 10px 18px; border: 1px solid #2563eb; border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-weight: 600;">Enregistrer mes choix</button>
+                        <button type="submit" style="background: #2563eb; color: #ffffff; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Enregistrer mes choix</button>
                     </form>
                 </div>
             </div>
         </div>
+        
         <script>
           function toggleCookiesSettings() {
             const el = document.getElementById('cookie-settings');
@@ -72,17 +80,20 @@
         </script>
     {% endif %}
 
-    <main id="contenu">
-        {# Zone où le contenu spécifique de chaque page sera injecté #}
+    {# --- ZONE DE CONTENU PRINCIPAL --- #}
+    <main id="contenu" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; min-height: 70vh;">
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <p>© 2026 – Projet CESI</p>
-        <p>
-            <a href="index.php?page=mentions">Mentions légales</a>
-            <a href="index.php?page=cookie-reset" style="font-size: 0.8rem;">Gérer les cookies</a>
-        </p>
+    {# --- PIED DE PAGE --- #}
+    <footer style="margin-top: 50px; padding: 40px 20px; background: var(--surface); border-top: 1px solid var(--border); text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <p>© 2026 – Projet CESI – StagePro</p>
+            <p style="margin-top: 10px;">
+                <a href="index.php?page=mentions" style="margin-right: 15px;">Mentions légales</a>
+                <a href="index.php?page=cookie-reset" style="font-size: 0.8rem; color: var(--text-muted);">Gérer mes préférences cookies</a>
+            </p>
+        </div>
     </footer>
 
     <script src="js/scripts.js"></script>

@@ -8,13 +8,20 @@ class OffreController {
     private $model;
     private $twig;
 
+    /**
+     * Le constructeur initialise le modèle et reçoit l'instance Twig
+     */
     public function __construct($twig) {
         $this->model = new Offre();
         $this->twig = $twig;
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     /**
-     * Liste des offres avec filtres
+     * Liste des offres avec système de filtrage
      */
     public function index() {
         $filters = [
@@ -35,41 +42,46 @@ class OffreController {
     }
 
     /**
-     * Détail d'une offre
+     * Affiche le détail d'une offre et vérifie si l'étudiant a déjà postulé
      */
     public function show($id) {
-        $offre = $this->model->findById($id);
+        $offre = $this->model->findById((int)$id);
         if (!$offre) { 
             header('Location: index.php?page=offres');
             exit;
         }
 
         $maCandidature = null;
-        if (isset($_SESSION['user']) && strtolower($_SESSION['user']['role_nom'] ?? '') === 'etudiant') {
+        // Vérification flexible du rôle (logique collègues)
+        $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
+        
+        if (isset($_SESSION['user']) && $role === 'etudiant') {
             $candModel = new Candidature();
-            $maCandidature = $candModel->findSpecific($_SESSION['user']['id'], $id);
+            // Vérification de l'existence de la méthode pour éviter les erreurs
+            if (method_exists($candModel, 'findSpecific')) {
+                $maCandidature = $candModel->findSpecific($_SESSION['user']['id'], (int)$id);
+            }
         }
 
         echo $this->twig->render('offres/detail.html.twig', [
             'offre' => $offre,
             'maCandidature' => $maCandidature,
-            'titre_page' => $offre['titre'] . " | StagePro"
+            'titre_page' => htmlspecialchars($offre['titre']) . " | StagePro"
         ]);
     }
 
     /**
-     * Formulaire Création / Édition (La méthode qui te manquait !)
+     * Formulaire de création ou d'édition (réservé Admin/Pilote)
      */
     public function create($id = 0) {
-        // Sécurité : Seuls Admin et Pilote peuvent accéder
         $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=login');
             exit;
         }
 
-        $modeEdition = ($id > 0);
-        $offre = $modeEdition ? $this->model->findById($id) : null;
+        $modeEdition = ((int)$id > 0);
+        $offre = $modeEdition ? $this->model->findById((int)$id) : null;
         $entreprises = (new Entreprise())->findAll();
 
         echo $this->twig->render('offres/formulaire.html.twig', [
@@ -81,7 +93,7 @@ class OffreController {
     }
 
     /**
-     * Enregistrement en base de données
+     * Sauvegarde les données (Insert ou Update) avec typage robuste
      */
     public function save() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -90,15 +102,17 @@ class OffreController {
         }
 
         $id = (int)($_POST['id'] ?? 0);
+        
+        // Construction des données avec sécurisation et typage (fusion logique collègues)
         $data = [
-            'titre' => htmlspecialchars($_POST['titre']),
-            'description' => htmlspecialchars($_POST['description']),
-            'competences' => htmlspecialchars($_POST['competences']),
-            'localite' => htmlspecialchars($_POST['localite']),
-            'duree' => htmlspecialchars($_POST['duree']),
-            'remuneration' => !empty($_POST['remuneration']) ? $_POST['remuneration'] : null,
-            'nb_places' => (int)$_POST['nb_places'],
-            'id_entreprise' => (int)$_POST['id_entreprise']
+            'titre' => htmlspecialchars($_POST['titre'] ?? ''),
+            'description' => htmlspecialchars($_POST['description'] ?? ''),
+            'competences' => htmlspecialchars($_POST['competences'] ?? ''),
+            'localite' => htmlspecialchars($_POST['localite'] ?? ''),
+            'duree' => htmlspecialchars($_POST['duree'] ?? ''),
+            'remuneration' => ($_POST['remuneration'] ?? '') !== '' ? (float)$_POST['remuneration'] : null,
+            'nb_places' => (int)($_POST['nb_places'] ?? 1),
+            'id_entreprise' => (int)($_POST['id_entreprise'] ?? 0)
         ];
 
         if ($id > 0) {
@@ -112,11 +126,10 @@ class OffreController {
     }
 
     /**
-     * Suppression d'une offre
+     * Supprime une offre via GET ou POST
      */
     public function delete($id) {
-        // On récupère l'ID soit par l'argument, soit par le POST
-        $id_to_delete = ($id > 0) ? $id : (int)($_POST['id'] ?? 0);
+        $id_to_delete = ((int)$id > 0) ? (int)$id : (int)($_POST['id'] ?? 0);
 
         if ($id_to_delete > 0) {
             $this->model->delete($id_to_delete);
@@ -127,13 +140,34 @@ class OffreController {
     }
 
     /**
-     * Statistiques
+     * Statistiques détaillées des offres (logique de calcul avancée fusionnée)
      */
     public function stats() {
+        $statsLocalite = $this->model->getStatsByLocalite();
+        $statsEntreprise = $this->model->getStatsByEntreprise();
+        $totalOffres = $this->model->countAll();
+
+        // Calculs avancés issus du travail des collègues
+        $topLocalite = !empty($statsLocalite) ? $statsLocalite[0] : null;
+        $topEntreprise = null;
+        $nbEntreprisesAvecOffres = 0;
+
+        foreach ($statsEntreprise as $ligne) {
+            if ((int)($ligne['nb'] ?? 0) > 0) {
+                $nbEntreprisesAvecOffres++;
+                if ($topEntreprise === null) {
+                    $topEntreprise = $ligne;
+                }
+            }
+        }
+
         echo $this->twig->render('offres/stats.html.twig', [
-            'statsLocalite' => $this->model->getStatsByLocalite(),
-            'statsEntreprise' => $this->model->getStatsByEntreprise(),
-            'totalOffres' => $this->model->countAll(),
+            'statsLocalite' => $statsLocalite,
+            'statsEntreprise' => $statsEntreprise,
+            'totalOffres' => $totalOffres,
+            'topLocalite' => $topLocalite,
+            'topEntreprise' => $topEntreprise,
+            'nbEntreprisesAvecOffres' => $nbEntreprisesAvecOffres,
             'titre_page' => "Statistiques | StagePro"
         ]);
     }
