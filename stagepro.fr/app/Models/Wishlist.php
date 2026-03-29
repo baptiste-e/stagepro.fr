@@ -28,7 +28,6 @@ class Wishlist {
 
     /**
      * Retire une offre des favoris
-     * Correction confirmée : on utilise 'utilisateur_id' et non 'id_utilisateur'
      */
     public function remove($id_user, $id_offre) {
         $sql = "DELETE FROM wishlist WHERE utilisateur_id = :u AND offre_id = :o";
@@ -41,10 +40,9 @@ class Wishlist {
 
     /**
      * Récupère toutes les offres de la wishlist d'un utilisateur
-     * Inclut le nom de l'entreprise et la date d'ajout
+     * Inclut le nom de l'entreprise et la date d'ajout pour un affichage complet
      */
     public function getUserWishlist($id_user) {
-        // Fusion logique : o.entreprise_id est utilisé pour la jointure
         $sql = "SELECT 
                     o.*, 
                     e.nom AS entreprise_nom,

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 25 mars 2026 à 14:21
+-- Généré le : ven. 27 mars 2026 à 15:21
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -33,6 +33,7 @@ CREATE TABLE `candidatures` (
   `offre_id` int(11) NOT NULL,
   `cv` varchar(255) DEFAULT NULL,
   `lettre_motivation` text DEFAULT NULL,
+  `statut` varchar(20) NOT NULL DEFAULT 'en_attente',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -40,8 +41,8 @@ CREATE TABLE `candidatures` (
 -- Déchargement des données de la table `candidatures`
 --
 
-INSERT INTO `candidatures` (`id`, `utilisateur_id`, `offre_id`, `cv`, `lettre_motivation`, `created_at`) VALUES
-(1, 1, 3, 'uploads/1774391907_Compétences DEV.pdf', 'sdqdsqd', '2026-03-24 22:38:27');
+INSERT INTO `candidatures` (`id`, `utilisateur_id`, `offre_id`, `cv`, `lettre_motivation`, `statut`, `created_at`) VALUES
+(4, 3, 3, 'uploads/1774620928_Dossier_Synthese_Valentin_PLEINDOUX_CPI A2 Info 25-26 Aix_Semestre_3 (22).PDF', 'eded', 'en_attente', '2026-03-27 14:15:28');
 
 -- --------------------------------------------------------
 
@@ -63,7 +64,6 @@ CREATE TABLE `entreprises` (
 --
 
 INSERT INTO `entreprises` (`id`, `nom`, `description`, `email_contact`, `telephone_contact`, `created_at`) VALUES
-(1, 'TechCorp', 'Entreprise spécialisée en développement web', 'contact@techcorp.fr', '0102030405', '2026-03-24 13:45:29'),
 (2, 'DataFlow', 'Entreprise spécialisée en data', 'contact@dataflow.fr', '0607080910', '2026-03-24 13:45:29'),
 (3, 'CreativeLab', 'Agence UX/UI et design produit', 'contact@creativelab.fr', '0708091011', '2026-03-24 13:45:29');
 
@@ -92,9 +92,8 @@ CREATE TABLE `offres` (
 --
 
 INSERT INTO `offres` (`id`, `entreprise_id`, `titre`, `description`, `competences`, `localite`, `duree`, `nb_places`, `remuneration`, `date_offre`, `created_at`) VALUES
-(1, 1, 'Développeur Web', 'Stage en développement web PHP / JS', NULL, NULL, NULL, 1, 800.00, '2026-03-20', '2026-03-24 13:45:29'),
 (2, 2, 'Data Analyst', 'Analyse de données et reporting', NULL, NULL, NULL, 1, 900.00, '2026-03-21', '2026-03-24 13:45:29'),
-(3, 3, 'UI/UX Designer', 'Conception d’interfaces et expérience utilisateur', '', 'Paris', '6', 1, 850.00, '2026-03-22', '2026-03-24 13:45:29');
+(3, 3, 'UI/UX Designer', 'Conception d’interfaces et expérience utilisateur', '', 'Paris', '6', 1, 152000.00, '2026-03-22', '2026-03-24 13:45:29');
 
 -- --------------------------------------------------------
 
@@ -139,7 +138,10 @@ CREATE TABLE `utilisateurs` (
 INSERT INTO `utilisateurs` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `role_id`, `created_at`) VALUES
 (1, 'Admin', 'StagePro', 'admin@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 1, '2026-03-24 13:54:36'),
 (2, 'Pilote', 'Paul', 'pilote@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 2, '2026-03-24 13:54:36'),
-(3, 'Etudiant', 'Emma', 'etudiant@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 3, '2026-03-24 13:54:36');
+(3, 'Etudiant', 'Emma', 'etudiant@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 3, '2026-03-24 13:54:36'),
+(5, 'Pleindoux', 'Valentin', 'valentin.pleindoux@viacesi.fr', '$2y$10$8raFQm5W8KVGoen2JGS3se0RgLPQHWynrZL3wOyohzwpzLHd3cYqm', 2, '2026-03-25 14:07:36'),
+(6, 'Pleindoux', 'Valentin', 'pleindoux.valentin13@gmail.com', '$2y$10$9ICB8d/91om3lti2Yyz9K.ni.Wo10tPiR5Nqa3GUFlr8XZmG9MizC', 3, '2026-03-25 14:39:25'),
+(7, 'de', 'de', 'eded@gmail.com', '$2y$10$3NvmD7I.mWFveTIsskZSmuM70F58RTgziITt4WFruhxbR/vA02sKy', 2, '2026-03-26 16:10:58');
 
 -- --------------------------------------------------------
 
@@ -217,7 +219,7 @@ ALTER TABLE `wishlist`
 -- AUTO_INCREMENT pour la table `candidatures`
 --
 ALTER TABLE `candidatures`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `entreprises`
@@ -229,7 +231,7 @@ ALTER TABLE `entreprises`
 -- AUTO_INCREMENT pour la table `offres`
 --
 ALTER TABLE `offres`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `roles`
@@ -241,13 +243,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Contraintes pour les tables déchargées

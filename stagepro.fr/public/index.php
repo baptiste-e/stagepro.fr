@@ -12,7 +12,7 @@ session_start();
 // 3. Configuration de Twig
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../app/Views');
 $twig = new \Twig\Environment($loader, [
-    'cache' => false, // Mettre à jour vers un dossier de cache en production
+    'cache' => false, // Passer à un dossier de cache en production
     'debug' => true
 ]);
 
@@ -33,7 +33,7 @@ require_once __DIR__ . '/../app/Controllers/WishlistController.php';
 
 // 5. Récupération des paramètres de navigation
 $page = $_GET['page'] ?? 'home';
-$id = (int) ($_GET['id'] ?? 0);
+$id = (int)($_GET['id'] ?? 0);
 
 // 6. Routeur (Aiguillage global)
 switch ($page) {
@@ -65,10 +65,10 @@ switch ($page) {
         (new OffreController($twig))->show($id);
         break;
     case 'offre-create':
-        (new OffreController($twig))->create(); // Création (id = 0)
+        (new OffreController($twig))->create(); 
         break;
     case 'offre-edit':
-        (new OffreController($twig))->create($id); // Édition (id > 0)
+        (new OffreController($twig))->create($id); 
         break;
     case 'offre-save':
         (new OffreController($twig))->save();
@@ -180,12 +180,12 @@ switch ($page) {
         (new AuthController($twig))->logout();
         break;
 
-    // --- PAGES LÉGALES / DIVERS ---
+    // --- PAGES LÉGALES ---
     case 'mentions':
         echo $twig->render('mentions_legales.html.twig');
         break;
 
-    // --- PAGE 404 ---
+    // --- PAGE 404 (ERREUR) ---
     default:
         http_response_code(404);
         echo $twig->render('layout/404.html.twig', ['titre_page' => "404 - Page non trouvée"]);

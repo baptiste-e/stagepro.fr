@@ -10,7 +10,7 @@ class Offre {
     }
 
     /**
-     * Récupère toutes les offres avec le nom de l'entreprise, triées par date
+     * Récupère toutes les offres avec le nom de l'entreprise associée
      */
     public function findAll(): array {
         $sql = "SELECT o.*, e.nom AS entreprise_nom
@@ -23,7 +23,7 @@ class Offre {
     }
 
     /**
-     * Recherche multicritère incluant les filtres de dates
+     * Recherche multicritère (Titre, Entreprise, Compétences, Rémunération, Dates)
      */
     public function search(array $filters = []): array {
         $sql = "SELECT o.*, e.nom AS entreprise_nom
@@ -52,7 +52,7 @@ class Offre {
             $params[':remuneration'] = (float)$filters['remuneration'];
         }
 
-        // Filtres de dates (Logique fusionnée)
+        // Gestion des filtres de dates
         if (!empty($filters['date_offre'])) {
             $sql .= " AND o.date_offre = :date_offre";
             $params[':date_offre'] = $filters['date_offre'];
@@ -77,7 +77,7 @@ class Offre {
     }
 
     /**
-     * Récupère une offre par son ID
+     * Récupère une offre spécifique par son ID
      */
     public function findById(int $id): array|false {
         $sql = "SELECT o.*, e.nom AS entreprise_nom
@@ -93,7 +93,7 @@ class Offre {
     }
 
     /**
-     * Crée une offre avec gestion de la date de publication
+     * Crée une nouvelle offre
      */
     public function create(array $data): bool {
         $sql = "INSERT INTO offres (
@@ -152,7 +152,7 @@ class Offre {
     }
 
     /**
-     * Suppression sécurisée avec nettoyage des dépendances (Transaction)
+     * Suppression sécurisée en cascade (Transaction)
      */
     public function delete(int $id): bool {
         try {
@@ -162,11 +162,11 @@ class Offre {
             $stmt1 = $this->pdo->prepare("DELETE FROM candidatures WHERE offre_id = :id");
             $stmt1->execute([':id' => $id]);
 
-            // 2. Supprimer de la wishlist
+            // 2. Supprimer de la wishlist des étudiants
             $stmt2 = $this->pdo->prepare("DELETE FROM wishlist WHERE offre_id = :id");
             $stmt2->execute([':id' => $id]);
 
-            // 3. Supprimer l'offre
+            // 3. Supprimer l'offre elle-même
             $stmt3 = $this->pdo->prepare("DELETE FROM offres WHERE id = :id");
             $stmt3->execute([':id' => $id]);
 
@@ -178,13 +178,20 @@ class Offre {
         }
     }
 
+    /**
+     * Statistiques : Nombre total d'offres
+     */
     public function countAll(): int {
         return (int)$this->pdo->query("SELECT COUNT(*) FROM offres")->fetchColumn();
     }
 
+    /**
+     * Statistiques : Répartition par localité
+     */
     public function getStatsByLocalite(): array {
         $sql = "SELECT localite, COUNT(*) AS nb
                 FROM offres
+                WHERE localite IS NOT NULL
                 GROUP BY localite
                 ORDER BY nb DESC, localite ASC";
 
@@ -192,6 +199,9 @@ class Offre {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Statistiques : Répartition par entreprise
+     */
     public function getStatsByEntreprise(): array {
         $sql = "SELECT e.nom, COUNT(o.id) AS nb
                 FROM entreprises e

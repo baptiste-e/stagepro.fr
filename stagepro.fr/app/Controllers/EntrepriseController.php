@@ -7,7 +7,7 @@ class EntrepriseController {
     private $twig;
 
     /**
-     * Le constructeur reçoit Twig et initialise le modèle
+     * Le constructeur reçoit Twig et initialise le modèle Entreprise
      */
     public function __construct($twig) {
         $this->model = new Entreprise();
@@ -19,7 +19,7 @@ class EntrepriseController {
     }
 
     /**
-     * Vérifie si l'utilisateur est connecté et autorisé (Admin ou Pilote)
+     * Sécurité : Vérifie si l'utilisateur est un Admin ou un Pilote
      */
     private function checkAuth() {
         $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
@@ -30,16 +30,17 @@ class EntrepriseController {
     }
 
     /**
-     * Affiche l'annuaire des entreprises avec le nombre d'offres par entreprise
+     * Liste des entreprises (Annuaire)
+     * Inclut le nombre d'offres actives pour chaque entreprise
      */
     public function index() {
         $entreprises = $this->model->findAll();
 
-        // Fusion de la logique collègues : on ajoute le compte des offres pour chaque entreprise
+        // On enrichit les données avec le nombre d'offres par entreprise
         foreach ($entreprises as &$entreprise) {
             $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
         }
-        unset($entreprise); // Sécurité sur la référence du foreach
+        unset($entreprise); // Sécurité sur la référence
 
         echo $this->twig->render('entreprises/liste.html.twig', [
             'entreprises' => $entreprises,
@@ -48,7 +49,7 @@ class EntrepriseController {
     }
 
     /**
-     * Affiche la fiche détaillée d'une entreprise
+     * Fiche détaillée d'une entreprise
      */
     public function show($id) {
         $entreprise = $this->model->findById((int)$id);
@@ -57,7 +58,7 @@ class EntrepriseController {
             exit;
         }
 
-        // Récupération du nombre d'offres pour cette entreprise précise
+        // On récupère le nombre d'offres pour cette entreprise précise
         $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
         
         echo $this->twig->render('entreprises/detail.html.twig', [
@@ -67,13 +68,13 @@ class EntrepriseController {
     }
 
     /**
-     * Affiche le formulaire de création
+     * Affiche le formulaire de création (Admin/Pilote uniquement)
      */
     public function create() {
         $this->checkAuth();
         echo $this->twig->render('entreprises/formulaire.html.twig', [
             'titre_page' => "Ajouter une entreprise | StagePro",
-            'entreprise' => null
+            'entreprise' => null // Nécessaire pour le template Twig qui gère aussi l'édition
         ]);
     }
 
@@ -96,10 +97,11 @@ class EntrepriseController {
     }
 
     /**
-     * Sauvegarde une nouvelle entreprise
+     * Enregistre une nouvelle entreprise dans la base
      */
     public function save() {
         $this->checkAuth();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->model->create(
                 trim($_POST['nom'] ?? ''),
@@ -107,18 +109,21 @@ class EntrepriseController {
                 trim($_POST['email_contact'] ?? ''),
                 trim($_POST['telephone_contact'] ?? '')
             );
+
             header('Location: index.php?page=entreprises&status=created');
             exit;
         }
     }
 
     /**
-     * Met à jour une entreprise existante
+     * Met à jour les informations d'une entreprise
      */
     public function update() {
         $this->checkAuth();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)($_POST['id'] ?? 0);
+
             $data = [
                 'nom' => trim($_POST['nom'] ?? ''),
                 'description' => trim($_POST['description'] ?? ''),
@@ -137,11 +142,14 @@ class EntrepriseController {
      */
     public function delete() {
         $this->checkAuth();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)($_POST['id'] ?? 0);
+
             if ($id > 0) {
                 $this->model->delete($id);
             }
+
             header('Location: index.php?page=entreprises&status=deleted');
             exit;
         }

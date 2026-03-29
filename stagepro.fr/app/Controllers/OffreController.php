@@ -31,6 +31,7 @@ class OffreController {
             'remuneration' => trim($_GET['remuneration'] ?? '')
         ];
 
+        // On filtre les résultats seulement si au moins un champ est rempli
         $hasFilters = !empty(array_filter($filters));
         $offres = $hasFilters ? $this->model->search($filters) : $this->model->findAll();
         
@@ -52,12 +53,12 @@ class OffreController {
         }
 
         $maCandidature = null;
-        // Vérification flexible du rôle (logique collègues)
+        // On récupère le rôle de l'utilisateur (insensible à la casse)
         $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
         
         if (isset($_SESSION['user']) && $role === 'etudiant') {
             $candModel = new Candidature();
-            // Vérification de l'existence de la méthode pour éviter les erreurs
+            // Sécurité : on vérifie que la méthode de recherche de candidature existe
             if (method_exists($candModel, 'findSpecific')) {
                 $maCandidature = $candModel->findSpecific($_SESSION['user']['id'], (int)$id);
             }
@@ -75,6 +76,8 @@ class OffreController {
      */
     public function create($id = 0) {
         $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
+        
+        // Seuls l'admin et le pilote peuvent accéder à la gestion des offres
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=login');
             exit;
@@ -93,7 +96,7 @@ class OffreController {
     }
 
     /**
-     * Sauvegarde les données (Insert ou Update) avec typage robuste
+     * Sauvegarde les données (Insert ou Update)
      */
     public function save() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -103,7 +106,7 @@ class OffreController {
 
         $id = (int)($_POST['id'] ?? 0);
         
-        // Construction des données avec sécurisation et typage (fusion logique collègues)
+        // Construction des données sécurisées (fusion des logiques)
         $data = [
             'titre' => htmlspecialchars($_POST['titre'] ?? ''),
             'description' => htmlspecialchars($_POST['description'] ?? ''),
@@ -126,7 +129,7 @@ class OffreController {
     }
 
     /**
-     * Supprime une offre via GET ou POST
+     * Supprime une offre (réservé Admin/Pilote)
      */
     public function delete($id) {
         $id_to_delete = ((int)$id > 0) ? (int)$id : (int)($_POST['id'] ?? 0);
@@ -135,19 +138,19 @@ class OffreController {
             $this->model->delete($id_to_delete);
         }
 
-        header('Location: index.php?page=offres&msg=deleted');
+        header('Location: index.php?page=offres&status=deleted');
         exit;
     }
 
     /**
-     * Statistiques détaillées des offres (logique de calcul avancée fusionnée)
+     * Statistiques détaillées des offres
      */
     public function stats() {
         $statsLocalite = $this->model->getStatsByLocalite();
         $statsEntreprise = $this->model->getStatsByEntreprise();
         $totalOffres = $this->model->countAll();
 
-        // Calculs avancés issus du travail des collègues
+        // Calcul du top localité et top entreprise
         $topLocalite = !empty($statsLocalite) ? $statsLocalite[0] : null;
         $topEntreprise = null;
         $nbEntreprisesAvecOffres = 0;

@@ -9,7 +9,7 @@ class AdminController
     private $twig;
 
     /**
-     * Le constructeur reçoit Twig depuis l'index.php
+     * Le constructeur reçoit l'instance Twig depuis l'index.php
      */
     public function __construct($twig)
     {
@@ -17,7 +17,7 @@ class AdminController
     }
 
     /**
-     * Méthode de sécurité interne (issue du travail de tes collègues)
+     * Démarre la session si elle n'est pas déjà active
      */
     private function startSessionIfNeeded(): void
     {
@@ -27,39 +27,39 @@ class AdminController
     }
 
     /**
-     * Vérification stricte du rôle Admin
+     * Vérification stricte du rôle Admin pour sécuriser la page
      */
     private function requireAdmin(): void
     {
         $this->startSessionIfNeeded();
 
-        // On vérifie les deux clés possibles (role ou role_nom)
+        // On récupère le rôle peu importe le nom de la clé en session
         $role = $_SESSION['user']['role'] ?? $_SESSION['user']['role_nom'] ?? '';
         $role = strtolower(trim($role));
 
         if (!isset($_SESSION['user']) || $role !== 'admin') {
-            // Optionnel : On peut vider la session si tentative d'intrusion
-            // session_unset(); 
-            // session_destroy();
+            // Sécurité : on détruit la session en cas de tentative d'accès illégitime
+            session_unset();
+            session_destroy();
             header('Location: index.php?page=login');
             exit;
         }
     }
 
     /**
-     * Affichage du Dashboard avec Twig
+     * Affiche le tableau de bord administratif
      */
     public function dashboard()
     {
-        // 1. On sécurise l'accès
+        // 1. On vérifie les droits d'accès
         $this->requireAdmin();
 
-        // 2. Initialisation des modèles
+        // 2. Instanciation des modèles pour récupérer les données
         $userModel = new Utilisateur();
         $entrepriseModel = new Entreprise();
         $offreModel = new Offre();
 
-        // 3. Récupération des statistiques
+        // 3. Préparation des statistiques pour la vue
         $stats = [
             'etudiants'   => $userModel->countByRole('etudiant'),
             'pilotes'     => $userModel->countByRole('pilote'),
@@ -67,10 +67,10 @@ class AdminController
             'offres'      => $offreModel->countAll()
         ];
 
-        // 4. Rendu Twig (Fusion de la logique et du moteur)
+        // 4. Rendu de la vue Twig (plus besoin d'include header/footer)
         echo $this->twig->render('admin/dashboard.html.twig', [
             'stats' => $stats,
-            'titre_page' => "Tableau de Bord Administrateur | StagePro"
+            'titre_page' => "Console d'administration | StagePro"
         ]);
     }
 }

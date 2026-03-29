@@ -51,12 +51,12 @@ class EtudiantController {
     }
 
     /**
-     * Formulaire de création
+     * Formulaire de création (réservé Admin/Pilote)
      */
     public function create() {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
 
-        if (!isset($_SESSION['user']) || $role === 'etudiant') {
+        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=home');
             exit;
         }
@@ -108,20 +108,20 @@ class EtudiantController {
 
         $id = (int)($_POST['id'] ?? 0);
 
-        // Récupération dynamique du rôle depuis le modèle Role (logique collègues)
+        // Récupération dynamique du rôle depuis le modèle Role
         $roleEtudiant = $this->roleModel->findByNom('etudiant');
         if (!$roleEtudiant) {
             die("Erreur critique : Le rôle 'etudiant' n'existe pas en base de données.");
         }
 
         $data = [
-            'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
-            'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
-            'email'   => htmlspecialchars($_POST['email'] ?? ''),
+            'nom'    => htmlspecialchars($_POST['nom'] ?? ''),
+            'prenom' => htmlspecialchars($_POST['prenom'] ?? ''),
+            'email'  => htmlspecialchars($_POST['email'] ?? ''),
             'role_id' => (int)$roleEtudiant['id']
         ];
 
-        // Gestion du mot de passe
+        // Gestion du mot de passe (si fourni ou nouveau compte)
         if (!empty($_POST['password'])) {
             $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         } elseif ($id === 0) {
@@ -140,22 +140,24 @@ class EtudiantController {
     }
 
     /**
-     * Suppression d'un étudiant
+     * Suppression d'un étudiant (via POST uniquement)
      */
     public function delete() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
 
-            if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
-                die("Accès refusé.");
-            }
+        $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
 
-            $id = (int)($_POST['id'] ?? 0);
-            if ($id > 0) {
-                $this->model->delete($id);
-            }
-            header('Location: index.php?page=etudiants&message=deleted');
-            exit;
+        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
+            die("Accès refusé.");
         }
+
+        $id = (int)($_POST['id'] ?? 0);
+
+        if ($id > 0) {
+            $this->model->delete($id);
+        }
+
+        header('Location: index.php?page=etudiants&message=deleted');
+        exit;
     }
 }

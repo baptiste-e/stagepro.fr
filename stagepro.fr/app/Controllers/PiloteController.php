@@ -11,7 +11,7 @@ class PiloteController
     private $twig;
 
     /**
-     * Le constructeur initialise les modèles, Twig et vérifie l'authentification de base
+     * Le constructeur initialise les modèles, Twig et vérifie l'authentification
      */
     public function __construct($twig)
     {
@@ -31,7 +31,7 @@ class PiloteController
     }
 
     /**
-     * Vérification des permissions spécifiques
+     * Vérification des permissions spécifiques pour restreindre l'accès
      */
     private function requireRoles(array $roles): void
     {
@@ -44,7 +44,7 @@ class PiloteController
     }
 
     /**
-     * Annuaire des pilotes (Admin & Pilote)
+     * Annuaire des pilotes (Accessible aux Admin & Pilotes)
      */
     public function index()
     {
@@ -58,7 +58,7 @@ class PiloteController
     }
 
     /**
-     * Fiche détaillée d'un pilote (Admin & Pilote)
+     * Fiche détaillée d'un pilote
      */
     public function show($id)
     {
@@ -77,7 +77,7 @@ class PiloteController
     }
 
     /**
-     * Formulaire de création (Admin uniquement)
+     * Formulaire de création (Réservé aux Admin)
      */
     public function create()
     {
@@ -85,12 +85,13 @@ class PiloteController
         
         echo $this->twig->render('pilotes/formulaire.html.twig', [
             'titre_page' => "Ajouter un pilote | StagePro",
-            'modeEdition' => false
+            'modeEdition' => false,
+            'pilote' => null
         ]);
     }
 
     /**
-     * Formulaire de modification (Admin uniquement)
+     * Formulaire de modification (Réservé aux Admin)
      */
     public function edit($id)
     {
@@ -110,7 +111,7 @@ class PiloteController
     }
 
     /**
-     * Enregistrement en base de données
+     * Enregistrement en base de données (Create ou Update)
      */
     public function save()
     {
@@ -123,7 +124,7 @@ class PiloteController
 
         $id = (int)($_POST['id'] ?? 0);
 
-        // Récupération dynamique de l'ID du rôle 'pilote' (logique collègues)
+        // Récupération dynamique de l'ID du rôle 'pilote'
         $rolePilote = $this->roleModel->findByNom('pilote');
         if (!$rolePilote) {
             die("Erreur : Le rôle 'pilote' est introuvable en base de données.");
@@ -136,11 +137,11 @@ class PiloteController
             'role_id' => (int)$rolePilote['id']
         ];
 
-        // Gestion sécurisée du mot de passe
+        // Gestion du mot de passe (hachage)
         if (!empty($_POST['password'])) {
             $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         } elseif ($id === 0) {
-            // Mot de passe temporaire par défaut
+            // Mot de passe temporaire par défaut pour les nouveaux comptes
             $data['mot_de_passe'] = password_hash('StagePro2026', PASSWORD_DEFAULT);
         }
 
@@ -155,19 +156,24 @@ class PiloteController
     }
 
     /**
-     * Suppression (Admin uniquement)
+     * Suppression définitive d'un compte pilote
      */
     public function delete()
     {
         $this->requireRoles(['admin']);
 
-        $id = (int)($_POST['id'] ?? 0);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = (int)($_POST['id'] ?? 0);
 
-        if ($id > 0) {
-            $this->model->delete($id);
+            if ($id > 0) {
+                $this->model->delete($id);
+            }
+
+            header('Location: index.php?page=pilotes&message=deleted');
+            exit;
         }
-
-        header('Location: index.php?page=pilotes&message=deleted');
+        
+        header('Location: index.php?page=pilotes');
         exit;
     }
 }

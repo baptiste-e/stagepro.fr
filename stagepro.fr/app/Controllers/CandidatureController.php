@@ -10,8 +10,7 @@ class CandidatureController {
         $this->model = new Candidature();
         $this->twig = $twig;
         
-        // La session est normalement démarrée dans index.php, 
-        // mais on garde une sécurité si besoin.
+        // Sécurité : démarrage de la session si nécessaire
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -70,7 +69,7 @@ class CandidatureController {
 
         $role = $this->getRole();
 
-        // Sécurité : un étudiant ne peut pas voir la candidature d'un autre
+        // Sécurité : un étudiant ne peut pas voir la candidature d'un autre via l'URL
         if ($role === 'etudiant' && (int)$candidature['utilisateur_id'] !== (int)$_SESSION['user']['id']) {
             header('Location: index.php?page=candidatures');
             exit;
@@ -157,6 +156,7 @@ class CandidatureController {
         $id_cand = (int)$id_candidature;
 
         if ($id_cand > 0) {
+            // On vérifie l'ID utilisateur pour être sûr que l'étudiant supprime SA propre candidature
             $this->model->deleteByIdentifiers($id_cand, $userId);
         }
 

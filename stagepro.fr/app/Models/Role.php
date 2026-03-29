@@ -10,7 +10,7 @@ class Role {
     }
 
     /**
-     * Récupère tous les rôles (utile pour des listes déroulantes)
+     * Récupère tous les rôles (utile pour des listes déroulantes de création d'utilisateur)
      */
     public function findAll(): array {
         $sql = "SELECT * FROM roles ORDER BY nom ASC";
@@ -19,7 +19,7 @@ class Role {
     }
 
     /**
-     * Récupère un rôle par son ID
+     * Récupère un rôle spécifique par son ID
      */
     public function findById(int $id): array|false {
         $sql = "SELECT * FROM roles WHERE id = :id LIMIT 1";
@@ -30,7 +30,7 @@ class Role {
 
     /**
      * Récupère un rôle par son nom (ex: 'etudiant', 'pilote', 'admin')
-     * Très utile pour les contrôleurs afin de récupérer l'ID dynamiquement
+     * Très utile pour les contrôleurs afin de récupérer l'ID dynamiquement sans le "hardcoder"
      */
     public function findByNom(string $nom): array|false {
         $sql = "SELECT * FROM roles WHERE nom = :nom LIMIT 1";
