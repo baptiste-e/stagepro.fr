@@ -1,0 +1,120 @@
+{% extends "layout.html.twig" %}
+
+{# Détection du mode édition basée sur la variable passée par le contrôleur #}
+{% set isEdit = modeEdition|default(false) and offre is defined and offre.id is not empty %}
+
+{% block title %}
+    {{ isEdit ? "Modifier l'offre" : "Publier une offre" }} | StagePro
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>{{ isEdit ? "Modifier l'offre" : "Publier une nouvelle offre" }}</h1>
+    <p style="color: var(--text-muted);">
+        {{ isEdit ? "Ajustez les détails du poste pour les candidats." : "Remplissez les informations pour diffuser votre offre de stage." }}
+    </p>
+</section>
+
+<section style="margin-top: 2rem;">
+    <form action="index.php?page=offre-save" method="post" 
+          style="max-width: 900px; background: var(--surface); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+
+        {# Champ caché pour l'ID en cas de modification #}
+        {% if isEdit %}
+            <input type="hidden" name="id" value="{{ offre.id }}">
+        {% endif %}
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+
+            {# Titre (Pleine largeur) #}
+            <div class="form-group" style="grid-column: span 2;">
+                <label for="titre" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Intitulé du poste *</label>
+                <input type="text" id="titre" name="titre" value="{{ offre.titre|default('') }}" 
+                       placeholder="Ex: Développeur Web Fullstack H/F" required 
+                       style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+            </div>
+
+            {# Entreprise #}
+            <div class="form-group">
+                <label for="id_entreprise" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Entreprise *</label>
+                <select id="id_entreprise" name="id_entreprise" required 
+                        style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+                    <option value="">-- Sélectionnez une entreprise --</option>
+                    {% for entreprise in entreprises %}
+                        <option value="{{ entreprise.id }}" 
+                            {{ (offre.entreprise_id is defined and offre.entreprise_id == entreprise.id) ? 'selected' : '' }}>
+                            {{ entreprise.nom }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {# Date de publication #}
+            <div class="form-group">
+                <label for="date_offre" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Date de publication *</label>
+                <input type="date" id="date_offre" name="date_offre" 
+                       value="{{ offre.date_offre|default("now"|date("Y-m-d")) }}" required 
+                       style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+            </div>
+
+            {# Localité #}
+            <div class="form-group">
+                <label for="localite" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Ville / Lieu *</label>
+                <input type="text" id="localite" name="localite" value="{{ offre.localite|default('') }}" 
+                       placeholder="Ex: Lyon (69)" required 
+                       style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+            </div>
+
+            {# Durée #}
+            <div class="form-group">
+                <label for="duree" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Durée du stage</label>
+                <input type="text" id="duree" name="duree" value="{{ offre.duree|default('') }}" 
+                       placeholder="Ex: 4 à 6 mois" 
+                       style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+            </div>
+
+            {# Nombre de places #}
+            <div class="form-group">
+                <label for="nb_places" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre de places *</label>
+                <input type="number" id="nb_places" name="nb_places" min="1" value="{{ offre.nb_places|default('1') }}" required 
+                       style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+            </div>
+
+            {# Rémunération #}
+            <div class="form-group">
+                <label for="remuneration" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Gratification mensuelle (€)</label>
+                <input type="number" id="remuneration" name="remuneration" min="0" step="0.01" 
+                       value="{{ offre.remuneration|default('') }}" placeholder="Ex: 600" 
+                       style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+            </div>
+
+            {# Compétences (Pleine largeur) #}
+            <div class="form-group" style="grid-column: span 2;">
+                <label for="competences" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Tags / Compétences clés</label>
+                <input type="text" id="competences" name="competences" value="{{ offre.competences|default('') }}" 
+                       placeholder="Ex: React, PHP, Docker..." 
+                       style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--text);">
+            </div>
+
+            {# Description (Pleine largeur) #}
+            <div class="form-group" style="grid-column: span 2;">
+                <label for="description" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Description détaillée des missions *</label>
+                <textarea id="description" name="description" rows="8" placeholder="Décrivez les projets et les responsabilités du stagiaire..." required 
+                          style="width: 100%; padding: 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--background); color: var(--text); font-family: inherit; line-height: 1.5;">{{ offre.description|default('') }}</textarea>
+            </div>
+
+        </div>
+
+        {# Boutons d'action #}
+        <div style="margin-top: 2.5rem; display: flex; align-items: center; gap: 2rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+            <button type="submit" class="btn-cta" style="padding: 0.8rem 2rem;">
+                {{ isEdit ? "Mettre à jour l'offre" : "Publier l'offre" }}
+            </button>
+            <a href="index.php?page=offres" style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500;">
+                Annuler
+            </a>
+        </div>
+
+    </form>
+</section>
+{% endblock %}

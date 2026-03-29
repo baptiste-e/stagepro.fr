@@ -1,4 +1,5 @@
 <?php
+// app/Models/Offre.php
 require_once __DIR__ . '/../../config/Database.php';
 
 class Offre {
@@ -8,6 +9,9 @@ class Offre {
         $this->pdo = Database::getConnection();
     }
 
+    /**
+     * Récupère toutes les offres avec le nom de l'entreprise associée
+     */
     public function findAll(): array {
         $sql = "SELECT o.*, e.nom AS entreprise_nom
                 FROM offres o
@@ -18,6 +22,9 @@ class Offre {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Recherche multicritère (Titre, Entreprise, Compétences, Rémunération, Dates)
+     */
     public function search(array $filters = []): array {
         $sql = "SELECT o.*, e.nom AS entreprise_nom
                 FROM offres o
@@ -45,6 +52,7 @@ class Offre {
             $params[':remuneration'] = (float)$filters['remuneration'];
         }
 
+        // Gestion des filtres de dates
         if (!empty($filters['date_offre'])) {
             $sql .= " AND o.date_offre = :date_offre";
             $params[':date_offre'] = $filters['date_offre'];
@@ -68,6 +76,9 @@ class Offre {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Récupère une offre spécifique par son ID
+     */
     public function findById(int $id): array|false {
         $sql = "SELECT o.*, e.nom AS entreprise_nom
                 FROM offres o
@@ -81,27 +92,16 @@ class Offre {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Crée une nouvelle offre
+     */
     public function create(array $data): bool {
         $sql = "INSERT INTO offres (
-                    titre,
-                    description,
-                    competences,
-                    localite,
-                    duree,
-                    remuneration,
-                    nb_places,
-                    entreprise_id,
-                    date_offre
+                    titre, description, competences, localite, 
+                    duree, remuneration, nb_places, entreprise_id, date_offre
                 ) VALUES (
-                    :titre,
-                    :description,
-                    :competences,
-                    :localite,
-                    :duree,
-                    :remuneration,
-                    :nb_places,
-                    :id_entreprise,
-                    :date_offre
+                    :titre, :description, :competences, :localite, 
+                    :duree, :remuneration, :nb_places, :id_entreprise, :date_offre
                 )";
 
         $stmt = $this->pdo->prepare($sql);
@@ -115,10 +115,13 @@ class Offre {
             ':remuneration'  => $data['remuneration'] !== '' ? $data['remuneration'] : null,
             ':nb_places'     => $data['nb_places'],
             ':id_entreprise' => $data['id_entreprise'],
-            ':date_offre'    => $data['date_offre']
+            ':date_offre'    => $data['date_offre'] ?? date('Y-m-d')
         ]);
     }
 
+    /**
+     * Met à jour une offre existante
+     */
     public function update(int $id, array $data): bool {
         $sql = "UPDATE offres
                 SET titre = :titre,
@@ -148,16 +151,22 @@ class Offre {
         ]);
     }
 
+    /**
+     * Suppression sécurisée en cascade (Transaction)
+     */
     public function delete(int $id): bool {
         try {
             $this->pdo->beginTransaction();
 
+            // 1. Supprimer les candidatures liées
             $stmt1 = $this->pdo->prepare("DELETE FROM candidatures WHERE offre_id = :id");
             $stmt1->execute([':id' => $id]);
 
+            // 2. Supprimer de la wishlist des étudiants
             $stmt2 = $this->pdo->prepare("DELETE FROM wishlist WHERE offre_id = :id");
             $stmt2->execute([':id' => $id]);
 
+            // 3. Supprimer l'offre elle-même
             $stmt3 = $this->pdo->prepare("DELETE FROM offres WHERE id = :id");
             $stmt3->execute([':id' => $id]);
 
@@ -169,13 +178,20 @@ class Offre {
         }
     }
 
+    /**
+     * Statistiques : Nombre total d'offres
+     */
     public function countAll(): int {
         return (int)$this->pdo->query("SELECT COUNT(*) FROM offres")->fetchColumn();
     }
 
+    /**
+     * Statistiques : Répartition par localité
+     */
     public function getStatsByLocalite(): array {
         $sql = "SELECT localite, COUNT(*) AS nb
                 FROM offres
+                WHERE localite IS NOT NULL
                 GROUP BY localite
                 ORDER BY nb DESC, localite ASC";
 
@@ -183,6 +199,9 @@ class Offre {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Statistiques : Répartition par entreprise
+     */
     public function getStatsByEntreprise(): array {
         $sql = "SELECT e.nom, COUNT(o.id) AS nb
                 FROM entreprises e

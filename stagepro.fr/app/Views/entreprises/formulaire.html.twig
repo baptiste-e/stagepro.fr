@@ -1,0 +1,86 @@
+{% extends "layout.html.twig" %}
+
+{# Détection dynamique du mode (Création ou Modification) #}
+{% set isEdit = entreprise.id is defined and entreprise.id is not empty %}
+
+{% block title %}
+    {{ isEdit ? "Modifier" : "Ajouter" }} une entreprise | StagePro
+{% endblock %}
+
+{% block content %}
+<div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
+    {# Fil d'Ariane #}
+    <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
+      <p>
+        <a href="index.php?page=home" style="color: #2563eb; text-decoration: none;">Accueil</a> &gt;
+        <a href="index.php?page=entreprises" style="color: #2563eb; text-decoration: none;">Entreprises</a> &gt;
+        <span style="color: #666;">{{ isEdit ? 'Modification' : 'Création' }}</span>
+      </p>
+    </nav>
+
+    {# En-tête dynamique #}
+    <header style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2.5rem; color: #1e293b; margin-bottom: 0.5rem;">
+        {{ isEdit ? "Modifier l'entreprise" : "Ajouter une entreprise" }}
+      </h1>
+      <p style="color: #64748b; font-size: 1.1rem;">
+        {{ isEdit 
+            ? "Mettez à jour les informations de l'entreprise partenaire." 
+            : "Remplissez le formulaire ci-dessous pour référencer une nouvelle entreprise." 
+        }}
+      </p>
+    </header>
+
+    {# Formulaire avec action conditionnelle #}
+    <form action="index.php?page={{ isEdit ? 'entreprise-update' : 'entreprise-save' }}" method="post" 
+          style="background: #ffffff; padding: 2.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+        
+        {# ID caché pour la modification #}
+        {% if isEdit %}
+          <input type="hidden" name="id" value="{{ entreprise.id }}">
+        {% endif %}
+
+        <div style="margin-bottom: 1.5rem;">
+          <label for="nom" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #334155;">Nom de l'entreprise *</label>
+          <input type="text" id="nom" name="nom" value="{{ entreprise.nom|default('') }}" required 
+                 placeholder="Ex: CyberSoft Solutions"
+                 style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 1rem; box-sizing: border-box;">
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label for="description" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #334155;">Description / Secteur d'activité</label>
+          <textarea id="description" name="description" rows="5" placeholder="Décrivez l'activité de l'entreprise..."
+                    style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 1rem; font-family: inherit; box-sizing: border-box;">{{ entreprise.description|default('') }}</textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div>
+              <label for="email_contact" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #334155;">Email de contact</label>
+              <input type="email" id="email_contact" name="email_contact" value="{{ entreprise.email_contact|default('') }}" 
+                     placeholder="contact@entreprise.com"
+                     style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box;">
+            </div>
+            <div>
+              <label for="telephone_contact" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #334155;">Téléphone</label>
+              <input type="text" id="telephone_contact" name="telephone_contact" value="{{ entreprise.telephone_contact|default('') }}" 
+                     placeholder="01 23 45 67 89"
+                     style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box;">
+            </div>
+        </div>
+
+        {# Pied de formulaire avec boutons d'action #}
+        <div style="padding-top: 1.5rem; border-top: 1px solid #e2e8f0; display: flex; flex-direction: row-reverse; gap: 1rem; align-items: center;">
+          <button type="submit" 
+                  style="background-color: #2563eb; color: #ffffff; padding: 0.8rem 2rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: background 0.2s;">
+            {{ isEdit ? "Enregistrer les modifications" : "Créer l'entreprise" }}
+          </button>
+          
+          <a href="index.php?page=entreprises" 
+             style="text-decoration: none; color: #64748b; font-weight: 500; font-size: 1rem; padding: 0.8rem 1rem;">
+            Annuler
+          </a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

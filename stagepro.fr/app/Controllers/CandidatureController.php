@@ -4,23 +4,29 @@ require_once __DIR__ . '/../Models/Candidature.php';
 
 class CandidatureController {
     private $model;
+    private $twig;
 
-    public function __construct() {
+    public function __construct($twig) {
         $this->model = new Candidature();
-
+        $this->twig = $twig;
+        
+        // Sécurité : démarrage de la session si nécessaire
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
 
+    /**
+     * Retourne le rôle de l'utilisateur connecté en minuscules
+     */
     private function getRole(): string {
         return strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
     }
 
     /**
      * Liste des candidatures
-     * - étudiant : ses candidatures
-     * - admin/pilote : toutes les candidatures
+     * - Étudiant : voit uniquement les siennes
+     * - Admin/Pilote : voient toutes les candidatures du système
      */
     public function index() {
         if (!isset($_SESSION['user'])) {
@@ -29,23 +35,25 @@ class CandidatureController {
         }
 
         $role = $this->getRole();
+        $userId = (int)$_SESSION['user']['id'];
 
         if (in_array($role, ['admin', 'pilote'], true)) {
             $candidatures = $this->model->findAllFull();
             $titre_page = "Gestion des candidatures | StagePro";
         } else {
-            $userId = (int)$_SESSION['user']['id'];
             $candidatures = $this->model->findByEtudiant($userId);
             $titre_page = "Mes Candidatures | StagePro";
         }
 
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/candidatures/liste.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('candidatures/liste.html.twig', [
+            'candidatures' => $candidatures,
+            'role' => $role,
+            'titre_page' => $titre_page
+        ]);
     }
 
     /**
-     * Détail d'une candidature
+     * Détail d'une candidature précise
      */
     public function show($id) {
         if (!isset($_SESSION['user'])) {
@@ -61,20 +69,21 @@ class CandidatureController {
 
         $role = $this->getRole();
 
+        // Sécurité : un étudiant ne peut pas voir la candidature d'un autre via l'URL
         if ($role === 'etudiant' && (int)$candidature['utilisateur_id'] !== (int)$_SESSION['user']['id']) {
             header('Location: index.php?page=candidatures');
             exit;
         }
 
-        $titre_page = "Détail candidature | StagePro";
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/candidatures/detail.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('candidatures/detail.html.twig', [
+            'candidature' => $candidature,
+            'role' => $role,
+            'titre_page' => "Détail candidature | StagePro"
+        ]);
     }
 
     /**
-     * Formulaire pour postuler
+     * Traitement de la postulation (Formulaire POST)
      */
     public function postuler() {
         if (!isset($_SESSION['user'])) {
@@ -87,6 +96,7 @@ class CandidatureController {
             $lettre = htmlspecialchars($_POST['lm'] ?? '');
             $userId = (int)$_SESSION['user']['id'];
 
+            // Gestion de l'upload du CV
             $cvPath = null;
             if (!empty($_FILES['cv']['tmp_name'])) {
                 if (!is_dir('uploads')) {
@@ -104,7 +114,7 @@ class CandidatureController {
     }
 
     /**
-     * Mise à jour du statut (admin / pilote)
+     * Mise à jour du statut (Acceptée, Refusée, etc.) - Réservé Admin/Pilote
      */
     public function updateStatus($id) {
         if (!isset($_SESSION['user'])) {
@@ -123,12 +133,12 @@ class CandidatureController {
             $this->model->updateStatut((int)$id, $statut);
         }
 
-        header('Location: index.php?page=candidature-detail&id=' . (int)$id);
+        header('Location: index.php?page=candidature-detail&id=' . (int)$id . '&status=updated');
         exit;
     }
 
     /**
-     * Annulation de candidature (étudiant uniquement)
+     * Annulation d'une candidature par l'étudiant
      */
     public function cancel($id_candidature) {
         if (!isset($_SESSION['user'])) {
@@ -146,6 +156,7 @@ class CandidatureController {
         $id_cand = (int)$id_candidature;
 
         if ($id_cand > 0) {
+            // On vérifie l'ID utilisateur pour être sûr que l'étudiant supprime SA propre candidature
             $this->model->deleteByIdentifiers($id_cand, $userId);
         }
 

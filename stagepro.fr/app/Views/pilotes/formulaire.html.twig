@@ -1,0 +1,82 @@
+{% extends "layout.html.twig" %}
+
+{# Détection du mode : Création ou Édition #}
+{% set isEdit = modeEdition|default(false) and pilote is defined and pilote.id is not empty %}
+
+{% block title %}
+    {{ isEdit ? "Modifier" : "Créer" }} un compte pilote | StagePro
+{% endblock %}
+
+{% block content %}
+<section>
+  {# Fil d’ariane #}
+  <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
+    <p>
+      <a href="index.php?page=home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
+      <a href="index.php?page=pilotes" style="color: var(--accent-blue); text-decoration: none;">Pilotes</a> &gt;
+      <span style="color: var(--text-muted);">{{ isEdit ? 'Édition' : 'Création' }}</span>
+    </p>
+  </nav>
+
+  <h1>{{ isEdit ? "Modifier le compte pilote" : "Créer un nouveau pilote" }}</h1>
+  <p style="color: var(--text-muted);">
+    {{ isEdit ? "Mettez à jour les informations professionnelles de ce pilote." : "Remplissez les informations pour ajouter un nouveau membre à l'équipe pédagogique." }}
+  </p>
+</section>
+
+<section style="margin-top: 2rem;">
+  <form action="index.php?page=pilote-save" method="post" 
+        style="max-width: 800px; background: var(--surface); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+    
+    {# Champ caché pour l'ID en cas de modification #}
+    <input type="hidden" name="id" value="{{ isEdit ? pilote.id : 0 }}">
+
+    {# Grille pour Nom et Prénom #}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="form-group">
+          <label for="nom" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main);">Nom *</label>
+          <input type="text" id="nom" name="nom" value="{{ pilote.nom|default('') }}" required 
+                 placeholder="Ex: Martin"
+                 style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--background); color: var(--text); box-sizing: border-box;">
+        </div>
+
+        <div class="form-group">
+          <label for="prenom" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main);">Prénom *</label>
+          <input type="text" id="prenom" name="prenom" value="{{ pilote.prenom|default('') }}" required 
+                 placeholder="Ex: Jean"
+                 style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--background); color: var(--text); box-sizing: border-box;">
+        </div>
+    </div>
+
+    {# Email Professionnel #}
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+      <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main);">Email professionnel *</label>
+      <input type="email" id="email" name="email" value="{{ pilote.email|default('') }}" required 
+             placeholder="Ex: jmartin@cesi.fr"
+             style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--background); color: var(--text); box-sizing: border-box;">
+    </div>
+
+    {# Mot de passe #}
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+      <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main);">
+        Mot de passe {{ isEdit ? "<span style='font-weight: normal; color: var(--text-muted); font-size: 0.85rem;'>(laisser vide pour ne pas changer)</span>"|raw : "*" }}
+      </label>
+      <input type="password" id="password" name="password" {{ isEdit ? "" : "required" }} 
+             placeholder="{{ isEdit ? '••••••••' : 'Définir un mot de passe' }}"
+             style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--background); color: var(--text); box-sizing: border-box;">
+    </div>
+
+    {# Pied de formulaire #}
+    <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 1.5rem;">
+      <button type="submit" class="btn-cta" style="padding: 0.8rem 2rem; font-weight: 700; cursor: pointer;">
+        {{ isEdit ? "Mettre à jour le pilote" : "Enregistrer le pilote" }}
+      </button>
+      
+      <a href="index.php?page=pilotes" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;">
+        Annuler
+      </a>
+    </div>
+
+  </form>
+</section>
+{% endblock %}

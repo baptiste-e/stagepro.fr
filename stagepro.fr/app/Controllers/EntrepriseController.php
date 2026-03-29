@@ -4,16 +4,22 @@ require_once __DIR__ . '/../Models/Entreprise.php';
 
 class EntrepriseController {
     private $model;
+    private $twig;
 
-    public function __construct() {
+    /**
+     * Le constructeur reçoit Twig et initialise le modèle Entreprise
+     */
+    public function __construct($twig) {
         $this->model = new Entreprise();
+        $this->twig = $twig;
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
 
     /**
-     * Vérifie si l'utilisateur est connecté et autorisé
+     * Sécurité : Vérifie si l'utilisateur est un Admin ou un Pilote
      */
     private function checkAuth() {
         $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
@@ -23,21 +29,28 @@ class EntrepriseController {
         }
     }
 
+    /**
+     * Liste des entreprises (Annuaire)
+     * Inclut le nombre d'offres actives pour chaque entreprise
+     */
     public function index() {
         $entreprises = $this->model->findAll();
 
+        // On enrichit les données avec le nombre d'offres par entreprise
         foreach ($entreprises as &$entreprise) {
             $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
         }
-        unset($entreprise);
+        unset($entreprise); // Sécurité sur la référence
 
-        $titre_page = "Annuaire des Entreprises | StagePro";
-        
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/entreprises/liste.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('entreprises/liste.html.twig', [
+            'entreprises' => $entreprises,
+            'titre_page' => "Annuaire des Entreprises | StagePro"
+        ]);
     }
 
+    /**
+     * Fiche détaillée d'une entreprise
+     */
     public function show($id) {
         $entreprise = $this->model->findById((int)$id);
         if (!$entreprise) {
@@ -45,24 +58,29 @@ class EntrepriseController {
             exit;
         }
 
+        // On récupère le nombre d'offres pour cette entreprise précise
         $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
         
-        $titre_page = "Fiche " . htmlspecialchars($entreprise['nom']) . " | StagePro";
-        
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/entreprises/detail.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('entreprises/detail.html.twig', [
+            'entreprise' => $entreprise,
+            'titre_page' => "Fiche " . $entreprise['nom'] . " | StagePro"
+        ]);
     }
 
+    /**
+     * Affiche le formulaire de création (Admin/Pilote uniquement)
+     */
     public function create() {
         $this->checkAuth();
-        $titre_page = "Ajouter une entreprise | StagePro";
-        
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/entreprises/formulaire.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('entreprises/formulaire.html.twig', [
+            'titre_page' => "Ajouter une entreprise | StagePro",
+            'entreprise' => null // Nécessaire pour le template Twig qui gère aussi l'édition
+        ]);
     }
 
+    /**
+     * Affiche le formulaire de modification
+     */
     public function edit($id) {
         $this->checkAuth();
         $entreprise = $this->model->findById((int)$id);
@@ -72,13 +90,15 @@ class EntrepriseController {
             exit;
         }
 
-        $titre_page = "Modifier l'entreprise : " . htmlspecialchars($entreprise['nom']);
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/entreprises/formulaire.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('entreprises/formulaire.html.twig', [
+            'entreprise' => $entreprise,
+            'titre_page' => "Modifier l'entreprise : " . $entreprise['nom']
+        ]);
     }
 
+    /**
+     * Enregistre une nouvelle entreprise dans la base
+     */
     public function save() {
         $this->checkAuth();
 
@@ -95,6 +115,9 @@ class EntrepriseController {
         }
     }
 
+    /**
+     * Met à jour les informations d'une entreprise
+     */
     public function update() {
         $this->checkAuth();
 
@@ -114,6 +137,9 @@ class EntrepriseController {
         }
     }
 
+    /**
+     * Supprime une entreprise
+     */
     public function delete() {
         $this->checkAuth();
 

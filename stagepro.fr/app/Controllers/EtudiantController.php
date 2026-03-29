@@ -6,10 +6,15 @@ require_once __DIR__ . '/../Models/Role.php';
 class EtudiantController {
     private $model;
     private $roleModel;
+    private $twig;
 
-    public function __construct() {
+    /**
+     * Le constructeur initialise les modèles et l'instance Twig
+     */
+    public function __construct($twig) {
         $this->model = new Utilisateur();
         $this->roleModel = new Role();
+        $this->twig = $twig;
 
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -21,11 +26,11 @@ class EtudiantController {
      */
     public function index() {
         $etudiants = $this->model->findByRole('etudiant');
-        $titre_page = "Annuaire des étudiants | StagePro";
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/liste.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        
+        echo $this->twig->render('etudiants/liste.html.twig', [
+            'etudiants' => $etudiants,
+            'titre_page' => "Annuaire des étudiants | StagePro"
+        ]);
     }
 
     /**
@@ -39,30 +44,28 @@ class EtudiantController {
             exit;
         }
 
-        $titre_page = "Profil de " . htmlspecialchars($etudiant['nom']) . " | StagePro";
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/detail.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('etudiants/detail.html.twig', [
+            'etudiant' => $etudiant,
+            'titre_page' => "Profil de " . $etudiant['nom'] . " | StagePro"
+        ]);
     }
 
     /**
-     * Formulaire de création
+     * Formulaire de création (réservé Admin/Pilote)
      */
     public function create() {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
 
-        if (!isset($_SESSION['user']) || $role === 'etudiant') {
+        if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             header('Location: index.php?page=home');
             exit;
         }
 
-        $titre_page = "Ajouter un étudiant | StagePro";
-        $modeEdition = false;
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/formulaire.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('etudiants/formulaire.html.twig', [
+            'titre_page' => "Ajouter un étudiant | StagePro",
+            'etudiant' => null,
+            'modeEdition' => false
+        ]);
     }
 
     /**
@@ -83,12 +86,11 @@ class EtudiantController {
             exit;
         }
 
-        $titre_page = "Modifier l'étudiant | StagePro";
-        $modeEdition = true;
-
-        include __DIR__ . '/../Views/layout/header.php';
-        include __DIR__ . '/../Views/etudiants/formulaire.php';
-        include __DIR__ . '/../Views/layout/footer.php';
+        echo $this->twig->render('etudiants/formulaire.html.twig', [
+            'etudiant' => $etudiant,
+            'modeEdition' => true,
+            'titre_page' => "Modifier l'étudiant | StagePro"
+        ]);
     }
 
     /**
@@ -102,23 +104,28 @@ class EtudiantController {
             exit;
         }
 
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
+
         $id = (int)($_POST['id'] ?? 0);
 
+        // Récupération dynamique du rôle depuis le modèle Role
         $roleEtudiant = $this->roleModel->findByNom('etudiant');
         if (!$roleEtudiant) {
-            die("Le rôle 'etudiant' est introuvable dans la base.");
+            die("Erreur critique : Le rôle 'etudiant' n'existe pas en base de données.");
         }
 
         $data = [
-            'nom'     => htmlspecialchars($_POST['nom'] ?? ''),
-            'prenom'  => htmlspecialchars($_POST['prenom'] ?? ''),
-            'email'   => htmlspecialchars($_POST['email'] ?? ''),
+            'nom'    => htmlspecialchars($_POST['nom'] ?? ''),
+            'prenom' => htmlspecialchars($_POST['prenom'] ?? ''),
+            'email'  => htmlspecialchars($_POST['email'] ?? ''),
             'role_id' => (int)$roleEtudiant['id']
         ];
 
+        // Gestion du mot de passe (si fourni ou nouveau compte)
         if (!empty($_POST['password'])) {
             $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         } elseif ($id === 0) {
+            // Mot de passe par défaut pour les nouveaux comptes
             $data['mot_de_passe'] = password_hash('Cesi2026!', PASSWORD_DEFAULT);
         }
 
@@ -133,9 +140,11 @@ class EtudiantController {
     }
 
     /**
-     * Suppression
+     * Suppression d'un étudiant (via POST uniquement)
      */
     public function delete() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
+
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
 
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {

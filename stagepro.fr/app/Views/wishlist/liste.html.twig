@@ -1,0 +1,70 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Ma Wish-list | StagePro{% endblock %}
+
+{% block content %}
+{# Fil d'Ariane #}
+<nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
+  <p>
+    <a href="index.php?page=home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
+    <span style="color: var(--text-muted);">Ma wish-list</span>
+  </p>
+</nav>
+
+<section>
+    {# Vérification si la liste est vide #}
+    {% if wishlist is empty %}
+        <div style="background: var(--surface); padding: 4rem 2rem; border-radius: 12px; border: 1px dashed var(--border); text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.5;">⭐</div>
+            <h1 style="margin-bottom: 1rem;">Votre wish-list est vide</h1>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem;">Vous n'avez pas encore enregistré d'offres en favoris.</p>
+            <a href="index.php?page=offres" class="btn-cta" style="padding: 0.8rem 2rem; text-decoration: none;">Explorer les offres</a>
+        </div>
+    {% else %}
+        <h1 style="margin-bottom: 2rem;">Ma wish-list</h1>
+        
+        {# Grille des favoris #}
+        <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+            {% for item in wishlist %}
+                <article class="card wishlist-card" style="display: flex; flex-direction: column; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 12px; transition: transform 0.2s;">
+                    
+                    <div>
+                        <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 1.2rem;">{{ item.titre }}</h3>
+                        <p style="margin-bottom: 0.5rem;"><strong>🏢 Entreprise :</strong> {{ item.entreprise_nom }}</p>
+                        
+                        {# Affichage de la date d'ajout (issu de la version PHP) #}
+                        {% if item.wishlist_created_at %}
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.8rem;">
+                                📅 <strong>Ajoutée le :</strong> 
+                                {{ item.wishlist_created_at|date('d/m/Y à H:i') }}
+                            </p>
+                        {% endif %}
+                    </div>
+                    
+                    {# Actions #}
+                    <div style="margin-top: 2rem; display: flex; gap: 12px; align-items: center; border-top: 1px solid var(--border); padding-top: 1.2rem;">
+                        <a href="index.php?page=offre-detail&id={{ item.id }}" class="btn-cta" style="font-size: 0.8rem; text-decoration: none; padding: 0.6rem 1rem;">
+                            Voir l'offre
+                        </a>
+                        
+                        <form action="index.php?page=wishlist-remove" method="post" style="margin: 0;" onsubmit="return confirm('Retirer cette offre de vos favoris ?');">
+                            <input type="hidden" name="id_offre" value="{{ item.id }}">
+                            <button type="submit" style="background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 0.6rem 1rem; font-size: 0.8rem; cursor: pointer; border-radius: 6px; font-weight: 700; transition: all 0.2s;">
+                                Retirer
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+<style>
+.wishlist-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-blue) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+</style>
+{% endblock %}

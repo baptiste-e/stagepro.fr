@@ -1,9 +1,27 @@
 <?php
-// public/index.php
+/**
+ * point d'entrée unique - StagePro
+ */
+
+// 1. Chargement de l'autoloader de Composer (indispensable pour Twig)
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// 2. Démarrage de la session
 session_start();
 
-require_once __DIR__ . '/../config/Database.php';
+// 3. Configuration de Twig
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../app/Views');
+$twig = new \Twig\Environment($loader, [
+    'cache' => false, // Passer à un dossier de cache en production
+    'debug' => true
+]);
 
+// Ajout des variables globales pour que Twig y ait accès dans TOUS les templates
+$twig->addGlobal('session', $_SESSION);
+$twig->addGlobal('cookie_consent', $_COOKIE['cookie_consent'] ?? null);
+
+// 4. Imports des ressources système et des contrôleurs
+require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../app/Controllers/OffreController.php';
 require_once __DIR__ . '/../app/Controllers/EntrepriseController.php';
 require_once __DIR__ . '/../app/Controllers/EtudiantController.php';
@@ -13,218 +31,163 @@ require_once __DIR__ . '/../app/Controllers/AuthController.php';
 require_once __DIR__ . '/../app/Controllers/CandidatureController.php';
 require_once __DIR__ . '/../app/Controllers/WishlistController.php';
 
+// 5. Récupération des paramètres de navigation
 $page = $_GET['page'] ?? 'home';
 $id = (int)($_GET['id'] ?? 0);
 
+// 6. Routeur (Aiguillage global)
 switch ($page) {
     case 'home':
-        $titre_page = "Accueil | StagePro";
-        include __DIR__ . '/../app/Views/layout/header.php';
-        include __DIR__ . '/../app/Views/home.php';
-        include __DIR__ . '/../app/Views/layout/footer.php';
+        echo $twig->render('home.html.twig', ['titre_page' => "Accueil | StagePro"]);
         break;
 
+    // --- GESTION DES COOKIES (RGPD) ---
     case 'cookie-accept':
-        setcookie('cookie_consent', 'accepted', [
-            'expires' => time() + 365 * 24 * 60 * 60,
-            'path' => '/',
-            'secure' => false,
-            'httponly' => true,
-            'samesite' => 'Lax'
-        ]);
+        setcookie('cookie_consent', 'accepted', ['expires' => time() + 365*24*60*60, 'path' => '/', 'httponly' => true, 'samesite' => 'Lax']);
         header('Location: index.php?page=home');
         exit;
 
     case 'cookie-refuse':
-        setcookie('cookie_consent', 'refused', [
-            'expires' => time() + 365 * 24 * 60 * 60,
-            'path' => '/',
-            'secure' => false,
-            'httponly' => true,
-            'samesite' => 'Lax'
-        ]);
+        setcookie('cookie_consent', 'refused', ['expires' => time() + 365*24*60*60, 'path' => '/', 'httponly' => true, 'samesite' => 'Lax']);
         header('Location: index.php?page=home');
         exit;
 
     case 'cookie-reset':
-        setcookie('cookie_consent', '', [
-            'expires' => time() - 3600,
-            'path' => '/',
-            'secure' => false,
-            'httponly' => true,
-            'samesite' => 'Lax'
-        ]);
+        setcookie('cookie_consent', '', ['expires' => time() - 3600, 'path' => '/']);
         header('Location: index.php?page=home');
         exit;
 
-    // OFFRES
+    // --- OFFRES DE STAGE ---
     case 'offres':
-        (new OffreController())->index();
+        (new OffreController($twig))->index();
         break;
-
     case 'offre-detail':
-        (new OffreController())->show($id);
+        (new OffreController($twig))->show($id);
         break;
-
     case 'offre-create':
+        (new OffreController($twig))->create(); 
+        break;
     case 'offre-edit':
-        (new OffreController())->create($id);
+        (new OffreController($twig))->create($id); 
         break;
-
     case 'offre-save':
-        (new OffreController())->save();
+        (new OffreController($twig))->save();
         break;
-
     case 'offre-delete':
-        (new OffreController())->delete($id);
+        (new OffreController($twig))->delete($id);
         break;
-
     case 'offres-stats':
-        (new OffreController())->stats();
+        (new OffreController($twig))->stats();
         break;
 
-    // ENTREPRISES
+    // --- ENTREPRISES ---
     case 'entreprises':
-        (new EntrepriseController())->index();
+        (new EntrepriseController($twig))->index();
         break;
-
     case 'entreprise-detail':
-        (new EntrepriseController())->show($id);
+        (new EntrepriseController($twig))->show($id);
         break;
-
     case 'entreprise-create':
-        (new EntrepriseController())->create();
+        (new EntrepriseController($twig))->create();
         break;
-
     case 'entreprise-edit':
-        (new EntrepriseController())->edit($id);
+        (new EntrepriseController($twig))->edit($id);
         break;
-
     case 'entreprise-save':
-        (new EntrepriseController())->save();
+        (new EntrepriseController($twig))->save();
         break;
-
     case 'entreprise-update':
-        (new EntrepriseController())->update();
+        (new EntrepriseController($twig))->update();
         break;
-
     case 'entreprise-delete':
-        (new EntrepriseController())->delete();
+        (new EntrepriseController($twig))->delete();
         break;
 
-    // CANDIDATURES
+    // --- CANDIDATURES ---
     case 'candidatures':
-        (new CandidatureController())->index();
+        (new CandidatureController($twig))->index();
         break;
-
     case 'postuler':
-        (new CandidatureController())->postuler();
+        (new CandidatureController($twig))->postuler();
         break;
-
-    case 'candidature-cancel':
-        (new CandidatureController())->cancel($id);
-        break;
-
     case 'candidature-detail':
-        (new CandidatureController())->show($id);
+        (new CandidatureController($twig))->show($id);
         break;
-
+    case 'candidature-cancel':
+        (new CandidatureController($twig))->cancel($id);
+        break;
     case 'candidature-update-status':
-        (new CandidatureController())->updateStatus($id);
+        (new CandidatureController($twig))->updateStatus($id);
         break;
 
-    // WISHLIST
+    // --- WISHLIST (FAVORIS) ---
     case 'wishlist':
-        (new WishlistController())->index();
+        (new WishlistController($twig))->index();
         break;
-
     case 'wishlist-add':
-        (new WishlistController())->add();
+        (new WishlistController($twig))->add();
         break;
-
     case 'wishlist-remove':
-        (new WishlistController())->remove();
+        (new WishlistController($twig))->remove();
         break;
 
-    // ADMIN / UTILISATEURS
+    // --- ADMINISTRATION & UTILISATEURS ---
     case 'admin':
-        (new AdminController())->dashboard();
+        (new AdminController($twig))->dashboard();
         break;
-
     case 'pilotes':
-        (new PiloteController())->index();
+        (new PiloteController($twig))->index();
         break;
-
     case 'pilote-detail':
-        (new PiloteController())->show($id);
+        (new PiloteController($twig))->show($id);
         break;
-
     case 'pilote-create':
-        (new PiloteController())->create();
+        (new PiloteController($twig))->create();
         break;
-
     case 'pilote-edit':
-        (new PiloteController())->edit($id);
+        (new PiloteController($twig))->edit($id);
         break;
-
     case 'pilote-save':
-        (new PiloteController())->save();
+        (new PiloteController($twig))->save();
         break;
-
     case 'pilote-delete':
-        (new PiloteController())->delete();
+        (new PiloteController($twig))->delete();
         break;
-
     case 'etudiants':
-        (new EtudiantController())->index();
+        (new EtudiantController($twig))->index();
         break;
-
     case 'etudiant-detail':
-        (new EtudiantController())->show($id);
+        (new EtudiantController($twig))->show($id);
         break;
-
     case 'etudiant-create':
-        (new EtudiantController())->create();
+        (new EtudiantController($twig))->create();
         break;
-
     case 'etudiant-edit':
-        (new EtudiantController())->edit($id);
+        (new EtudiantController($twig))->edit($id);
         break;
-
     case 'etudiant-save':
-        (new EtudiantController())->save();
+        (new EtudiantController($twig))->save();
         break;
-
     case 'etudiant-delete':
-        (new EtudiantController())->delete();
+        (new EtudiantController($twig))->delete();
         break;
 
-    // AUTH
+    // --- AUTHENTIFICATION ---
     case 'login':
-        (new AuthController())->login();
+        (new AuthController($twig))->login();
         break;
-
     case 'logout':
-        session_destroy();
-        header('Location: index.php?page=home');
-        exit;
-
-    // DIVERS
-    case 'mentions':
-        $titre_page = "Mentions Légales | StagePro";
-        include __DIR__ . '/../app/Views/layout/header.php';
-        include __DIR__ . '/../app/Views/layout/mentions.php';
-        include __DIR__ . '/../app/Views/layout/footer.php';
+        (new AuthController($twig))->logout();
         break;
 
+    // --- PAGES LÉGALES ---
+    case 'mentions':
+        echo $twig->render('mentions_legales.html.twig');
+        break;
+
+    // --- PAGE 404 (ERREUR) ---
     default:
         http_response_code(404);
-        include __DIR__ . '/../app/Views/layout/header.php';
-        echo "<section style='padding:5rem; text-align:center;'>
-                <h1>404 - Page non trouvée</h1>
-                <p>La page demandée n'existe pas.</p>
-                <a href='index.php?page=home' class='btn-cta'>Retour à l'accueil</a>
-              </section>";
-        include __DIR__ . '/../app/Views/layout/footer.php';
+        echo $twig->render('layout/404.html.twig', ['titre_page' => "404 - Page non trouvée"]);
         break;
 }

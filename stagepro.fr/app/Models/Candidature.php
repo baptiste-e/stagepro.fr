@@ -10,7 +10,7 @@ class Candidature {
     }
 
     /**
-     * Récupère une candidature avec tous les détails de l'offre associée
+     * Récupère une candidature avec tous les détails de l'offre et de l'entreprise associée
      */
     public function findByIdFull($id) {
         $sql = "SELECT c.*, o.titre AS offre_titre, o.description AS offre_desc,
@@ -26,7 +26,7 @@ class Candidature {
     }
 
     /**
-     * Récupère les candidatures d'un étudiant
+     * Récupère les candidatures d'un étudiant spécifique (pour son interface "Mes Candidatures")
      */
     public function findByEtudiant($userId) {
         $sql = "SELECT c.*, o.titre AS offre_titre, e.nom AS entreprise_nom
@@ -41,7 +41,7 @@ class Candidature {
     }
 
     /**
-     * Récupère toutes les candidatures (admin / pilote)
+     * Récupère TOUTES les candidatures avec les infos étudiants (pour Admin / Pilote)
      */
     public function findAllFull() {
         $sql = "SELECT c.*, 
@@ -60,7 +60,7 @@ class Candidature {
     }
 
     /**
-     * Vérifie si un étudiant a déjà postulé à une offre précise
+     * Vérifie si un étudiant a déjà postulé à une offre précise (évite les doublons)
      */
     public function findSpecific($userId, $offreId) {
         $sql = "SELECT *
@@ -79,7 +79,7 @@ class Candidature {
     }
 
     /**
-     * Crée une candidature
+     * Crée une nouvelle candidature avec un statut initial "en_attente"
      */
     public function create($userId, $offreId, $cvPath, $lettre) {
         $sql = "INSERT INTO candidatures (utilisateur_id, offre_id, cv, lettre_motivation, statut)
@@ -95,7 +95,7 @@ class Candidature {
     }
 
     /**
-     * Met à jour le statut d'une candidature
+     * Met à jour le statut d'une candidature (Acceptée, Refusée, etc.)
      */
     public function updateStatut($id, $statut) {
         $statutsAutorises = ['en_attente', 'acceptee', 'refusee'];
@@ -115,7 +115,7 @@ class Candidature {
     }
 
     /**
-     * Supprime une candidature (sécurisé par userId)
+     * Supprime une candidature (sécurisé par le double ID pour éviter les erreurs de suppression)
      */
     public function deleteByIdentifiers($id_candidature, $userId) {
         $sql = "DELETE FROM candidatures

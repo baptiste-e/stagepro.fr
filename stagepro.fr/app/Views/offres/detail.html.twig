@@ -1,0 +1,126 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}{{ offre.titre }} | StagePro{% endblock %}
+
+{% block content %}
+<div style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+    {# Fil d'Ariane #}
+    <nav style="margin-bottom: 2rem; font-size: 0.8rem; color: #666;">
+        <a href="index.php?page=offres" style="color: #2563eb; text-decoration: none;">&larr; Retour aux offres</a>
+    </nav>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start;">
+        
+        {# --- COLONNE PRINCIPALE --- #}
+        <article>
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--text-main);">{{ offre.titre }}</h1>
+            <p style="font-size: 1.25rem; color: var(--accent-blue); margin-bottom: 2rem; font-weight: 600;">{{ offre.entreprise_nom }}</p>
+
+            <section style="margin-bottom: 2.5rem;">
+                <h3 style="border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1rem;">Description du poste</h3>
+                <p style="line-height: 1.7; color: var(--text-main);">{{ offre.description|nl2br }}</p>
+            </section>
+
+            <section style="margin-bottom: 2.5rem;">
+                <h3 style="border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1rem;">Compétences recherchées</h3>
+                <p style="line-height: 1.7; color: var(--text-main);">{{ offre.competences|default('Non spécifiées')|nl2br }}</p>
+            </section>
+
+            {# --- ZONE DE CANDIDATURE --- #}
+            <section style="margin-top: 4rem; padding: 2rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                {% if maCandidature %}
+                    {# L'étudiant a déjà postulé #}
+                    <div style="border-left: 4px solid var(--accent-blue); padding-left: 1.5rem;">
+                        <h2 style="color: var(--text-main); margin-bottom: 1rem;">Vous avez déjà postulé</h2>
+                        <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted);"><strong>Votre lettre de motivation :</strong></p>
+                        <blockquote style="font-style: italic; color: var(--text-muted); margin-bottom: 1.5rem; background: var(--background); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                            "{{ maCandidature.lettre_motivation|nl2br }}"
+                        </blockquote>
+                        
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            {% if maCandidature.cv %}
+                                <a href="{{ maCandidature.cv }}" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-blue); color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                                    📄 Voir le CV envoyé
+                                </a>
+                            {% endif %}
+                            <a href="index.php?page=candidatures" style="color: var(--accent-blue); text-decoration: none; font-weight: 500; font-size: 0.9rem;">Suivre mes candidatures →</a>
+                        </div>
+                    </div>
+                {% else %}
+                    {# Formulaire de candidature #}
+                    <h2 style="margin-bottom: 1.5rem; color: var(--text-main);">Postuler à cette offre</h2>
+                    <form action="index.php?page=postuler" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id_offre" value="{{ offre.id }}">
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">Votre CV (Format PDF uniquement)</label>
+                            <input type="file" name="cv" accept=".pdf" required style="width: 100%; padding: 0.5rem; background: var(--background); border: 1px solid var(--border); border-radius: 4px;">
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main);">Lettre de motivation</label>
+                            <textarea name="lm" rows="6" placeholder="Expliquez pourquoi ce stage vous intéresse..." required 
+                                      style="width: 100%; padding: 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--background); color: var(--text); font-family: inherit; line-height: 1.5;"></textarea>
+                        </div>
+
+                        <button type="submit" style="background: var(--accent-purple); color: white; padding: 1rem 2rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%; font-size: 1rem; transition: filter 0.2s;">
+                            Envoyer ma candidature
+                        </button>
+                    </form>
+                {% endif %}
+            </section>
+        </article>
+
+        {# --- BARRE LATÉRALE (SIDEBAR) --- #}
+        <aside style="position: sticky; top: 2rem;">
+            {# Bloc Infos Stage #}
+            <div style="background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+                <h3 style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem;">Détails du stage</h3>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>📍 Lieu :</strong> {{ offre.localite }}</p>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>⏳ Durée :</strong> {{ offre.duree }}</p>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>💰 Gratification :</strong> {{ offre.remuneration|number_format(2, ',', ' ') }} €/mois</p>
+                <p style="margin: 0; font-size: 0.95rem;"><strong>👥 Places :</strong> {{ offre.nb_places|default(1) }} poste(s)</p>
+            </div>
+
+            {# Bloc Wish-list (Étudiant uniquement) #}
+            {% if session.user and session.user.role == 'etudiant' %}
+                <div style="padding: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1rem;">Actions</h3>
+                    <form action="index.php?page=wishlist-add" method="post" style="margin: 0;">
+                        <input type="hidden" name="id_offre" value="{{ offre.id }}">
+                        <button type="submit" class="btn-cta" style="width: 100%; background: transparent; border: 2px solid var(--accent-blue); color: var(--accent-blue);">
+                            ☆ Ajouter aux favoris
+                        </button>
+                    </form>
+                    
+                    {% if maCandidature %}
+                        <a href="index.php?page=candidature-cancel&id={{ maCandidature.id }}" 
+                           onclick="return confirm('Retirer définitivement votre candidature ?');" 
+                           style="display: block; text-align: center; margin-top: 1rem; color: #e11d48; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+                           Annuler ma candidature
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {# Bloc Administration (Admin / Pilote) #}
+            {% if session.user and session.user.role in ['admin', 'pilote'] %}
+                <div style="padding: 1.5rem; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px;">
+                    <h3 style="font-size: 0.875rem; color: #be123c; text-transform: uppercase; margin-bottom: 1rem;">Administration</h3>
+                    <a href="index.php?page=offre-edit&id={{ offre.id }}" 
+                       style="display: block; text-align: center; background: #1e293b; color: white; padding: 0.75rem; border-radius: 6px; text-decoration: none; margin-bottom: 0.5rem; font-weight: 600;">
+                        Modifier l'offre
+                    </a>
+                    
+                    <form action="index.php?page=offre-delete" method="post" onsubmit="return confirm('Supprimer définitivement cette offre et toutes les candidatures associées ?');">
+                        <input type="hidden" name="id" value="{{ offre.id }}">
+                        <button type="submit" style="width: 100%; background: #e11d48; color: white; padding: 0.75rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                            Supprimer
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        </aside>
+    </div>
+</div>
+{% endblock %}
