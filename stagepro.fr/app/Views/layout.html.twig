@@ -1,118 +1,54 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{{ titre_page|default('StagePro') }}{% endblock %}</title>
-    <link rel="stylesheet" href="styles.css">
-    
-    <style>
-        @media (max-width: 992px) {
-            header .container {
-                flex-direction: column !important;
-                gap: 15px !important;
-                text-align: center;
-            }
 
-            header h1 {
-                margin-right: 0 !important;
-                width: 100%;
-            }
-
-            nav ul {
-                justify-content: center;
-                gap: 10px !important;
-                font-size: 0.85rem;
-            }
-        }
-    </style>
-
-    <link rel="manifest" href="manifest.json">
-
-    {# =========================
-       COOKIES UTILES
-       Si l'utilisateur a accepté, on active un mini suivi local
-       ========================= #}
-    {% if cookie_consent is defined and cookie_consent == 'accepted' %}
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                try {
-                    localStorage.setItem('cookie_stats_enabled', '1');
-
-                    let visits = parseInt(localStorage.getItem('stagepro_total_visits') || '0', 10);
-                    localStorage.setItem('stagepro_total_visits', String(visits + 1));
-
-                    let currentPage = window.location.pathname + window.location.search;
-                    let pages = JSON.parse(localStorage.getItem('stagepro_pages_seen') || '[]');
-
-                    pages.push({
-                        page: currentPage,
-                        viewed_at: new Date().toISOString()
-                    });
-
-                    localStorage.setItem('stagepro_pages_seen', JSON.stringify(pages));
-                    localStorage.setItem('stagepro_last_page', currentPage);
-
-                    console.log('Cookies statistiques activés');
-                } catch (e) {
-                    console.log('Impossible d’écrire dans localStorage', e);
-                }
-            });
-        </script>
-    {% elseif cookie_consent is defined and cookie_consent == 'refused' %}
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                try {
-                    localStorage.removeItem('cookie_stats_enabled');
-                } catch (e) {
-                    console.log('Nettoyage localStorage impossible', e);
-                }
-            });
-        </script>
-    {% endif %}
-</head>
 <body>
 
     <header style="background: var(--surface, #ffffff); border-bottom: 1px solid var(--border, #e5e7eb); position: sticky; top: 0; z-index: 1000;">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 15px 20px;">
-            
-            <h1 style="margin: 0; margin-right: 50px; font-size: 1.5rem; flex-shrink: 0;">
-                <a href="index.php?page=home" style="text-decoration: none; color: #2563eb; font-weight: 800; white-space: nowrap;">StagePro</a>
-            </h1>
-            
-            <nav aria-label="Navigation principale">
-                <ul style="list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; flex-wrap: wrap;">
-                    <li><a href="index.php?page=home" style="text-decoration: none; color: inherit; font-weight: 500;">Accueil</a></li>
-                    <li><a href="index.php?page=offres" style="text-decoration: none; color: inherit; font-weight: 500;">Offres</a></li>
-                    <li><a href="index.php?page=candidatures" style="text-decoration: none; color: inherit; font-weight: 500;">Candidatures</a></li>
-                    <li><a href="index.php?page=entreprises" style="text-decoration: none; color: inherit; font-weight: 500;">Entreprises</a></li>
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 15px 20px; position: relative;">
+        
+        <h1 style="margin: 0; font-size: 1.5rem; flex-shrink: 0;">
+            <a href="index.php?page=home" style="text-decoration: none; color: #2563eb; font-weight: 800; white-space: nowrap;">StagePro</a>
+        </h1>
 
-                    {% if session.user and session.user.role in ['admin', 'pilote'] %}
-                        <li><a href="index.php?page=etudiants" style="text-decoration: none; color: inherit; font-weight: 500;">Étudiants</a></li>
-                        <li><a href="index.php?page=pilotes" style="text-decoration: none; color: inherit; font-weight: 500;">Pilotes</a></li>
-                    {% endif %}
+        <button class="burger-btn" type="button" aria-label="Ouvrir le menu" aria-expanded="false" style="background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; padding: 0;">
+            <span style="display: block; width: 24px; height: 2px; background: #1f2937; margin: 0 auto;"></span>
+            <span style="display: block; width: 24px; height: 2px; background: #1f2937; margin: 0 auto;"></span>
+            <span style="display: block; width: 24px; height: 2px; background: #1f2937; margin: 0 auto;"></span>
+        </button>
+        
+        <nav class="main-nav" aria-label="Navigation principale" style="display: none; position: absolute; top: calc(100% + 10px); right: 20px; background: white; border: 1px solid #e5e7eb; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 1rem; min-width: 240px; border-radius: 12px;">
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; margin: 0; padding: 0;">
+                <li><a href="index.php?page=home" style="text-decoration: none; color: inherit; font-weight: 500;">Accueil</a></li>
+                <li><a href="index.php?page=offres" style="text-decoration: none; color: inherit; font-weight: 500;">Offres</a></li>
+                <li><a href="index.php?page=candidatures" style="text-decoration: none; color: inherit; font-weight: 500;">Candidatures</a></li>
+                <li><a href="index.php?page=entreprises" style="text-decoration: none; color: inherit; font-weight: 500;">Entreprises</a></li>
 
-                    <li><a href="index.php?page=wishlist" style="text-decoration: none; color: inherit; font-weight: 500;">Wish-List</a></li>
+                {% if session.user and session.user.role in ['admin', 'pilote'] %}
+                    <li><a href="index.php?page=etudiants" style="text-decoration: none; color: inherit; font-weight: 500;">Étudiants</a></li>
+                    <li><a href="index.php?page=pilotes" style="text-decoration: none; color: inherit; font-weight: 500;">Pilotes</a></li>
+                {% endif %}
 
-                    {% if session.user %}
-                        <li style="border-left: 1px solid #ccc; padding-left: 20px; margin-left: 10px; white-space: nowrap;">
-                            <strong style="color: var(--text-main);">
-                                {{ session.user.prenom }}
-                                <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">({{ session.user.role }})</span>
-                            </strong>
-                        </li>
-                        <li><a href="index.php?page=logout" style="color: #dc2626; text-decoration: none; font-weight: 600;">Déconnexion</a></li>
-                    {% else %}
-                        <li>
-                            <a href="index.php?page=login" class="btn-cta" style="background: #2563eb; color: white; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: 600;">
-                                Connexion
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    </header>
+                <li><a href="index.php?page=wishlist" style="text-decoration: none; color: inherit; font-weight: 500;">Wish-List</a></li>
+
+                {% if session.user %}
+                    <li style="padding-top: 10px; border-top: 1px solid #e5e7eb; width: 100%;">
+                        <strong style="color: var(--text-main);">
+                            {{ session.user.prenom }}
+                            <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">({{ session.user.role }})</span>
+                        </strong>
+                    </li>
+                    <li><a href="index.php?page=logout" style="color: #dc2626; text-decoration: none; font-weight: 600;">Déconnexion</a></li>
+                {% else %}
+                    <li style="width: 100%;">
+                        <a href="index.php?page=login" class="btn-cta" style="display: inline-block; background: #2563eb; color: white; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                            Connexion
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</header>
 
     {# =========================
        BANNIÈRE DE COOKIES
@@ -249,6 +185,30 @@
         </div>
     </footer>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const burgerBtn = document.querySelector('.burger-btn');
+    const mainNav = document.querySelector('.main-nav');
+
+    if (burgerBtn && mainNav) {
+        burgerBtn.addEventListener('click', function () {
+            const isOpen = mainNav.style.display === 'block';
+
+            mainNav.style.display = isOpen ? 'none' : 'block';
+            burgerBtn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!mainNav.contains(event.target) && !burgerBtn.contains(event.target)) {
+                mainNav.style.display = 'none';
+                burgerBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+});
+</script>
+
     <script src="js/scripts.js"></script>
+
 </body>
 </html>
