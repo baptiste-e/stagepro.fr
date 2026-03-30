@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 30 mars 2026 à 08:59
+-- Généré le : lun. 30 mars 2026 à 09:34
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -69,6 +69,21 @@ INSERT INTO `entreprises` (`id`, `nom`, `description`, `email_contact`, `telepho
 (6, 'TechCorp', 'TechCorp est une entreprise spécialisée dans le développement de solutions web et logicielles sur mesure. Elle conçoit des plateformes digitales performantes adaptées aux besoins des entreprises.', 'contact@techcorp.fr', '0611223344', '2026-03-27 14:27:50'),
 (7, 'SecureIT', 'SecureIT est une entreprise spécialisée en cybersécurité et protection des systèmes informatiques. Elle accompagne les entreprises dans la sécurisation de leurs infrastructures.', 'contact@secureit.fr', '0677889900', '2026-03-27 14:27:50'),
 (8, 'CyberNova', 'CyberNova est une entreprise innovante spécialisée dans la cybersécurité et l’intelligence artificielle. Elle développe des solutions de protection avancées pour les entreprises.', 'contact@cybernova.fr', '0678451239', '2026-03-27 14:27:50');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `evaluations`
+--
+
+CREATE TABLE `evaluations` (
+  `id` int(11) NOT NULL,
+  `entreprise_id` int(11) NOT NULL,
+  `utilisateur_id` int(11) NOT NULL,
+  `note` int(11) NOT NULL,
+  `commentaire` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -191,6 +206,14 @@ ALTER TABLE `entreprises`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `evaluations`
+--
+ALTER TABLE `evaluations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `entreprise_id` (`entreprise_id`),
+  ADD KEY `utilisateur_id` (`utilisateur_id`);
+
+--
 -- Index pour la table `offres`
 --
 ALTER TABLE `offres`
@@ -237,6 +260,12 @@ ALTER TABLE `entreprises`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
+-- AUTO_INCREMENT pour la table `evaluations`
+--
+ALTER TABLE `evaluations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT pour la table `offres`
 --
 ALTER TABLE `offres`
@@ -270,6 +299,13 @@ ALTER TABLE `wishlist`
 ALTER TABLE `candidatures`
   ADD CONSTRAINT `candidatures_ibfk_1` FOREIGN KEY (`utilisateur_id`) REFERENCES `utilisateurs` (`id`),
   ADD CONSTRAINT `candidatures_ibfk_2` FOREIGN KEY (`offre_id`) REFERENCES `offres` (`id`);
+
+--
+-- Contraintes pour la table `evaluations`
+--
+ALTER TABLE `evaluations`
+  ADD CONSTRAINT `evaluations_ibfk_1` FOREIGN KEY (`entreprise_id`) REFERENCES `entreprises` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `evaluations_ibfk_2` FOREIGN KEY (`utilisateur_id`) REFERENCES `utilisateurs` (`id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `offres`
