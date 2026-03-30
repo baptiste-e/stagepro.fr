@@ -330,21 +330,11 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   max-width: none;
   margin: 0;
   background: #ffffff;
-  padding: 30vh 1rem;
+  padding: 10rem 1rem 8rem 1rem;
   position: relative;
   z-index: 2;
 }
 
-.stats-section::before {
-  content: "";
-  position: absolute;
-  top: -30vh;
-  left: 0;
-  width: 100%;
-  height: 30vh;
-  background: #ffffff;
-  z-index: -1;
-}
 
 .stats-container {
   max-width: 1000px;
