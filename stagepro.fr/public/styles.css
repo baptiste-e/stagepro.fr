@@ -615,7 +615,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 .faq-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -625,6 +625,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   font-weight: 700;
   text-align: center;
   margin-bottom: 1rem;
+  color: var(--text-main);
 }
 
 .faq-subtitle {
@@ -636,9 +637,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 
 /* ITEM */
 .faq-item {
-  border-radius: 12px;
   margin-bottom: 1rem;
-  overflow: hidden;
 }
 
 /* QUESTION */
@@ -648,46 +647,50 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   justify-content: space-between;
   align-items: center;
 
-  background: #f3f4f6; /* gris */
-  padding: 1.2rem 1.5rem;
-  border-radius: 12px;
+  background: #f3f4f6 !important;
   border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.35rem 1.5rem;
 
-  cursor: pointer;
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-main);
 
-  transition: all 0.25s ease;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 
-/* HOVER */
+/* IMPORTANT : on garde le fond gris même au hover */
 .faq-question:hover {
-  border-color: #2563eb;
-  color: #2563eb;
+  background: #f3f4f6 !important;
+  border-color: var(--accent);
+  color: var(--accent);
   transform: translateY(-2px);
 }
 
-/* ICÔNE */
-.faq-icon {
-  font-size: 1.3rem;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-/* hover icône */
-.faq-question:hover .faq-icon {
-  color: #2563eb;
-}
-
-/* ACTIF (ouvert) */
+/* état ouvert */
 .faq-item.active .faq-question {
-  border-color: #2563eb;
-  color: #2563eb;
-  background: #f3f4f6; /* reste gris */
+  background: #f3f4f6 !important;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-/* rotation du + */
+/* ICÔNE + */
+.faq-icon {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  transition: transform 0.25s ease, color 0.25s ease;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.faq-question:hover .faq-icon {
+  color: var(--accent);
+}
+
 .faq-item.active .faq-icon {
+  color: var(--accent);
   transform: rotate(45deg);
 }
 
@@ -698,7 +701,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   transition: max-height 0.35s ease;
 }
 
-/* CONTENU */
 .faq-answer p {
   padding: 1rem 1.5rem 1.5rem 1.5rem;
   color: var(--text-muted);
