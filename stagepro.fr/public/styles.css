@@ -307,7 +307,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 /* --- BARRE DE PROGRESSION --- */
 
 .testimonial-progress {
-  margin-top: 2rem;
+  margin-top: 1rem;
   width: 100%;
   height: 4px;
   background: #dcdfe4;
