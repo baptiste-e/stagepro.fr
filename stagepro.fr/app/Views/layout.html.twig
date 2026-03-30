@@ -1,6 +1,72 @@
 <!DOCTYPE html>
 <html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ titre_page|default('StagePro') }}{% endblock %}</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        @media (max-width: 992px) {
+            header .container {
+                flex-direction: column !important;
+                gap: 15px !important;
+                text-align: center;
+            }
 
+            header h1 {
+                margin-right: 0 !important;
+                width: 100%;
+            }
+
+            nav ul {
+                justify-content: center;
+                gap: 10px !important;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+
+    <link rel="manifest" href="manifest.json">
+
+    {% if cookie_consent is defined and cookie_consent == 'accepted' %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                try {
+                    localStorage.setItem('cookie_stats_enabled', '1');
+
+                    let visits = parseInt(localStorage.getItem('stagepro_total_visits') || '0', 10);
+                    localStorage.setItem('stagepro_total_visits', String(visits + 1));
+
+                    let currentPage = window.location.pathname + window.location.search;
+                    let pages = JSON.parse(localStorage.getItem('stagepro_pages_seen') || '[]');
+
+                    pages.push({
+                        page: currentPage,
+                        viewed_at: new Date().toISOString()
+                    });
+
+                    localStorage.setItem('stagepro_pages_seen', JSON.stringify(pages));
+                    localStorage.setItem('stagepro_last_page', currentPage);
+
+                    console.log('Cookies statistiques activés');
+                } catch (e) {
+                    console.log('Impossible d’écrire dans localStorage', e);
+                }
+            });
+        </script>
+    {% elseif cookie_consent is defined and cookie_consent == 'refused' %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                try {
+                    localStorage.removeItem('cookie_stats_enabled');
+                } catch (e) {
+                    console.log('Nettoyage localStorage impossible', e);
+                }
+            });
+        </script>
+    {% endif %}
+</head>
 <body>
 
     <header style="background: var(--surface, #ffffff); border-bottom: 1px solid var(--border, #e5e7eb); position: sticky; top: 0; z-index: 1000;">
@@ -184,29 +250,6 @@
             {% endif %}
         </div>
     </footer>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const burgerBtn = document.querySelector('.burger-btn');
-    const mainNav = document.querySelector('.main-nav');
-
-    if (burgerBtn && mainNav) {
-        burgerBtn.addEventListener('click', function () {
-            const isOpen = mainNav.style.display === 'block';
-
-            mainNav.style.display = isOpen ? 'none' : 'block';
-            burgerBtn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-        });
-
-        document.addEventListener('click', function (event) {
-            if (!mainNav.contains(event.target) && !burgerBtn.contains(event.target)) {
-                mainNav.style.display = 'none';
-                burgerBtn.setAttribute('aria-expanded', 'false');
-            }
-        });
-    }
-});
-</script>
 
     <script src="js/scripts.js"></script>
 
