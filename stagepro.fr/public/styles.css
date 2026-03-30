@@ -636,9 +636,17 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 
 
 .faq-question {
-  background: #f3f4f6; /* même couleur que le bloc */
-  color: var(--text-main);
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* ← clé */
+  align-items: center;
+
+  background: #f3f4f6;
   padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+
+  cursor: pointer;
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -651,7 +659,8 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 .faq-question:hover {
-  background: #e5e7eb;
+  border-color: #2563eb;
+  color: #2563eb;
 }
 
 .faq-item.active .faq-question {
@@ -661,6 +670,10 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 
 .faq-item.active .faq-question::after {
   content: "−";
+}
+
+.faq-question:hover .faq-icon {
+  color: #2563eb;
 }
 
 .faq-answer {
@@ -686,4 +699,13 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   font-weight: 700;
   text-align: center;
   margin-bottom: 1rem;
+}
+
+.faq-icon {
+  transition: transform 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg); /* devient un X */
 }
