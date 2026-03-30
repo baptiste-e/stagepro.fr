@@ -6,9 +6,6 @@ class EntrepriseController {
     private $model;
     private $twig;
 
-    /**
-     * Le constructeur reçoit Twig et initialise le modèle Entreprise
-     */
     public function __construct($twig) {
         $this->model = new Entreprise();
         $this->twig = $twig;
@@ -18,9 +15,6 @@ class EntrepriseController {
         }
     }
 
-    /**
-     * Sécurité : Vérifie si l'utilisateur est un Admin ou un Pilote
-     */
     private function checkAuth() {
         $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
@@ -29,18 +23,12 @@ class EntrepriseController {
         }
     }
 
-    /**
-     * Liste des entreprises (Annuaire)
-     * Inclut le nombre d'offres actives pour chaque entreprise
-     */
     public function index() {
         $entreprises = $this->model->findAll();
-
-        // On enrichit les données avec le nombre d'offres par entreprise
         foreach ($entreprises as &$entreprise) {
             $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
         }
-        unset($entreprise); // Sécurité sur la référence
+        unset($entreprise);
 
         echo $this->twig->render('entreprises/liste.html.twig', [
             'entreprises' => $entreprises,
@@ -49,7 +37,7 @@ class EntrepriseController {
     }
 
     /**
-     * Fiche détaillée d'une entreprise
+     * UNE SEULE MÉTHODE SHOW ICI (Fusionnée avec les avis)
      */
     public function show($id) {
         $entreprise = $this->model->findById((int)$id);
@@ -58,50 +46,41 @@ class EntrepriseController {
             exit;
         }
 
-        // On récupère le nombre d'offres pour cette entreprise précise
         $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
         
+        // On récupère les avis pour les passer à la vue (SFx 5)
+        $evaluations = $this->model->getEvaluations((int)$id);
+
         echo $this->twig->render('entreprises/detail.html.twig', [
             'entreprise' => $entreprise,
+            'evaluations' => $evaluations,
             'titre_page' => "Fiche " . $entreprise['nom'] . " | StagePro"
         ]);
     }
 
-    /**
-     * Affiche le formulaire de création (Admin/Pilote uniquement)
-     */
     public function create() {
         $this->checkAuth();
         echo $this->twig->render('entreprises/formulaire.html.twig', [
             'titre_page' => "Ajouter une entreprise | StagePro",
-            'entreprise' => null // Nécessaire pour le template Twig qui gère aussi l'édition
+            'entreprise' => null
         ]);
     }
 
-    /**
-     * Affiche le formulaire de modification
-     */
     public function edit($id) {
         $this->checkAuth();
         $entreprise = $this->model->findById((int)$id);
-
         if (!$entreprise) {
             header('Location: index.php?page=entreprises');
             exit;
         }
-
         echo $this->twig->render('entreprises/formulaire.html.twig', [
             'entreprise' => $entreprise,
             'titre_page' => "Modifier l'entreprise : " . $entreprise['nom']
         ]);
     }
 
-    /**
-     * Enregistre une nouvelle entreprise dans la base
-     */
     public function save() {
         $this->checkAuth();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->model->create(
                 trim($_POST['nom'] ?? ''),
@@ -109,48 +88,54 @@ class EntrepriseController {
                 trim($_POST['email_contact'] ?? ''),
                 trim($_POST['telephone_contact'] ?? '')
             );
-
             header('Location: index.php?page=entreprises&status=created');
             exit;
         }
     }
 
-    /**
-     * Met à jour les informations d'une entreprise
-     */
     public function update() {
         $this->checkAuth();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)($_POST['id'] ?? 0);
-
             $data = [
                 'nom' => trim($_POST['nom'] ?? ''),
                 'description' => trim($_POST['description'] ?? ''),
                 'email_contact' => trim($_POST['email_contact'] ?? ''),
                 'telephone_contact' => trim($_POST['telephone_contact'] ?? '')
             ];
-
             $this->model->update($id, $data);
             header('Location: index.php?page=entreprise-detail&id=' . $id . '&status=updated');
             exit;
         }
     }
 
-    /**
-     * Supprime une entreprise
-     */
     public function delete() {
         $this->checkAuth();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int)($_POST['id'] ?? 0);
-
-            if ($id > 0) {
-                $this->model->delete($id);
-            }
-
+            if ($id > 0) { $this->model->delete($id); }
             header('Location: index.php?page=entreprises&status=deleted');
+            exit;
+        }
+    }
+
+    public function evaluate($id) {
+        $entreprise = $this->model->findById((int)$id);
+        echo $this->twig->render('entreprises/evaluer.html.twig', [
+            'entreprise' => $entreprise,
+            'titre_page' => "Évaluer " . $entreprise['nom']
+        ]);
+    }
+
+    public function saveEvaluation() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $eId = $_POST['entreprise_id'];
+            $uId = $_SESSION['user']['id'];
+            $note = $_POST['note'];
+            $comm = $_POST['commentaire'];
+
+            $this->model->addEvaluation($eId, $uId, $note, $comm);
+            header("Location: index.php?page=entreprise-detail&id=" . $eId . "&status=evaluated");
             exit;
         }
     }

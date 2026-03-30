@@ -102,6 +102,12 @@ switch ($page) {
     case 'entreprise-delete':
         (new EntrepriseController($twig))->delete();
         break;
+    case 'entreprise-evaluate':
+    (new EntrepriseController($twig))->evaluate($id);
+    break;
+case 'entreprise-save-eval':
+    (new EntrepriseController($twig))->saveEvaluation();
+    break;
 
     // --- CANDIDATURES ---
     case 'candidatures':

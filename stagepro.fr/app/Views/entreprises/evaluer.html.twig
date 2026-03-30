@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; background: var(--surface); padding: 2rem; border-radius: 8px; border: 1px solid var(--border);">
+    <h1>Évaluer l'entreprise {{ entreprise.nom }}</h1>
+    
+    <form action="index.php?page=entreprise-save-eval" method="POST" style="margin-top: 1.5rem;">
+        <input type="hidden" name="entreprise_id" value="{{ entreprise.id }}">
+        
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Quelle note donnez-vous ?</label>
+        <select name="note" required style="width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; border-radius: 4px; border: 1px solid var(--border);">
+            <option value="5">5/5 - Excellent</option>
+            <option value="4">4/5 - Très bien</option>
+            <option value="3">3/5 - Correct</option>
+            <option value="2">2/5 - Décevant</option>
+            <option value="1">1/5 - À éviter</option>
+        </select>
+
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Votre commentaire (facultatif) :</label>
+        <textarea name="commentaire" rows="5" style="width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; border-radius: 4px; border: 1px solid var(--border); font-family: inherit;"></textarea>
+
+        <button type="submit" class="btn-cta" style="width: 100%; cursor: pointer;">Envoyer mon avis</button>
+        <a href="index.php?page=entreprise-detail&id={{ entreprise.id }}" style="display: block; text-align: center; margin-top: 1rem; color: var(--text-muted); text-decoration: none;">Annuler</a>
+    </form>
+</div>
+{% endblock %}
