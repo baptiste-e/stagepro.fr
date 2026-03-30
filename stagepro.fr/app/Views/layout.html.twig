@@ -7,17 +7,18 @@
     <link rel="stylesheet" href="styles.css">
     
     <style>
-        /* Styles pour rendre le header vraiment responsive */
         @media (max-width: 992px) {
             header .container {
                 flex-direction: column !important;
                 gap: 15px !important;
                 text-align: center;
             }
+
             header h1 {
-                margin-right: 0 !important; /* On annule l'écartement pour centrer sur mobile */
+                margin-right: 0 !important;
                 width: 100%;
             }
+
             nav ul {
                 justify-content: center;
                 gap: 10px !important;
@@ -25,17 +26,59 @@
             }
         }
     </style>
+
     <link rel="manifest" href="manifest.json">
+
+    {# =========================
+       COOKIES UTILES
+       Si l'utilisateur a accepté, on active un mini suivi local
+       ========================= #}
+    {% if cookie_consent is defined and cookie_consent == 'accepted' %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                try {
+                    localStorage.setItem('cookie_stats_enabled', '1');
+
+                    let visits = parseInt(localStorage.getItem('stagepro_total_visits') || '0', 10);
+                    localStorage.setItem('stagepro_total_visits', String(visits + 1));
+
+                    let currentPage = window.location.pathname + window.location.search;
+                    let pages = JSON.parse(localStorage.getItem('stagepro_pages_seen') || '[]');
+
+                    pages.push({
+                        page: currentPage,
+                        viewed_at: new Date().toISOString()
+                    });
+
+                    localStorage.setItem('stagepro_pages_seen', JSON.stringify(pages));
+                    localStorage.setItem('stagepro_last_page', currentPage);
+
+                    console.log('Cookies statistiques activés');
+                } catch (e) {
+                    console.log('Impossible d’écrire dans localStorage', e);
+                }
+            });
+        </script>
+    {% elseif cookie_consent is defined and cookie_consent == 'refused' %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                try {
+                    localStorage.removeItem('cookie_stats_enabled');
+                } catch (e) {
+                    console.log('Nettoyage localStorage impossible', e);
+                }
+            });
+        </script>
+    {% endif %}
 </head>
 <body>
 
     <header style="background: var(--surface, #ffffff); border-bottom: 1px solid var(--border, #e5e7eb); position: sticky; top: 0; z-index: 1000;">
         <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 15px 20px;">
             
-            {# LOGO : margin-right auto pousse tout le reste vers la droite #}
             <h1 style="margin: 0; margin-right: 50px; font-size: 1.5rem; flex-shrink: 0;">
-    <a href="index.php?page=home" style="text-decoration: none; color: #2563eb; font-weight: 800; white-space: nowrap;">StagePro</a>
-</h1>
+                <a href="index.php?page=home" style="text-decoration: none; color: #2563eb; font-weight: 800; white-space: nowrap;">StagePro</a>
+            </h1>
             
             <nav aria-label="Navigation principale">
                 <ul style="list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; flex-wrap: wrap;">
@@ -44,7 +87,6 @@
                     <li><a href="index.php?page=candidatures" style="text-decoration: none; color: inherit; font-weight: 500;">Candidatures</a></li>
                     <li><a href="index.php?page=entreprises" style="text-decoration: none; color: inherit; font-weight: 500;">Entreprises</a></li>
 
-                    {# Liens réservés aux administrateurs et pilotes #}
                     {% if session.user and session.user.role in ['admin', 'pilote'] %}
                         <li><a href="index.php?page=etudiants" style="text-decoration: none; color: inherit; font-weight: 500;">Étudiants</a></li>
                         <li><a href="index.php?page=pilotes" style="text-decoration: none; color: inherit; font-weight: 500;">Pilotes</a></li>
@@ -52,46 +94,129 @@
 
                     <li><a href="index.php?page=wishlist" style="text-decoration: none; color: inherit; font-weight: 500;">Wish-List</a></li>
 
-                    {# Gestion de la connexion / profil #}
                     {% if session.user %}
                         <li style="border-left: 1px solid #ccc; padding-left: 20px; margin-left: 10px; white-space: nowrap;">
-                            <strong style="color: var(--text-main);">{{ session.user.prenom }} 
+                            <strong style="color: var(--text-main);">
+                                {{ session.user.prenom }}
                                 <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">({{ session.user.role }})</span>
                             </strong>
                         </li>
                         <li><a href="index.php?page=logout" style="color: #dc2626; text-decoration: none; font-weight: 600;">Déconnexion</a></li>
                     {% else %}
-                        <li><a href="index.php?page=login" class="btn-cta" style="background: #2563eb; color: white; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: 600;">Connexion</a></li>
+                        <li>
+                            <a href="index.php?page=login" class="btn-cta" style="background: #2563eb; color: white; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                                Connexion
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </nav>
         </div>
     </header>
 
-    {# --- BANNIÈRE DE COOKIES --- #}
+    {# =========================
+       BANNIÈRE DE COOKIES
+       ========================= #}
     {% if cookie_consent is not defined or cookie_consent is null %}
-        <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #f9fafb; border-top: 1px solid #d1d5db; padding: 20px; z-index: 9999; box-sizing: border-box; box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.1);">
+        <div id="cookie-banner" style="
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #f9fafb;
+            border-top: 1px solid #d1d5db;
+            padding: 20px;
+            z-index: 9999;
+            box-sizing: border-box;
+            box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.1);
+        ">
             <div style="max-width: 1200px; margin: 0 auto;">
-                <p style="margin: 0 0 16px 0; font-size: 0.9rem; line-height: 1.6; color: #374151;">
-                    Ce site utilise des cookies pour améliorer votre expérience. En cliquant sur « Accepter », vous acceptez l'utilisation de tous les cookies.
+                <p style="margin: 0 0 16px 0; font-size: 0.9rem; line-height: 1.7; color: #374151;">
+                    Ce site utilise des cookies pour améliorer votre expérience et mesurer la fréquentation du site.
+                    Si vous cliquez sur « Accepter », les cookies essentiels et statistiques seront activés.
+                    Si vous cliquez sur « Refuser », seuls les cookies essentiels resteront actifs.
                 </p>
                 
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <a href="index.php?page=cookie-accept" style="background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Accepter</a>
-                    <a href="index.php?page=cookie-refuse" style="background: #ef4444; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Refuser</a>
-                    <button type="button" onclick="toggleCookiesSettings()" style="background: white; color: #2563eb; border: 1px solid #2563eb; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px; cursor: pointer;">Personnaliser</button>
+                    <a href="index.php?page=cookie-accept" style="
+                        background: #2563eb;
+                        color: white;
+                        text-decoration: none;
+                        padding: 10px 20px;
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                        border-radius: 6px;
+                    ">
+                        Accepter
+                    </a>
+
+                    <a href="index.php?page=cookie-refuse" style="
+                        background: #ef4444;
+                        color: white;
+                        text-decoration: none;
+                        padding: 10px 20px;
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                        border-radius: 6px;
+                    ">
+                        Refuser
+                    </a>
+
+                    <button type="button" onclick="toggleCookiesSettings()" style="
+                        background: white;
+                        color: #2563eb;
+                        border: 1px solid #2563eb;
+                        padding: 10px 20px;
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                        border-radius: 6px;
+                        cursor: pointer;
+                    ">
+                        Personnaliser
+                    </button>
                 </div>
-                
-                <div id="cookie-settings" style="display: none; margin-top: 15px; padding: 15px; background: white; border: 1px solid #d1d5db; border-radius: 6px;">
+
+                <div id="cookie-settings" style="
+                    display: none;
+                    margin-top: 15px;
+                    padding: 15px;
+                    background: white;
+                    border: 1px solid #d1d5db;
+                    border-radius: 6px;
+                ">
                     <form method="get" action="index.php">
                         <input type="hidden" name="page" value="cookie-accept">
-                        <div style="margin-bottom: 8px;"><label><input type="checkbox" checked disabled> Essentiels</label></div>
-                        <div style="margin-bottom: 12px;"><label><input type="checkbox" name="stats"> Statistiques</label></div>
-                        <button type="submit" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Enregistrer</button>
+
+                        <div style="margin-bottom: 10px;">
+                            <label>
+                                <input type="checkbox" checked disabled>
+                                Cookies essentiels (obligatoires)
+                            </label>
+                        </div>
+
+                        <div style="margin-bottom: 14px;">
+                            <label>
+                                <input type="checkbox" name="stats" checked>
+                                Cookies statistiques
+                            </label>
+                        </div>
+
+                        <button type="submit" style="
+                            background: #2563eb;
+                            color: white;
+                            border: none;
+                            padding: 8px 15px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-weight: 600;
+                        ">
+                            Enregistrer mes choix
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
+
         <script>
             function toggleCookiesSettings() {
                 const el = document.getElementById('cookie-settings');
@@ -100,12 +225,10 @@
         </script>
     {% endif %}
 
-    {# --- ZONE DE CONTENU PRINCIPAL --- #}
     <main id="contenu" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; min-height: 75vh;">
         {% block content %}{% endblock %}
     </main>
 
-    {# --- PIED DE PAGE --- #}
     <footer style="margin-top: 60px; padding: 40px 20px; background: #f3f4f6; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; font-size: 0.9rem;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <p>© 2026 – StagePro – Propulsé par le talent des étudiants CESI.</p>
@@ -113,6 +236,16 @@
                 <a href="index.php?page=mentions" style="margin: 0 10px; color: #4b5563; text-decoration: underline;">Mentions légales</a>
                 <a href="index.php?page=cookie-reset" style="margin: 0 10px; color: #4b5563;">Préférences Cookies</a>
             </p>
+
+            {% if cookie_consent is defined and cookie_consent == 'accepted' %}
+                <p style="margin-top: 10px; color: #16a34a; font-weight: 600;">
+                    Cookies statistiques activés
+                </p>
+            {% elseif cookie_consent is defined and cookie_consent == 'refused' %}
+                <p style="margin-top: 10px; color: #dc2626; font-weight: 600;">
+                    Cookies statistiques refusés
+                </p>
+            {% endif %}
         </div>
     </footer>
 
