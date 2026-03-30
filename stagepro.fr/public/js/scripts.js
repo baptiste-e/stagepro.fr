@@ -147,4 +147,27 @@ function updateStatsOnScroll() {
 window.addEventListener('scroll', updateStatsOnScroll);
 window.addEventListener('resize', updateStatsOnScroll);
 updateStatsOnScroll();
+
+const faqItems = document.querySelectorAll('.faq-item');
+
+faqItems.forEach(item => {
+    const button = item.querySelector('.faq-question');
+
+    button.addEventListener('click', () => {
+        const isOpen = item.classList.contains('active');
+
+        // fermer tous
+        faqItems.forEach(i => {
+            i.classList.remove('active');
+            i.querySelector('.faq-answer').style.maxHeight = null;
+        });
+
+        // ouvrir celui cliqué
+        if (!isOpen) {
+            item.classList.add('active');
+            const answer = item.querySelector('.faq-answer');
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+    });
+});
 });
