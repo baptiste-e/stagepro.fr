@@ -210,7 +210,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 
 .entreprise-showcase {
   width: 100%;
-  padding: 10rem 0 8rem 0; /* plus d’espace en bas */
+  padding: 8rem 0 6rem 0;
   background: #ffffff;
   text-align: center;
 }
@@ -238,46 +238,13 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   font-size: 1rem;
 }
 
+
 /* --- SLIDER --- */
 
-.testimonial-slider {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 0 1rem 2rem 1rem;
-  position: relative;
-  z-index: 2;
-}
 
-.testimonial-track {
-  position: relative;
-  overflow: hidden;
-  min-height: 320px;
-}
 
 /* --- CARTES --- */
 
-.testimonial-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  opacity: 0;
-  transform: translateX(50px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  background: white;
-  padding: 3rem;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  min-height: 260px;
-}
-
-/* carte active visible */
-.testimonial-card.active {
-  opacity: 1;
-  transform: translateX(0);
-  position: relative;
-  z-index: 2;
-}
 
 /* --- TEXTE --- */
 
@@ -306,24 +273,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 
 /* --- BARRE DE PROGRESSION --- */
 
-.testimonial-progress {
-  margin-top: 1rem;
-  width: 100%;
-  height: 4px;
-  background: #dcdfe4;
-  border-radius: 999px;
-  overflow: hidden;
-  position: relative;
-  z-index: 3;
-}
-
-.testimonial-progress-bar {
-  display: block;
-  width: 0%;
-  height: 100%;
-  background: #2563eb;
-  border-radius: 999px;
-}
 
 .espaces-section {
   position: relative;
@@ -462,4 +411,203 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 .stats-container .stat h3,
 .stats-container .stat p {
   transition: none;
+}
+
+/* --- GRILLE DE LOGO --- */
+
+
+.logo-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+
+/* --- SECTION ENTREPRISES / SHOWCASE --- */
+
+.entreprise-showcase {
+  width: 100%;
+  padding: 8rem 0 7rem 0;
+  background: #ffffff;
+  text-align: center;
+}
+
+.entreprise-showcase-header {
+  max-width: 760px;
+  margin: 0 auto 3.5rem auto;
+  padding: 0 1rem;
+}
+
+.entreprise-showcase h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.15;
+}
+
+.showcase-intro {
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.showcase-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.showcase-left,
+.showcase-right {
+  min-width: 0;
+}
+
+/* --- COLONNE GAUCHE --- */
+
+.testimonial-slider {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-track {
+  position: relative;
+  min-height: 470px;
+}
+
+.testimonial-card {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 3rem 2.75rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.testimonial-card.active {
+  opacity: 1;
+  transform: translateX(0);
+  z-index: 2;
+}
+
+.testimonial-quote {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.testimonial-meta {
+  margin-top: 2rem;
+}
+
+.testimonial-meta strong {
+  display: block;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.testimonial-meta span {
+  display: block;
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.testimonial-progress {
+  margin-top: 1.25rem;
+  width: 100%;
+  height: 5px;
+  background: #dcdfe4;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.testimonial-progress-bar {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* --- COLONNE DROITE --- */
+
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.logo-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #7b8594;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.logo-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+
+/* --- RESPONSIVE --- */
+
+@media (max-width: 1100px) {
+  .showcase-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .testimonial-track {
+    min-height: 380px;
+  }
+
+  .logo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .entreprise-showcase h2 {
+    font-size: 2rem;
+  }
+
+  .showcase-intro {
+    font-size: 1rem;
+  }
+
+  .testimonial-track {
+    min-height: 340px;
+  }
+
+  .testimonial-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .testimonial-quote {
+    font-size: 1rem;
+  }
+
+  .logo-grid {
+    grid-template-columns: 1fr;
+  }
 }
