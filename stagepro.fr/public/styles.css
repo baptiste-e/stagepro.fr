@@ -625,20 +625,22 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   margin-bottom: 3rem;
 }
 
+
 .faq-item {
-  border-bottom: 1px solid var(--border);
+  background: #f3f4f6; /* gris clair visible */
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
 }
 
+
 .faq-question {
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  padding: 1.5rem 0;
+  background: #f3f4f6; /* même couleur que le bloc */
+  color: var(--text-main);
+  padding: 1.2rem 1.5rem;
   font-size: 1.1rem;
   font-weight: 600;
-  cursor: pointer;
-  position: relative;
 }
 
 .faq-question::after {
@@ -646,6 +648,15 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   position: absolute;
   right: 0;
   font-size: 1.5rem;
+}
+
+.faq-question:hover {
+  background: #e5e7eb;
+}
+
+.faq-item.active .faq-question {
+  background: #2563eb;
+  color: white;
 }
 
 .faq-item.active .faq-question::after {
