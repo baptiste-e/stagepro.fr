@@ -214,4 +214,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // LOGIQUE DU BOUTON RETOUR EN HAUT AJOUTÉE ICI
+    const scrollTopBtn = document.getElementById('scroll-to-top');
+
+    if (scrollTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                scrollTopBtn.style.display = 'flex';
+            } else {
+                scrollTopBtn.style.display = 'none';
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        scrollTopBtn.addEventListener('mouseenter', () => {
+            scrollTopBtn.style.transform = 'scale(1.1)';
+            scrollTopBtn.style.backgroundColor = '#1d4ed8';
+        });
+        
+        scrollTopBtn.addEventListener('mouseleave', () => {
+            scrollTopBtn.style.transform = 'scale(1)';
+            scrollTopBtn.style.backgroundColor = '#2563eb';
+        });
+    }
 });
