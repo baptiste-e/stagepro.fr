@@ -687,7 +687,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
 }
 
