@@ -70,12 +70,10 @@ section { margin-bottom: 5rem; }
   padding: 0 1rem 4rem 1rem;
 }
 
-
 .hero h1 {
   font-size: 2.2rem;
   margin-bottom: 2rem;
 }
-
 
 .hero p {
   font-size: 1.1rem;
@@ -83,7 +81,6 @@ section { margin-bottom: 5rem; }
   margin-bottom: 1.5rem;
   max-width: 650px;
 }
-
 
 header.scrolled {
   border-bottom: 2px solid var(--border);
@@ -97,14 +94,11 @@ header h1 a {
 .btn-cta { 
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
-
   padding: 12px 24px;
   font-size: 1rem;
   font-weight: 600;
-
-  border-radius: 12px; /* ← IMPORTANT */
+  border-radius: 12px;
   text-decoration: none;
-
   display: inline-block;
   transition: all 0.2s ease;
 }
@@ -128,7 +122,6 @@ article {
   padding: 1rem;
   position: relative;
   min-height: 150px;
-  /* On garde les images mais sans les filtres violets/noirs complexes */
   background-size: cover;
   background-position: center;
 }
@@ -139,7 +132,12 @@ article {
 }
 
 article a.lien-etendu {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
 }
 
 article:hover {
@@ -148,56 +146,83 @@ article:hover {
 }
 
 /* --- Formulaires --- */
-form { background: #fff; padding: 1.5rem; border: 1px solid var(--border); }
-label { font-weight: bold; font-size: 0.8rem; display: block; margin-bottom: 0.3rem; }
+form {
+  background: #fff;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+label {
+  font-weight: bold;
+  font-size: 0.8rem;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
 input, select, textarea { 
-  width: 100%; border: 1px solid var(--border); padding: 0.5rem; margin-bottom: 1rem; 
+  width: 100%;
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 button { 
-  background: #374151; color: #fff; border: none; padding: 0.6rem 1rem; cursor: pointer; 
+  background: #374151;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
 }
-button:hover { background: var(--accent); }
+
+button:hover {
+  background: var(--accent);
+}
 
 footer { 
-  margin-top: 3rem; padding: 1rem; text-align: center; border-top: 1px solid var(--border); 
+  margin-top: 3rem;
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid var(--border); 
 }
+
 .card-etudiant { 
-    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/etudiant.jpg'); 
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/etudiant.jpg'); 
 }
 
 .card-pilote { 
-    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/pilote.jpg'); 
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/pilote.jpg'); 
 }
 
 .card-admin { 
-    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/admin.jpg'); 
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/admin.jpg'); 
 }
+
 .card-data_analyst { 
-    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/data_analyst.jpg'); 
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/data_analyst.jpg'); 
 }
 
 .card-dev_web { 
-    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/dev_web.jpg'); 
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/dev_web.jpg'); 
 }
 
 .card-UI_UX_designer { 
-    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/UI_UX_designer.jpg'); 
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/UI_UX_designer.jpg'); 
 }
+
 /* 2. On règle l'affichage pour que l'image soit propre */
 .card {
-    background-size: cover;       /* L'image remplit le carré sans se déformer */
-    background-position: center;   /* L'image est centrée (on voit les visages/écrans) */
-    min-height: 250px;            /* Hauteur minimum pour ne pas que l'image soit écrasée */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;      /* Centre le texte au milieu du carré */
-    text-align: center;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    text-decoration: none;
-    color: #333;                  /* Couleur du texte en gris foncé/noir */
+  background-size: cover;
+  background-position: center;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-decoration: none;
+  color: #333;
 }
 
 section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-section) {
@@ -207,7 +232,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 /* --- SECTION ENTREPRISES --- */
-
 .entreprise-showcase {
   width: 100%;
   padding: 8rem 0 6rem 0;
@@ -238,16 +262,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   font-size: 1rem;
 }
 
-
-/* --- SLIDER --- */
-
-
-
-/* --- CARTES --- */
-
-
 /* --- TEXTE --- */
-
 .testimonial-quote {
   font-size: 1.1rem;
   line-height: 1.6;
@@ -270,9 +285,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   color: var(--text-muted);
   line-height: 1.5;
 }
-
-/* --- BARRE DE PROGRESSION --- */
-
 
 .espaces-section {
   position: relative;
@@ -304,20 +316,17 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 /* --- ANIMATIONS FADE IN --- */
-
 .fade-in {
   opacity: 0;
   transform: translateY(40px);
   transition: all 0.8s ease;
 }
 
-/* état visible */
 .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* effet décalé (cascade) */
 .fade-in:nth-child(1) {
   transition-delay: 0.1s;
 }
@@ -332,7 +341,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 /* --- SECTION STATS --- */
-
 .stats-section {
   width: 100%;
   padding: 6rem 0;
@@ -413,7 +421,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 /* --- FAQ --- */
-
 .faq-section {
   width: 100%;
   padding: 6rem 0;
@@ -489,8 +496,72 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   color: var(--accent);
 }
 
-/* --- TESTIMONIALS LAYOUT --- */
+/* --- HERO SEARCH --- */
+.hero-search-form {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto 2rem auto;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
 
+.hero-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 0.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.hero-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  color: var(--text-main);
+  padding: 0.9rem 1rem;
+  margin: 0;
+}
+
+.hero-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.hero-search-button {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  padding: 0.95rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.hero-search-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);
+}
+
+@media (max-width: 768px) {
+  .hero-search-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-search-button {
+    width: 100%;
+  }
+}
+
+/* --- TESTIMONIALS LAYOUT --- */
 .showcase-layout {
   max-width: 1100px;
   margin: 0 auto;
@@ -576,7 +647,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 /* --- UTILITAIRES COMPLÉMENTAIRES --- */
-
 .text-center {
   text-align: center;
 }
@@ -592,7 +662,6 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 /* =========================================================
    HEADER + NAVIGATION + MENU BURGER
    ========================================================= */
-
 .site-header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);

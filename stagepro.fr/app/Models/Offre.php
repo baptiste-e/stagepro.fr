@@ -75,7 +75,23 @@ class Offre {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+public function searchGlobal(string $term): array {
+    $sql = "SELECT o.*, e.nom AS entreprise_nom
+            FROM offres o
+            LEFT JOIN entreprises e ON o.entreprise_id = e.id
+            WHERE o.titre LIKE :term
+               OR o.description LIKE :term
+               OR o.competences LIKE :term
+               OR e.nom LIKE :term
+            ORDER BY o.date_offre DESC, o.id DESC";
 
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([
+        ':term' => '%' . $term . '%'
+    ]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     /**
      * Récupère une offre spécifique par son ID
      */

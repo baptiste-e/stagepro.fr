@@ -1,0 +1,51 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Recherche | StagePro{% endblock %}
+
+{% block content %}
+<section class="search-results-page">
+    <h1>Résultats pour « {{ query }} »</h1>
+
+    {% set total_results = offres|length + entreprises|length %}
+
+    {% if total_results == 0 %}
+        <p>Aucun résultat trouvé.</p>
+        <p>Essayez avec un autre mot-clé, par exemple : PHP, Airbus, Data, wishlist, offres...</p>
+    {% else %}
+
+        {% if entreprises|length > 0 %}
+            <section style="margin-top: 2rem;">
+                <h2>Entreprises</h2>
+                <div class="grid-offres">
+                    {% for entreprise in entreprises %}
+                        <article class="card" style="position: relative;">
+                            <h3>{{ entreprise.nom }}</h3>
+                            <p>{{ entreprise.description|slice(0, 140) }}{% if entreprise.description|length > 140 %}...{% endif %}</p>
+                            <a href="index.php?page=entreprise-detail&id={{ entreprise.id }}" class="lien-etendu"></a>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+        {% if offres|length > 0 %}
+            <section style="margin-top: 2rem;">
+                <h2>Offres</h2>
+                <div class="grid-offres">
+                    {% for offre in offres %}
+                        <article class="card" style="position: relative;">
+                            <h3>{{ offre.titre }}</h3>
+                            <p>Entreprise : <strong>{{ offre.entreprise_nom ?? 'Non renseignée' }}</strong></p>
+                            <p style="margin-top: 0.8rem;">
+                                {{ offre.description|slice(0, 140) }}{% if offre.description|length > 140 %}...{% endif %}
+                            </p>
+                            <a href="index.php?page=offre-detail&id={{ offre.id }}" class="lien-etendu"></a>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+    {% endif %}
+</section>
+{% endblock %}

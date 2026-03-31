@@ -6,8 +6,22 @@
 {# --- SECTION HERO --- #}
 <section class="hero">
     <h1>Trouvez le stage qui propulsera votre carrière</h1>
-    <p style="margin-bottom: 2rem; font-size: 1.2rem; opacity: 0.9;">La plateforme de mise en relation entre étudiants ambitieux et entreprises innovantes.</p>
-    <a href="index.php?page=offres" class="btn-cta">Explorer les offres</a>
+
+<form action="index.php" method="get" class="hero-search-form">
+    <input type="hidden" name="page" value="recherche">
+
+    <div class="hero-search-wrapper">
+        <input 
+            type="text" 
+            name="q" 
+            class="hero-search-input"
+            placeholder="Rechercher une offre, une entreprise ou une page du site..."
+            aria-label="Rechercher sur StagePro"
+            required
+        >
+        <button type="submit" class="hero-search-button">Rechercher</button>
+    </div>
+</form>    <a href="index.php?page=offres" class="btn-cta">Explorer les offres</a>
 </section>
 
 {# --- SECTION TÉMOIGNAGES / SHOWCASE --- #}
