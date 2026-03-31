@@ -133,6 +133,26 @@ class Entreprise
             'comm' => htmlspecialchars($commentaire)
         ]);
     }
+/**
+ * Recherche globale simple pour la barre de recherche
+ */
+public function searchGlobal(string $term): array
+{
+    $sql = "SELECT *
+            FROM entreprises
+            WHERE nom LIKE :term
+               OR description LIKE :term
+               OR email_contact LIKE :term
+               OR telephone_contact LIKE :term
+            ORDER BY nom ASC";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([
+        ':term' => '%' . $term . '%'
+    ]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 public function getEvaluations(int $id): array {
     $sql = "SELECT ev.*, u.nom, u.prenom

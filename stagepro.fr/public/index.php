@@ -30,6 +30,7 @@ require_once __DIR__ . '/../app/Controllers/AdminController.php';
 require_once __DIR__ . '/../app/Controllers/AuthController.php';
 require_once __DIR__ . '/../app/Controllers/CandidatureController.php';
 require_once __DIR__ . '/../app/Controllers/WishlistController.php';
+require_once __DIR__ . '/../app/Controllers/SearchController.php';
 
 // 5. Récupération des paramètres de navigation
 $page = $_GET['page'] ?? 'home';
@@ -189,6 +190,11 @@ case 'entreprise-save-eval':
     // --- PAGES LÉGALES ---
     case 'mentions':
         echo $twig->render('mentions_legales.html.twig');
+        break;
+
+        // --- RECHERCHE GLOBALE ---
+    case 'recherche':
+        (new SearchController($twig))->index();
         break;
 
     // --- PAGE 404 (ERREUR) ---
