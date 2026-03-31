@@ -1,25 +1,47 @@
 /* --- Style Standard & Lisible --- */
 :root {
-  --bg-body: #ffffff;       /* Gris très clair */
-  --surface: #ffffff;       /* Blanc pur pour les cartes */
-  --accent: #2563eb;        /* Bleu standard */
-  --text-main: #1f2937;     /* Anthracite */
-  --text-muted: #6b7280;    /* Gris texte */
-  --border: #d1d5db;        /* Bordure grise standard */
+  --bg-body: #ffffff;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --border: #d1d5db;
+  --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.05);
   --header-height: 0px;
 }
 
 /* --- Base --- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   background-color: var(--bg-body);
   color: var(--text-main);
-  font-family: sans-serif; /* Utilise la police système */
+  font-family: sans-serif;
   line-height: 1.5;
   padding-bottom: 2rem;
 }
 
+main {
+  margin: 0;
+  padding: 0;
+}
+
+section {
+  margin-bottom: 5rem;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* --- Header simple --- */
 header {
   padding: 1rem 5%;
   display: flex;
@@ -37,24 +59,36 @@ header h1 {
   color: var(--accent);
 }
 
-nav ul { display: flex; list-style: none; gap: 1rem; }
+header h1 a {
+  text-decoration: none;
+  color: var(--accent);
+}
 
-nav ul li a, nav ul li strong {
+header.scrolled {
+  border-bottom: 2px solid var(--border);
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+}
+
+nav ul li a,
+nav ul li strong {
   text-decoration: none;
   font-size: 0.9rem;
   color: var(--text-muted);
 }
 
-nav ul li a:hover { text-decoration: underline; }
-nav ul li strong { color: var(--text-main); font-weight: bold; }
-
-/* --- Layout --- */
-main {
-  margin: 0;
-  padding: 0;
+nav ul li a:hover {
+  text-decoration: underline;
 }
 
-section { margin-bottom: 5rem; }
+nav ul li strong {
+  color: var(--text-main);
+  font-weight: bold;
+}
 
 /* --- Hero --- */
 .hero {
@@ -82,16 +116,8 @@ section { margin-bottom: 5rem; }
   max-width: 650px;
 }
 
-header.scrolled {
-  border-bottom: 2px solid var(--border);
-}
-
-header h1 a {
-  text-decoration: none;
-  color: var(--accent);
-}
-
-.btn-cta { 
+/* --- CTA --- */
+.btn-cta {
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
   padding: 12px 24px;
@@ -108,8 +134,10 @@ header h1 a {
   box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
 }
 
-/* --- Grille de Cartes --- */
-div[aria-label*="Liste"], .container-espaces, .grid-offres {
+/* --- Grilles générales --- */
+div[aria-label*="Liste"],
+.container-espaces,
+.grid-offres {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
@@ -126,9 +154,14 @@ article {
   background-position: center;
 }
 
-/* Filtre gris simple pour la lisibilité du texte sur image */
-.card-etudiant, .card-pilote, .card-admin, .card-dev_web, .card-data_analyst, .card-UI_UX_designer { 
-  background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)); 
+/* Filtre léger sur les cartes images */
+.card-etudiant,
+.card-pilote,
+.card-admin,
+.card-dev_web,
+.card-data_analyst,
+.card-UI_UX_designer {
+  background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8));
 }
 
 article a.lien-etendu {
@@ -159,14 +192,16 @@ label {
   margin-bottom: 0.3rem;
 }
 
-input, select, textarea { 
+input,
+select,
+textarea {
   width: 100%;
   border: 1px solid var(--border);
   padding: 0.5rem;
   margin-bottom: 1rem;
 }
 
-button { 
+button {
   background: #374151;
   color: #fff;
   border: none;
@@ -178,38 +213,38 @@ button:hover {
   background: var(--accent);
 }
 
-footer { 
+footer {
   margin-top: 3rem;
   padding: 1rem;
   text-align: center;
-  border-top: 1px solid var(--border); 
+  border-top: 1px solid var(--border);
 }
 
-.card-etudiant { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/etudiant.jpg'); 
+/* --- Cartes métiers --- */
+.card-etudiant {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url("images/etudiant.jpg");
 }
 
-.card-pilote { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/pilote.jpg'); 
+.card-pilote {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url("images/pilote.jpg");
 }
 
-.card-admin { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/admin.jpg'); 
+.card-admin {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url("images/admin.jpg");
 }
 
-.card-data_analyst { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/data_analyst.jpg'); 
+.card-data_analyst {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url("images/data_analyst.jpg");
 }
 
-.card-dev_web { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/dev_web.jpg'); 
+.card-dev_web {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url("images/dev_web.jpg");
 }
 
-.card-UI_UX_designer { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/UI_UX_designer.jpg'); 
+.card-UI_UX_designer {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url("images/UI_UX_designer.jpg");
 }
 
-/* 2. On règle l'affichage pour que l'image soit propre */
 .card {
   background-size: cover;
   background-position: center;
@@ -231,17 +266,20 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   padding: 0 1rem;
 }
 
-/* --- SECTION ENTREPRISES --- */
+/* =========================================================
+   SECTION ENTREPRISES / TÉMOIGNAGES
+   ========================================================= */
+
 .entreprise-showcase {
   width: 100%;
-  padding: 8rem 0 6rem 0;
+  padding: 7rem 0 6rem 0;
   background: #ffffff;
   text-align: center;
 }
 
 .entreprise-showcase-header {
-  max-width: 700px;
-  margin: 0 auto 3rem auto;
+  max-width: 760px;
+  margin: 0 auto 3.5rem auto;
   padding: 0 1rem;
 }
 
@@ -252,40 +290,231 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 .entreprise-showcase h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1.15;
+  margin-bottom: 1.3rem;
   margin-top: 0;
+  color: #111827;
 }
 
 .showcase-intro {
   color: var(--text-muted);
-  font-size: 1rem;
+  font-size: 1.08rem;
+  line-height: 1.75;
+  max-width: 760px;
+  margin: 0 auto;
 }
 
-/* --- TEXTE --- */
+/* --- Layout principal --- */
+.showcase-layout {
+  max-width: 1220px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: 2.2rem;
+  align-items: stretch;
+  padding: 0 1rem;
+}
+
+.showcase-left,
+.showcase-right {
+  min-width: 0;
+}
+
+/* --- Bloc témoignage --- */
+.testimonial-slider {
+  width: 100%;
+  height: 100%;
+}
+
+.testimonial-track {
+  position: relative;
+  min-height: 520px;
+}
+
+.testimonial-card {
+  display: none;
+  height: 100%;
+  min-height: 520px;
+  background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+  border: 1px solid #e5e7eb;
+  border-radius: 28px;
+  padding: 2.25rem 2rem 1.5rem 2rem;
+  text-align: left;
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-card.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.testimonial-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 92px;
+  width: 82px;
+  height: 4px;
+  border-radius: 999px;
+  background: #9ec0ff;
+}
+
 .testimonial-quote {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  font-size: clamp(1.6rem, 3.1vw, 2.25rem);
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  color: #1f2937;
+  max-width: 92%;
 }
 
 .testimonial-meta {
   margin-top: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .testimonial-meta strong {
   display: block;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+  color: var(--text-main);
 }
 
 .testimonial-meta span {
   display: block;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   color: var(--text-muted);
   line-height: 1.5;
 }
 
+/* --- Logos / entreprises sous la citation si besoin --- */
+.testimonial-footer-logos {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.testimonial-footer-logo {
+  min-width: 64px;
+  height: 58px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #dbe2ea;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.testimonial-footer-logo img {
+  max-height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
+.testimonial-footer-logo span {
+  font-size: 0.92rem;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+/* --- Barre de progression --- */
+.testimonial-progress {
+  margin-top: 1.3rem;
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.testimonial-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #7fb0ff 0%, #2563eb 100%);
+  border-radius: 999px;
+}
+
+/* --- Colonne droite --- */
+.showcase-side-card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  text-align: left;
+  height: 100%;
+}
+
+.showcase-side-card h3 {
+  display: none;
+}
+
+.showcase-side-card p {
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+/* IMPORTANT :
+   si ta colonne droite contient un <ul>, ce style la transforme
+   automatiquement en grille de rectangles */
+.showcase-side-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 0.95rem;
+}
+
+.showcase-side-card li {
+  min-height: 92px;
+  border: 1px solid #dfe5ec;
+  border-radius: 22px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.1rem 1rem;
+  text-align: center;
+  color: #7a8492;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.2;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.showcase-side-card li:hover {
+  transform: translateY(-2px);
+  border-color: #c5d5ea;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* Si tu mets des logos dans les li */
+.showcase-side-card li img {
+  max-width: 120px;
+  max-height: 40px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.8;
+}
+
+.showcase-side-card li span {
+  display: inline-block;
+  color: #7a8492;
+}
+
+/* --- Espacements associés à la section --- */
 .espaces-section {
   position: relative;
   width: 100%;
@@ -315,7 +544,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   padding: 0 1rem;
 }
 
-/* --- ANIMATIONS FADE IN --- */
+/* --- Animations fade in --- */
 .fade-in {
   opacity: 0;
   transform: translateY(40px);
@@ -330,17 +559,23 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 .fade-in:nth-child(1) {
   transition-delay: 0.1s;
 }
+
 .fade-in:nth-child(2) {
   transition-delay: 0.25s;
 }
+
 .fade-in:nth-child(3) {
   transition-delay: 0.4s;
 }
+
 .fade-in:nth-child(4) {
   transition-delay: 0.55s;
 }
 
-/* --- SECTION STATS --- */
+/* =========================================================
+   SECTION STATS
+   ========================================================= */
+
 .stats-section {
   width: 100%;
   padding: 6rem 0;
@@ -407,20 +642,10 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   max-width: 220px;
 }
 
-@media (max-width: 992px) {
-  .stats-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
-}
+/* =========================================================
+   FAQ
+   ========================================================= */
 
-@media (max-width: 640px) {
-  .stats-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* --- FAQ --- */
 .faq-section {
   width: 100%;
   padding: 6rem 0;
@@ -496,7 +721,10 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   color: var(--accent);
 }
 
-/* --- HERO SEARCH --- */
+/* =========================================================
+   HERO SEARCH
+   ========================================================= */
+
 .hero-search-form {
   width: 100%;
   max-width: 760px;
@@ -550,103 +778,10 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);
 }
 
-@media (max-width: 768px) {
-  .hero-search-wrapper {
-    flex-direction: column;
-    align-items: stretch;
-  }
+/* =========================================================
+   UTILITAIRES
+   ========================================================= */
 
-  .hero-search-button {
-    width: 100%;
-  }
-}
-
-/* --- TESTIMONIALS LAYOUT --- */
-.showcase-layout {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 3rem;
-  align-items: center;
-  padding: 0 1rem;
-}
-
-.showcase-left,
-.showcase-right {
-  min-width: 0;
-}
-
-.testimonial-slider {
-  position: relative;
-}
-
-.testimonial-track {
-  position: relative;
-  min-height: 280px;
-}
-
-.testimonial-card {
-  display: none;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 2rem;
-  text-align: left;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
-}
-
-.testimonial-card.active {
-  display: block;
-}
-
-.testimonial-progress {
-  margin-top: 1.5rem;
-  width: 100%;
-  height: 4px;
-  background: #e5e7eb;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.testimonial-progress-bar {
-  width: 0%;
-  height: 100%;
-  background: var(--accent);
-}
-
-.showcase-side-card {
-  background: #f8fafc;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 2rem;
-  text-align: left;
-}
-
-.showcase-side-card h3 {
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-.showcase-side-card p {
-  color: var(--text-muted);
-  line-height: 1.7;
-  margin-bottom: 1rem;
-}
-
-.showcase-side-card ul {
-  padding-left: 1.25rem;
-  color: var(--text-main);
-  line-height: 1.8;
-}
-
-@media (max-width: 992px) {
-  .showcase-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* --- UTILITAIRES COMPLÉMENTAIRES --- */
 .text-center {
   text-align: center;
 }
@@ -662,6 +797,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 /* =========================================================
    HEADER + NAVIGATION + MENU BURGER
    ========================================================= */
+
 .site-header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -792,7 +928,33 @@ body.menu-open {
   overflow: hidden;
 }
 
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
 @media (max-width: 992px) {
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .showcase-layout {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+
+  .testimonial-track {
+    min-height: auto;
+  }
+
+  .testimonial-card {
+    min-height: 420px;
+  }
+
+  .showcase-side-card ul {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+
   .site-header__inner {
     padding: 14px 16px;
   }
@@ -860,6 +1022,62 @@ body.menu-open {
 
   .site-nav__login {
     text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-search-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-search-button {
+    width: 100%;
+  }
+
+  .entreprise-showcase {
+    padding: 5.5rem 0 4.5rem 0;
+  }
+
+  .testimonial-card {
+    padding: 1.5rem 1.25rem 1.25rem 1.25rem;
+    min-height: 360px;
+    border-radius: 22px;
+  }
+
+  .testimonial-card::after {
+    bottom: 76px;
+    width: 68px;
+  }
+
+  .testimonial-quote {
+    font-size: 1.5rem;
+    max-width: 100%;
+  }
+
+  .showcase-side-card ul {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .showcase-side-card li {
+    min-height: 82px;
+    font-size: 0.95rem;
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+
+  .showcase-side-card ul {
+    grid-template-columns: 1fr;
+  }
+
+  .entreprise-showcase-header {
+    margin-bottom: 2.2rem;
   }
 }
 
