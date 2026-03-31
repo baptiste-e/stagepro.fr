@@ -12,18 +12,59 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeElement.textContent = `Bonjour ${userFirstName}, prêt pour une nouvelle recherche ?`;
     }
 
-    // 2. Gestion du menu burger (Navigation mobile)
-    // Assurez-vous que votre HTML contient bien les éléments .nav-toggle
-    const navToggle = document.querySelector('.nav-toggle');
-    if (navToggle) {
-        navToggle.addEventListener('change', () => {
-            if (navToggle.checked) {
-                console.log("Menu ouvert");
-                // Optionnel : ajouter une classe pour styliser le menu mobile
+    // 2. Gestion du vrai menu burger
+    const burgerButton = document.querySelector('.burger-button');
+    const siteNav = document.querySelector('.site-nav');
+
+    if (burgerButton && siteNav) {
+        const closeMenu = () => {
+            burgerButton.classList.remove('is-active');
+            burgerButton.setAttribute('aria-expanded', 'false');
+            burgerButton.setAttribute('aria-label', 'Ouvrir le menu');
+            siteNav.classList.remove('is-open');
+            document.body.classList.remove('menu-open');
+        };
+
+        const openMenu = () => {
+            burgerButton.classList.add('is-active');
+            burgerButton.setAttribute('aria-expanded', 'true');
+            burgerButton.setAttribute('aria-label', 'Fermer le menu');
+            siteNav.classList.add('is-open');
+            document.body.classList.add('menu-open');
+        };
+
+        burgerButton.addEventListener('click', () => {
+            if (siteNav.classList.contains('is-open')) {
+                closeMenu();
             } else {
-                console.log("Menu fermé");
+                openMenu();
             }
-    
+        });
+
+        siteNav.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    closeMenu();
+                }
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!siteNav.contains(event.target) && !burgerButton.contains(event.target)) {
+                closeMenu();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 992) {
+                closeMenu();
+            }
         });
     }
 
@@ -36,17 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-        const header = document.querySelector('header');
+    const header = document.querySelector('header');
 
-        function updateHeaderHeight() {
+    function updateHeaderHeight() {
         if (header) {
             document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
         }
     }
-        updateHeaderHeight();
-        window.addEventListener('resize', updateHeaderHeight);
+
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
     
-        if (header) {
+    if (header) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 0) {
                 header.classList.add('scrolled');
@@ -56,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-        const testimonialCards = document.querySelectorAll('.testimonial-card');
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
     const progressBar = document.querySelector('.testimonial-progress-bar');
 
     if (testimonialCards.length > 0 && progressBar) {
@@ -92,7 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setInterval(nextTestimonial, duration);
     }
-        const fadeElements = document.querySelectorAll('.fade-in');
+
+    const fadeElements = document.querySelectorAll('.fade-in');
 
     if (fadeElements.length > 0) {
         const observer = new IntersectionObserver((entries) => {
@@ -109,65 +152,66 @@ document.addEventListener('DOMContentLoaded', () => {
             observer.observe(element);
         });
     }
-const statsSection = document.querySelector('.stats-section');
-const stats = document.querySelectorAll('.stats-container .stat');
 
-function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-}
+    const statsSection = document.querySelector('.stats-section');
+    const stats = document.querySelectorAll('.stats-container .stat');
 
-function updateStatsOnScroll() {
-    if (!statsSection || stats.length === 0) return;
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+    }
 
-    const rect = statsSection.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
+    function updateStatsOnScroll() {
+        if (!statsSection || stats.length === 0) return;
 
-    // progression de la section dans l'écran
-    const start = windowHeight * 0.60;
-    const end = windowHeight * 0.20;
-    const total = start - end;
+        const rect = statsSection.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
 
-    const progress = clamp((start - rect.top) / total, 0, 1);
+        // progression de la section dans l'écran
+        const start = windowHeight * 0.60;
+        const end = windowHeight * 0.20;
+        const total = start - end;
 
-    stats.forEach((stat, index) => {
-        const itemStart = index / stats.length;
-        const itemEnd = (index + 1) / stats.length;
+        const progress = clamp((start - rect.top) / total, 0, 1);
 
-        let itemProgress = (progress - itemStart) / (itemEnd - itemStart);
-        itemProgress = clamp(itemProgress, 0, 1);
+        stats.forEach((stat, index) => {
+            const itemStart = index / stats.length;
+            const itemEnd = (index + 1) / stats.length;
 
-        const opacity = itemProgress;
-        const translateY = 60 * (1 - itemProgress);
+            let itemProgress = (progress - itemStart) / (itemEnd - itemStart);
+            itemProgress = clamp(itemProgress, 0, 1);
 
-        stat.style.opacity = opacity;
-        stat.style.transform = `translateY(${translateY}px)`;
-    });
-}
+            const opacity = itemProgress;
+            const translateY = 60 * (1 - itemProgress);
 
-window.addEventListener('scroll', updateStatsOnScroll);
-window.addEventListener('resize', updateStatsOnScroll);
-updateStatsOnScroll();
-
-const faqItems = document.querySelectorAll('.faq-item');
-
-faqItems.forEach(item => {
-    const button = item.querySelector('.faq-question');
-
-    button.addEventListener('click', () => {
-        const isOpen = item.classList.contains('active');
-
-        // fermer tous
-        faqItems.forEach(i => {
-            i.classList.remove('active');
-            i.querySelector('.faq-answer').style.maxHeight = null;
+            stat.style.opacity = opacity;
+            stat.style.transform = `translateY(${translateY}px)`;
         });
+    }
 
-        // ouvrir celui cliqué
-        if (!isOpen) {
-            item.classList.add('active');
-            const answer = item.querySelector('.faq-answer');
-            answer.style.maxHeight = answer.scrollHeight + 'px';
-        }
+    window.addEventListener('scroll', updateStatsOnScroll);
+    window.addEventListener('resize', updateStatsOnScroll);
+    updateStatsOnScroll();
+
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+        const button = item.querySelector('.faq-question');
+
+        button.addEventListener('click', () => {
+            const isOpen = item.classList.contains('active');
+
+            // fermer tous
+            faqItems.forEach(i => {
+                i.classList.remove('active');
+                i.querySelector('.faq-answer').style.maxHeight = null;
+            });
+
+            // ouvrir celui cliqué
+            if (!isOpen) {
+                item.classList.add('active');
+                const answer = item.querySelector('.faq-answer');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        });
     });
-});
 });
