@@ -1,16 +1,20 @@
- /* --- Style Standard & Lisible --- */
+/* --- Style Standard & Lisible --- */
 :root {
-  --bg-body: #ffffff;       /* Gris très clair */
-  --surface: #ffffff;       /* Blanc pur pour les cartes */
-  --accent: #2563eb;        /* Bleu standard */
-  --text-main: #1f2937;     /* Anthracite */
-  --text-muted: #6b7280;    /* Gris texte */
-  --border: #d1d5db;        /* Bordure grise standard */
+  --bg-body: #ffffff; /* Gris très clair */
+  --surface: #ffffff; /* Blanc pur pour les cartes */
+  --accent: #2563eb; /* Bleu standard */
+  --text-main: #1f2937; /* Anthracite */
+  --text-muted: #6b7280; /* Gris texte */
+  --border: #d1d5db; /* Bordure grise standard */
   --header-height: 0px;
 }
 
 /* --- Base --- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   background-color: var(--bg-body);
@@ -37,16 +41,27 @@ header h1 {
   color: var(--accent);
 }
 
-nav ul { display: flex; list-style: none; gap: 1rem; }
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+}
 
-nav ul li a, nav ul li strong {
+nav ul li a,
+nav ul li strong {
   text-decoration: none;
   font-size: 0.9rem;
   color: var(--text-muted);
 }
 
-nav ul li a:hover { text-decoration: underline; }
-nav ul li strong { color: var(--text-main); font-weight: bold; }
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+nav ul li strong {
+  color: var(--text-main);
+  font-weight: bold;
+}
 
 /* --- Layout --- */
 main {
@@ -54,7 +69,9 @@ main {
   padding: 0;
 }
 
-section { margin-bottom: 5rem; }
+section {
+  margin-bottom: 5rem;
+}
 
 /* --- Hero --- */
 .hero {
@@ -91,7 +108,7 @@ header h1 a {
   color: var(--accent);
 }
 
-.btn-cta { 
+.btn-cta {
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
   padding: 12px 24px;
@@ -109,7 +126,9 @@ header h1 a {
 }
 
 /* --- Grille de Cartes --- */
-div[aria-label*="Liste"], .container-espaces, .grid-offres {
+div[aria-label*="Liste"],
+.container-espaces,
+.grid-offres {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
@@ -127,8 +146,13 @@ article {
 }
 
 /* Filtre gris simple pour la lisibilité du texte sur image */
-.card-etudiant, .card-pilote, .card-admin, .card-dev_web, .card-data_analyst, .card-UI_UX_designer { 
-  background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)); 
+.card-etudiant,
+.card-pilote,
+.card-admin,
+.card-dev_web,
+.card-data_analyst,
+.card-UI_UX_designer {
+  background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8));
 }
 
 article a.lien-etendu {
@@ -159,14 +183,16 @@ label {
   margin-bottom: 0.3rem;
 }
 
-input, select, textarea { 
+input,
+select,
+textarea {
   width: 100%;
   border: 1px solid var(--border);
   padding: 0.5rem;
   margin-bottom: 1rem;
 }
 
-button { 
+button {
   background: #374151;
   color: #fff;
   border: none;
@@ -178,35 +204,35 @@ button:hover {
   background: var(--accent);
 }
 
-footer { 
+footer {
   margin-top: 3rem;
   padding: 1rem;
   text-align: center;
-  border-top: 1px solid var(--border); 
+  border-top: 1px solid var(--border);
 }
 
-.card-etudiant { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/etudiant.jpg'); 
+.card-etudiant {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/etudiant.jpg');
 }
 
-.card-pilote { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/pilote.jpg'); 
+.card-pilote {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/pilote.jpg');
 }
 
-.card-admin { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/admin.jpg'); 
+.card-admin {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/admin.jpg');
 }
 
-.card-data_analyst { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/data_analyst.jpg'); 
+.card-data_analyst {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/data_analyst.jpg');
 }
 
-.card-dev_web { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/dev_web.jpg'); 
+.card-dev_web {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/dev_web.jpg');
 }
 
-.card-UI_UX_designer { 
-  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/UI_UX_designer.jpg'); 
+.card-UI_UX_designer {
+  background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('images/UI_UX_designer.jpg');
 }
 
 /* 2. On règle l'affichage pour que l'image soit propre */
@@ -225,7 +251,7 @@ footer {
   color: #333;
 }
 
-section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-section) {
+section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
   max-width: 1000px;
   margin: 0 auto 2.5rem auto;
   padding: 0 1rem;
@@ -234,7 +260,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 /* --- SECTION ENTREPRISES --- */
 .entreprise-showcase {
   width: 100%;
-  padding: 8rem 0 6rem 0;
+  padding: 10rem 0 4rem 0;
   background: #ffffff;
   text-align: center;
 }
@@ -289,20 +315,22 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 .espaces-section {
   position: relative;
   width: 100%;
-  padding: 6rem 0 6rem 0;
+  padding: 12rem 0 6rem 0;
 }
 
 .espaces-section::before {
   content: "";
   position: absolute;
-  top: 0;
+  top: -120px;
   left: 0;
   width: 100%;
-  height: 120px;
+  height: 220px;
   background: linear-gradient(
     to bottom,
     #ffffff 0%,
-    rgba(255, 255, 255, 0.7) 60%,
+    #ffffff 35%,
+    rgba(255, 255, 255, 0.9) 55%,
+    rgba(255, 255, 255, 0.45) 80%,
     rgba(255, 255, 255, 0) 100%
   );
   pointer-events: none;
@@ -330,14 +358,17 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 .fade-in:nth-child(1) {
   transition-delay: 0.1s;
 }
+
 .fade-in:nth-child(2) {
-  transition-delay: 0.25s;
+  transition-delay: 0.3s;
 }
+
 .fade-in:nth-child(3) {
-  transition-delay: 0.4s;
+  transition-delay: 0.5s;
 }
+
 .fade-in:nth-child(4) {
-  transition-delay: 0.55s;
+  transition-delay: 0.7s;
 }
 
 /* --- SECTION STATS --- */
@@ -578,41 +609,58 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 .testimonial-slider {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem 1rem;
   position: relative;
+  z-index: 2;
 }
 
 .testimonial-track {
   position: relative;
-  min-height: 280px;
+  overflow: hidden;
+  min-height: 320px;
 }
 
 .testimonial-card {
-  display: none;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 2rem;
-  text-align: left;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  background: white;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  min-height: 260px;
 }
 
 .testimonial-card.active {
-  display: block;
+  opacity: 1;
+  transform: translateX(0);
+  position: relative;
+  z-index: 2;
 }
 
 .testimonial-progress {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   width: 100%;
   height: 4px;
-  background: #e5e7eb;
+  background: #dcdfe4;
   border-radius: 999px;
   overflow: hidden;
+  position: relative;
+  z-index: 3;
 }
 
 .testimonial-progress-bar {
+  display: block;
   width: 0%;
   height: 100%;
-  background: var(--accent);
+  background: #2563eb;
+  border-radius: 999px;
 }
 
 .showcase-side-card {
@@ -660,8 +708,8 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 /* =========================================================
-   HEADER + NAVIGATION + MENU BURGER
-   ========================================================= */
+HEADER + NAVIGATION + MENU BURGER
+========================================================= */
 .site-header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -871,4 +919,12 @@ body.menu-open {
     pointer-events: auto !important;
     transform: none !important;
   }
+}
+
+section + section {
+  margin-top: 70vh;
+}
+
+section {
+  background: #ffffff;
 }
