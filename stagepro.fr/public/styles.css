@@ -664,10 +664,10 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 }
 
 .showcase-side-card {
-  background: #f8fafc;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   text-align: left;
 }
 
@@ -683,9 +683,28 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section) {
 }
 
 .showcase-side-card ul {
-  padding-left: 1.25rem;
-  color: var(--text-main);
-  line-height: 1.8;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.showcase-side-card li {
+  min-height: 92px;
+  border: 1px solid #dcdfe4;
+  border-radius: 22px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+  line-height: 1.2;
 }
 
 @media (max-width: 992px) {
