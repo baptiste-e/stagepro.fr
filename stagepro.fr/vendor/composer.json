@@ -1,8 +1,0 @@
-{
-    "name": "baptiste/stagepro.fr",
-    "type": "project",
-    "require": {
-        "phpunit/phpunit": "^12.5"
-    },
-    "minimum-stability": "stable"
-}
