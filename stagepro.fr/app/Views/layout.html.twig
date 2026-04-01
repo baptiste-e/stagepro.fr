@@ -5,21 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ titre_page|default('StagePro') }}{% endblock %}</title>
     <link rel="stylesheet" href="styles.css">
-    
-    <style>
-        @media (max-width: 992px) {
-            header .container {
-                flex-direction: row !important;
-                gap: 15px !important;
-                text-align: left;
-            }
-
-            header h1 {
-                margin-right: 0 !important;
-                width: auto;
-            }
-        }
-    </style>
 
     <link rel="manifest" href="manifest.json">
 
@@ -69,62 +54,62 @@
 
     {% set userRole = session.user.role_nom|default(session.user.role)|lower|trim %}
 
-    <header style="background: var(--surface, #ffffff); border-bottom: 1px solid var(--border, #e5e7eb); position: sticky; top: 0; z-index: 1000;">
-        <div class="container site-header-container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 15px 20px; position: relative;">
-            
-            <h1 style="margin: 0; margin-right: 50px; font-size: 1.5rem; flex-shrink: 0;">
-                <a href="index.php?page=home" style="text-decoration: none; color: #2563eb; font-weight: 800; white-space: nowrap;">StagePro</a>
-            </h1>
+    <header class="site-header">
+    <div class="site-header__inner">
+        
+        <h1 class="site-logo">
+            <a href="index.php?page=home">StagePro</a>
+        </h1>
 
-            <button
-                type="button"
-                class="burger-button"
-                aria-label="Ouvrir le menu"
-                aria-expanded="false"
-                aria-controls="site-navigation"
-            >
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-    
-            <nav id="site-navigation" class="site-nav" aria-label="Navigation principale">
-                <ul class="site-nav__list" style="list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; flex-wrap: wrap;">
-                    <li><a href="index.php?page=home" style="text-decoration: none; color: inherit; font-weight: 500;">Accueil</a></li>
-                    <li><a href="index.php?page=offres" style="text-decoration: none; color: inherit; font-weight: 500;">Offres</a></li>
-                    <li><a href="index.php?page=candidatures" style="text-decoration: none; color: inherit; font-weight: 500;">Candidatures</a></li>
-                    <li><a href="index.php?page=entreprises" style="text-decoration: none; color: inherit; font-weight: 500;">Entreprises</a></li>
+        <button
+            type="button"
+            class="burger-button"
+            aria-label="Ouvrir le menu"
+            aria-expanded="false"
+            aria-controls="site-navigation"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
 
-                    {% if session.user and userRole in ['admin', 'pilote'] %}
-                        <li><a href="index.php?page=etudiants" style="text-decoration: none; color: inherit; font-weight: 500;">Étudiants</a></li>
-                        <li><a href="index.php?page=pilotes" style="text-decoration: none; color: inherit; font-weight: 500;">Pilotes</a></li>
-                    {% endif %}
+        <nav id="site-navigation" class="site-nav" aria-label="Navigation principale">
+            <ul class="site-nav__list">
+                <li><a href="index.php?page=home">Accueil</a></li>
+                <li><a href="index.php?page=offres">Offres</a></li>
+                <li><a href="index.php?page=candidatures">Candidatures</a></li>
+                <li><a href="index.php?page=entreprises">Entreprises</a></li>
 
-                    {% if session.user and userRole == 'admin' %}
-                        <li><a href="index.php?page=admin-dashboard" style="text-decoration: none; color: inherit; font-weight: 500;">Dashboard</a></li>
-                    {% endif %}
+                {% if session.user and userRole in ['admin', 'pilote'] %}
+                    <li><a href="index.php?page=etudiants">Étudiants</a></li>
+                    <li><a href="index.php?page=pilotes">Pilotes</a></li>
+                {% endif %}
 
-                    <li><a href="index.php?page=wishlist" style="text-decoration: none; color: inherit; font-weight: 500;">Wish-List</a></li>
+                {% if session.user and userRole == 'admin' %}
+                    <li><a href="index.php?page=admin-dashboard">Dashboard</a></li>
+                {% endif %}
 
-                    {% if session.user %}
-                        <li class="nav-user-desktop site-nav__user" style="border-left: 1px solid #ccc; padding-left: 20px; margin-left: 10px; white-space: nowrap;">
-                            <strong style="color: var(--text-main);">
-                                {{ session.user.prenom }}
-                                <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">({{ session.user.role|default(session.user.role_nom) }})</span>
-                            </strong>
-                        </li>
-                        <li><a href="index.php?page=logout" class="site-nav__logout" style="color: #dc2626; text-decoration: none; font-weight: 600;">Déconnexion</a></li>
-                    {% else %}
-                        <li>
-                            <a href="index.php?page=login" class="btn-cta site-nav__login" style="background: #2563eb; color: white; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: 600;">
-                                Connexion
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    </header>
+                <li><a href="index.php?page=wishlist">Wish-List</a></li>
+
+                {% if session.user %}
+                    <li class="nav-user-desktop site-nav__user">
+                        <strong>
+                            {{ session.user.prenom }}
+                            <span>({{ session.user.role|default(session.user.role_nom) }})</span>
+                        </strong>
+                    </li>
+                    <li><a href="index.php?page=logout" class="site-nav__logout">Déconnexion</a></li>
+                {% else %}
+                    <li>
+                        <a href="index.php?page=login" class="btn-cta site-nav__login">
+                            Connexion
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</header>
 
     {# =========================
        BANNIÈRE DE COOKIES

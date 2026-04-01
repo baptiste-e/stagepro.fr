@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const header = document.querySelector('header');
+    const header = document.querySelector('.site-header');
 
     function updateHeaderHeight() {
         if (header) {
@@ -88,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
     updateHeaderHeight();
     window.addEventListener('resize', updateHeaderHeight);
     
+    if (header && window.scrollY === 0) {
+    header.classList.remove('scrolled');
+}
+
     if (header) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 0) {
@@ -167,8 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const windowHeight = window.innerHeight;
 
         // progression de la section dans l'écran
-        const start = windowHeight * 0.60;
-        const end = windowHeight * 0.20;
+        const start = windowHeight * 0.85;
+        const end = windowHeight * 0.3;
         const total = start - end;
 
         const progress = clamp((start - rect.top) / total, 0, 1);
