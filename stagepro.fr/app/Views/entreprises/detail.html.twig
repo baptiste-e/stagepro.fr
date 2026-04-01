@@ -61,11 +61,11 @@
   {# Grille d'infos #}
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
     <div>
-      <h3 style="color: var(--accent-blue, #2563eb); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">📞 Téléphone</h3>
+      <h3 style="color: var(--accent-blue, #2563eb); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;"> Téléphone</h3>
       <p style="font-size: 1.1rem; color: var(--text-main, #1f2937);">{{ entreprise.telephone_contact|default('Non renseigné') }}</p>
     </div>
     <div>
-      <h3 style="color: var(--accent-blue, #2563eb); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">💼 Opportunités</h3>
+      <h3 style="color: var(--accent-blue, #2563eb); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;"> Opportunités</h3>
       <p style="font-size: 1.1rem; font-weight: 600; color: var(--text-main, #1f2937);">{{ entreprise.nb_offres|default(0) }} offre(s) publiée(s)</p>
     </div>
   </div>

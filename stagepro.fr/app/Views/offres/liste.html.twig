@@ -13,7 +13,7 @@
         {# Bouton Statistiques #}
         <a href="index.php?page=offres-stats" 
            style="background: #818cf8; color: white; padding: 0.8rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 6px -1px rgba(129, 140, 248, 0.3);">
-            📊 Statistiques globales
+             Statistiques globales
         </a>
         
         {# Bouton de création réservé Admin/Pilote #}
@@ -79,7 +79,7 @@
                 {% endif %}
             </div>
             
-            <p style="font-weight: 700; font-size: 0.95rem; margin: 0; color: #111827;">🏢 {{ offre.entreprise_nom|default('Entreprise inconnue') }}</p>
+            <p style="font-weight: 700; font-size: 0.95rem; margin: 0; color: #111827;"> {{ offre.entreprise_nom|default('Entreprise inconnue') }}</p>
             
             <p style="font-size: 0.9rem; color: #6b7280; flex-grow: 1; line-height: 1.6;">
                 {{ offre.description|slice(0, 140) }}...
@@ -108,11 +108,11 @@
                     {# Actions Administrateur (Corrigées : Icônes visibles) #}
                     {% if session.user and session.user.role in ['admin', 'pilote'] %}
                         <div style="display: flex; gap: 10px; margin-left: 5px; border-left: 1px solid #e5e7eb; padding-left: 10px;">
-                            <a href="index.php?page=offre-edit&id={{ offre.id }}" title="Modifier" style="text-decoration: none; font-size: 1.1rem;">📝</a>
+                            <a href="index.php?page=offre-edit&id={{ offre.id }}" title="Modifier" style="text-decoration: none; font-size: 1.1rem;"></a>
                             <a href="index.php?page=offre-delete&id={{ offre.id }}" 
                                style="text-decoration: none; font-size: 1.1rem;" 
                                onclick="return confirm('Supprimer cette offre ?')" 
-                               title="Supprimer">🗑️</a>
+                               title="Supprimer"></a>
                         </div>
                     {% endif %}
                 </div>
