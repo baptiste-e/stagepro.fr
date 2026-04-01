@@ -1,0 +1,30 @@
+{# app/Views/layout/404.html.twig #}
+{% extends "layout.html.twig" %}
+
+{% block title %}Oups ! Page introuvable (404) | StagePro{% endblock %}
+
+{% block content %}
+{# Conteneur principal centré avec fond noir et texte blanc #}
+<div style="background: #ffffff; min-height: calc(100vh - 70px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; color: #1f2937;">
+    
+    {# Le gros code d'erreur bleu avec un léger glow #}
+    <h1 style="font-size: 10rem; font-weight: 800; color: var(--accent, #2563eb); margin: 0; line-height: 1; text-shadow: 0 0 30px rgba(37, 99, 235, 0.4);">
+        404
+    </h1>
+    
+    {# Le message d'erreur #}
+    <h2 style="font-size: 2.2rem; margin: 1.5rem 0 1rem 0; font-weight: 700;">
+        Perdu dans le cyberespace ?
+    </h2>
+    
+    {# Description détaillée #}
+    <p style="color: #6b7280; max-width: 550px; margin-bottom: 3.5rem; font-size: 1.1rem; line-height: 1.7;">
+        Désolé, mais la page que vous recherchez semble avoir été déplacée, supprimée ou n'existe tout simplement pas. Vérifiez l'adresse ou retournez à l'accueil pour continuer votre recherche de stage.
+    </p>
+    
+    {# Bouton d'action (utilise ta classe .btn-cta existante) #}
+    <a href="index.php?page=home" class="btn-cta" style="padding: 14px 28px; font-size: 1.1rem; border-radius: 12px; display: inline-flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.3rem;">←</span> Retourner à l'accueil
+    </a>
+</div>
+{% endblock %}

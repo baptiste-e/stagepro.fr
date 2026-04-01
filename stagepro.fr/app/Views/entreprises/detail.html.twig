@@ -6,9 +6,9 @@
 {# Fil d'Ariane #}
 <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
-    <a href="index.php?page=home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
-    <a href="index.php?page=entreprises" style="color: var(--accent-blue); text-decoration: none;">Entreprises</a> &gt;
-    <span style="color: var(--text-muted);">Fiche entreprise</span>
+    <a href="index.php?page=home" style="color: var(--accent-blue, #2563eb); text-decoration: none;">Accueil</a> &gt;
+    <a href="index.php?page=entreprises" style="color: var(--accent-blue, #2563eb); text-decoration: none;">Entreprises</a> &gt;
+    <span style="color: var(--text-muted, #6b7280);">Fiche entreprise</span>
   </p>
 </nav>
 
@@ -25,10 +25,11 @@
   </div>
 {% endif %}
 
-<article style="background: var(--surface); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border); max-width: 900px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+{# CORRECTION : Remplacement de <article> par <div> #}
+<div style="background: var(--surface, #ffffff); padding: 2.5rem; border-radius: 12px; border: 1px solid var(--border, #d1d5db); max-width: 900px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
   
   {# En-tête de la fiche #}
-  <header style="border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+  <header style="border-bottom: 1px solid var(--border, #d1d5db); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
     <div>
       <h1 style="font-size: 2.2rem; color: #818cf8; margin: 0 0 0.5rem 0;">
         {{ entreprise.nom }}
@@ -37,21 +38,21 @@
       {# AFFICHAGE DE LA NOTE MOYENNE #}
       <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
           <span style="color: #fbbf24; font-size: 1.4rem;">★</span>
-          <strong style="font-size: 1.2rem; color: var(--text-main);">
+          <strong style="font-size: 1.2rem; color: var(--text-main, #1f2937);">
               {{ entreprise.note_moyenne|default('0.0') }} / 5
           </strong>
-          <span style="color: var(--text-muted); font-size: 0.9rem;">
+          <span style="color: var(--text-muted, #6b7280); font-size: 0.9rem;">
               (basé sur les avis étudiants)
           </span>
       </div>
 
-      <p style="color: var(--text-muted); margin: 0;">
-        <strong>📧 Contact :</strong> {{ entreprise.email_contact|default('Non renseigné') }}
+      <p style="color: var(--text-muted, #6b7280); margin: 0;">
+        <strong> Contact :</strong> {{ entreprise.email_contact|default('Non renseigné') }}
       </p>
     </div>
 
     <div style="text-align: right;">
-      <span style="background: rgba(129, 140, 248, 0.1); color: var(--accent-blue); padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
+      <span style="background: rgba(129, 140, 248, 0.1); color: var(--accent-blue, #2563eb); padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">
         ID #{{ entreprise.id }}
       </span>
     </div>
@@ -60,19 +61,19 @@
   {# Grille d'infos #}
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
     <div>
-      <h3 style="color: var(--accent-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">📞 Téléphone</h3>
-      <p style="font-size: 1.1rem;">{{ entreprise.telephone_contact|default('Non renseigné') }}</p>
+      <h3 style="color: var(--accent-blue, #2563eb); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">📞 Téléphone</h3>
+      <p style="font-size: 1.1rem; color: var(--text-main, #1f2937);">{{ entreprise.telephone_contact|default('Non renseigné') }}</p>
     </div>
     <div>
-      <h3 style="color: var(--accent-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">💼 Opportunités</h3>
-      <p style="font-size: 1.1rem; font-weight: 600;">{{ entreprise.nb_offres|default(0) }} offre(s) publiée(s)</p>
+      <h3 style="color: var(--accent-blue, #2563eb); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">💼 Opportunités</h3>
+      <p style="font-size: 1.1rem; font-weight: 600; color: var(--text-main, #1f2937);">{{ entreprise.nb_offres|default(0) }} offre(s) publiée(s)</p>
     </div>
   </div>
 
   {# Description #}
-  <div style="line-height: 1.8; background: var(--background); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 2rem;">
-    <h3 style="color: var(--text-main); margin-top: 0; margin-bottom: 1rem; font-size: 1.2rem;">À propos de l'entreprise</h3>
-    <p style="color: var(--text-muted); margin: 0;">
+  <div style="line-height: 1.8; background: #f9fafb; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border, #d1d5db); margin-bottom: 2rem;">
+    <h3 style="color: var(--text-main, #1f2937); margin-top: 0; margin-bottom: 1rem; font-size: 1.2rem;">À propos de l'entreprise</h3>
+    <p style="color: var(--text-muted, #6b7280); margin: 0;">
       {{ entreprise.description|default('Aucune description disponible.')|nl2br }}
     </p>
   </div>
@@ -87,32 +88,33 @@
             <p style="margin: 0; color: #b45309; font-size: 0.9rem;">Aidez vos camarades en notant votre expérience dans cette entreprise.</p>
         </div>
         <a href="index.php?page=entreprise-evaluate&id={{ entreprise.id }}" class="btn-cta" style="background: #f59e0b; padding: 0.8rem 1.5rem; font-size: 0.9rem; text-decoration: none; border-radius: 6px; color: white; font-weight: 600;">
-            ⭐ Évaluer l'entreprise
+             Évaluer l'entreprise
         </a>
     </div>
   {% endif %}
 
   {# --- SECTION DES AVIS ÉTUDIANTS --- #}
-  <section style="margin-top: 4rem; border-top: 2px solid var(--border); padding-top: 2rem;">
-      <h2 style="color: var(--text-main); margin-bottom: 20px;">
+  {# CORRECTION : Remplacement de <section> par <div> #}
+  <div style="margin-top: 4rem; border-top: 2px solid var(--border, #d1d5db); padding-top: 2rem;">
+      <h2 style="color: var(--text-main, #1f2937); margin-bottom: 20px;">
           Avis des étudiants ({{ evaluations|length }})
       </h2>
 
       {% if evaluations is empty %}
-          <p style="color: var(--text-muted); font-style: italic;">Aucun commentaire pour le moment. Soyez le premier à donner votre avis !</p>
+          <p style="color: var(--text-muted, #6b7280); font-style: italic;">Aucun commentaire pour le moment. Soyez le premier à donner votre avis !</p>
       {% else %}
           <div style="display: flex; flex-direction: column; gap: 1.5rem;">
               {% for eval in evaluations %}
-                  <div style="background: var(--background); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                  <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border, #d1d5db);">
                       <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                          <strong style="color: var(--accent-blue);">{{ eval.prenom }} {{ eval.nom|first }}.</strong>
+                          <strong style="color: var(--accent-blue, #2563eb);">{{ eval.prenom }} {{ eval.nom|first }}.</strong>
                           <span style="color: #fbbf24;">
                               {% for i in 1..5 %}
                                   {{ i <= eval.note ? '★' : '☆' }}
                               {% endfor %}
                           </span>
                       </div>
-                      <p style="margin: 0; color: var(--text-muted); line-height: 1.6;">
+                      <p style="margin: 0; color: var(--text-muted, #6b7280); line-height: 1.6;">
                           {{ eval.commentaire|default('L\'étudiant n\'a pas laissé de commentaire écrit.')|nl2br }}
                       </p>
                       <small style="display: block; margin-top: 10px; color: #9ca3af; font-size: 0.8rem;">
@@ -122,17 +124,17 @@
               {% endfor %}
           </div>
       {% endif %}
-  </section>
+  </div>
 
   {# Liens de navigation #}
   <div style="margin-top: 2.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-    <a href="index.php?page=entreprises" style="color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem;">&larr; Retour à l'annuaire</a>
+    <a href="index.php?page=entreprises" style="color: var(--accent-blue, #2563eb); text-decoration: none; font-weight: 600; font-size: 0.9rem;">&larr; Retour à l'annuaire</a>
     {% if entreprise.nb_offres > 0 %}
         <a href="index.php?page=offres&entreprise={{ entreprise.nom|url_encode }}" class="btn-cta" style="background: #2563eb; color: white; padding: 0.6rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.8rem;">Voir ses offres</a>
     {% endif %}
   </div>
 
-  {# Zone Admin (Correction : Couleurs forcées pour la visibilité) #}
+  {# Zone Admin #}
   {% if session.user and userRole in ['admin', 'pilote'] %}
     <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed #ccc; display: flex; gap: 1rem; flex-wrap: wrap;">
       <a href="index.php?page=entreprise-edit&id={{ entreprise.id }}" 
@@ -141,7 +143,8 @@
         Modifier la fiche
       </a>
 
-      <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Supprimer définitivement cette entreprise ?');" style="display: inline;">
+      {# CORRECTION : Nettoyage du <form> pour qu'il soit transparent et n'ait plus de carrés parasites #}
+      <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Supprimer définitivement cette entreprise ?');" style="display: inline; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
         <input type="hidden" name="id" value="{{ entreprise.id }}">
         <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">
           Supprimer l'entreprise
@@ -149,5 +152,5 @@
       </form>
     </div>
   {% endif %}
-</article>
+</div>
 {% endblock %}

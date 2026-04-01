@@ -189,7 +189,7 @@ case 'entreprise-save-eval':
 
     // --- PAGES LÉGALES ---
     case 'mentions':
-        echo $twig->render('mentions_legales.html.twig');
+        echo $twig->render('layout/mentions.html.twig');
         break;
 
         // --- RECHERCHE GLOBALE ---

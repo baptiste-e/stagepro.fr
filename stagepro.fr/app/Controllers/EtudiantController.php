@@ -2,6 +2,8 @@
 // app/Controllers/EtudiantController.php
 require_once __DIR__ . '/../Models/Utilisateur.php';
 require_once __DIR__ . '/../Models/Role.php';
+// CORRECTION : Ajout de l'import du modèle Candidature pour l'affichage du profil
+require_once __DIR__ . '/../Models/Candidature.php';
 
 class EtudiantController {
     private $model;
@@ -34,9 +36,10 @@ class EtudiantController {
     }
 
     /**
-     * Affiche le profil détaillé d'un étudiant
+     * Affiche le profil détaillé d'un étudiant avec ses candidatures
      */
     public function show($id) {
+        // 1. Récupération des informations de l'étudiant
         $etudiant = $this->model->findById((int)$id);
 
         if (!$etudiant) {
@@ -44,8 +47,14 @@ class EtudiantController {
             exit;
         }
 
+        // 2. CORRECTION : Récupération des candidatures liées à cet étudiant
+        $candidatureModel = new Candidature();
+        $candidatures = $candidatureModel->findByEtudiant((int)$id);
+
+        // 3. Envoi des données à la vue
         echo $this->twig->render('etudiants/detail.html.twig', [
             'etudiant' => $etudiant,
+            'candidatures' => $candidatures, // Variable désormais disponible pour la boucle Twig
             'titre_page' => "Profil de " . $etudiant['nom'] . " | StagePro"
         ]);
     }
@@ -94,7 +103,7 @@ class EtudiantController {
     }
 
     /**
-     * Sauvegarde (Create ou Update)
+     * Sauvegarde (Création ou Mise à jour)
      */
     public function save() {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
@@ -108,10 +117,10 @@ class EtudiantController {
 
         $id = (int)($_POST['id'] ?? 0);
 
-        // Récupération dynamique du rôle depuis le modèle Role
+        // Récupération du rôle étudiant pour l'ID de rôle correct
         $roleEtudiant = $this->roleModel->findByNom('etudiant');
         if (!$roleEtudiant) {
-            die("Erreur critique : Le rôle 'etudiant' n'existe pas en base de données.");
+            die("Erreur critique : Le rôle 'etudiant' n'existe pas.");
         }
 
         $data = [
@@ -121,11 +130,11 @@ class EtudiantController {
             'role_id' => (int)$roleEtudiant['id']
         ];
 
-        // Gestion du mot de passe (si fourni ou nouveau compte)
+        // Hachage du mot de passe
         if (!empty($_POST['password'])) {
             $data['mot_de_passe'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         } elseif ($id === 0) {
-            // Mot de passe par défaut pour les nouveaux comptes
+            // Mot de passe par défaut pour les nouveaux arrivants
             $data['mot_de_passe'] = password_hash('Cesi2026!', PASSWORD_DEFAULT);
         }
 
@@ -140,7 +149,7 @@ class EtudiantController {
     }
 
     /**
-     * Suppression d'un étudiant (via POST uniquement)
+     * Suppression d'un compte étudiant
      */
     public function delete() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;

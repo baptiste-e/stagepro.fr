@@ -1,54 +1,59 @@
 {% extends "layout.html.twig" %}
 
-{% block title %}Profil Pilote - {{ pilote.prenom }} {{ pilote.nom }} | StagePro{% endblock %}
+{# Normalisation du rôle pour la sécurité de l'interface #}
+{% set userRole = session.user.role_nom|default(session.user.role)|lower|trim %}
+
+{% block title %}Profil de {{ pilote.prenom }} {{ pilote.nom }} | StagePro{% endblock %}
 
 {% block content %}
 {# Fil d’ariane #}
 <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
-    <a href="index.php?page=home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
-    <a href="index.php?page=pilotes" style="color: var(--accent-blue); text-decoration: none;">Pilotes</a> &gt;
-    <span style="color: var(--text-muted);">Détail pilote</span>
+    <a href="index.php?page=home" style="color: var(--accent, #2563eb); text-decoration: none;">Accueil</a> &gt;
+    <a href="index.php?page=pilotes" style="color: var(--accent, #2563eb); text-decoration: none;">Pilotes</a> &gt;
+    <span style="color: var(--text-muted, #6b7280);">Détail profil</span>
   </p>
 </nav>
 
 <div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 2rem; align-items: start;">
-  
-  {# --- COLONNE GAUCHE : INFOS PROFIL --- #}
+
+  {# Colonne de gauche : Carte d'identité #}
   <aside>
-    <section style="background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+    <div style="background: #ffffff; border: 1px solid var(--border, #d1d5db); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
       <div style="text-align: center; margin-bottom: 1.5rem;">
-        {# Avatar généré avec les initiales #}
-        <div style="width: 80px; height: 80px; background: var(--accent-blue); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white;">
+        <div style="width: 80px; height: 80px; background: #9333ea; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white;">
           {{ pilote.prenom|slice(0,1)|upper }}{{ pilote.nom|slice(0,1)|upper }}
         </div>
-        <h2 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.25rem;">{{ pilote.prenom }} {{ pilote.nom }}</h2>
-        <p style="font-size: 0.75rem; color: var(--accent-purple); font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em;">Pilote de Promotion</p>
+        <h2 style="font-size: 1.25rem; color: var(--text-main, #1f2937); margin-bottom: 0.25rem;">
+            {{ pilote.prenom }} {{ pilote.nom }}
+        </h2>
+        <p style="font-size: 0.75rem; color: #9333ea; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em;">Pilote</p>
       </div>
 
-      <ul style="list-style: none; font-size: 0.9rem; line-height: 1.8; padding: 0; margin: 0;">
+      <ul style="list-style: none; font-size: 0.9rem; line-height: 1.8; padding: 0; margin: 0; color: var(--text-main, #1f2937);">
         <li style="margin-bottom: 1rem;">
-            <strong style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Email</strong><br>
-            <span style="word-break: break-all;">{{ pilote.email }}</span>
+            <strong style="color: var(--text-muted, #6b7280); font-size: 0.75rem; text-transform: uppercase;">Email</strong><br>
+            <span style="word-break: break-all;">{{ pilote.email|default('Non renseigné') }}</span>
         </li>
         <li style="margin-bottom: 1rem;">
-            <strong style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Centre</strong><br>
+            <strong style="color: var(--text-muted, #6b7280); font-size: 0.75rem; text-transform: uppercase;">Centre</strong><br>
             {{ pilote.centre_nom|default('Non assigné') }}
         </li>
         <li>
-            <strong style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Compte créé le</strong><br>
+            <strong style="color: var(--text-muted, #6b7280); font-size: 0.75rem; text-transform: uppercase;">Compte créé le</strong><br>
             {{ pilote.created_at ? pilote.created_at|date("d/m/Y à H:i") : 'Non renseignée' }}
         </li>
       </ul>
 
-      {# --- ACTIONS ADMIN --- #}
-      {% if session.user and session.user.role == 'admin' %}
-      <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-        <a href="index.php?page=pilote-edit&id={{ pilote.id }}" class="btn-cta" style="display: block; text-align: center; margin-bottom: 0.7rem; font-size: 0.85rem; text-decoration: none; padding: 0.7rem;">
+      {# Actions réservées uniquement à l'Admin pour la gestion des pilotes #}
+      {% if userRole == 'admin' %}
+      <div style="margin-top: 2rem; border-top: 1px solid var(--border, #d1d5db); padding-top: 1.5rem;">
+        <a href="index.php?page=pilote-edit&id={{ pilote.id }}" 
+           style="display: block; text-align: center; margin-bottom: 0.7rem; font-size: 0.85rem; text-decoration: none; background: #1e293b; color: white; padding: 0.7rem; border-radius: 6px; font-weight: bold; transition: opacity 0.2s;">
             Modifier le compte
         </a>
-        
-        <form action="index.php?page=pilote-delete" method="post" onsubmit="return confirm('Attention : Cette action supprimera définitivement l\'accès de ce pilote. Confirmer ?');">
+
+        <form action="index.php?page=pilote-delete" method="post" style="margin: 0; padding: 0; border: none; background: transparent;" onsubmit="return confirm('Attention : Cette action est irréversible. Confirmer la suppression de ce pilote ?');">
             <input type="hidden" name="id" value="{{ pilote.id }}">
             <button type="submit" style="width: 100%; background: transparent; border: 1px solid #ef4444; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 0.6rem; border-radius: 6px; font-weight: 600; transition: all 0.2s;">
                 Supprimer le pilote
@@ -56,48 +61,30 @@
         </form>
       </div>
       {% endif %}
-    </section>
+    </div>
   </aside>
 
-  {# --- COLONNE DROITE : ACTIVITÉ --- #}
+  {# Colonne de droite : Activité et Contenu #}
   <div>
-    <section style="background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
-      <h2 style="margin-bottom: 1.5rem; color: var(--text-main); font-size: 1.3rem;">Étudiants rattachés & Candidatures</h2>
-      
-      <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
-          <p style="color: var(--text-muted); grid-column: 1/-1; font-style: italic;">
-              Cette fonctionnalité (liste dynamique des étudiants sous la responsabilité de ce pilote) est en cours de développement.
-          </p>
-          
-          {# Exemple de carte d'activité #}
-          <article class="card etudiant-card" style="position: relative; border: 1px solid var(--border); padding: 1.5rem; border-radius: 12px; transition: transform 0.2s;">
-            <h3 style="font-size: 1.1rem; color: var(--accent-blue); margin-bottom: 0.5rem;">Exemple Étudiant</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">
-                Dernière activité : Postulé à l'offre <strong>Développeur PHP</strong>
-            </p>
-            {# Lien vers la fiche de l'étudiant #}
-            <a href="index.php?page=etudiant-detail&id=1" class="lien-etendu" title="Voir le profil étudiant"></a>
-          </article>
-      </div>
-    </section>
-  </div>
+    <div style="background: #ffffff; border: 1px solid var(--border, #d1d5db); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+      <h2 style="margin-bottom: 1.5rem; color: var(--text-main, #1f2937); font-size: 1.3rem;">Activité / Promotions</h2>
 
+      <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+          <div style="border: 1px solid var(--border, #d1d5db); padding: 1.5rem; border-radius: 8px; background: #f8fafc;">
+            <h3 style="font-size: 1rem; color: #9333ea; margin-bottom: 0.75rem; margin-top: 0;">Promotions assignées</h3>
+            <p style="font-size: 0.85rem; color: var(--text-main, #334155); line-height: 1.6; margin: 0;">
+              Cette section affiche normalement les promotions dont ce pilote a la charge.
+            </p>
+          </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
-.etudiant-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent-blue);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.lien-etendu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+form button[type="submit"]:hover {
+    background: #ef4444 !important;
+    color: #ffffff !important;
 }
 </style>
 {% endblock %}

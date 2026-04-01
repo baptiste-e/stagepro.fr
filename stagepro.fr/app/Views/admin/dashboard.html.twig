@@ -10,24 +10,24 @@
 
 {# Grille des compteurs de statistiques - Données issues de l'AdminController #}
 <div class="container-espaces" style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-    <div class="card" style="border-left: 4px solid var(--accent-blue);">
+    <div class="dashboard-card" style="border-left: 4px solid var(--accent-blue, #2563eb);">
         <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Étudiants</h3>
-        <p style="font-size: 1.8rem; font-weight: bold;">{{ stats.etudiants|default(0)|number_format(0, ',', ' ') }}</p>
+        <p style="font-size: 1.8rem; font-weight: bold; color: var(--text-main);">{{ stats.etudiants|default(0)|number_format(0, ',', ' ') }}</p>
     </div>
     
-    <div class="card" style="border-left: 4px solid var(--accent-purple);">
+    <div class="dashboard-card" style="border-left: 4px solid var(--accent-purple, #9333ea);">
         <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Pilotes</h3>
-        <p style="font-size: 1.8rem; font-weight: bold;">{{ stats.pilotes|default(0)|number_format(0, ',', ' ') }}</p>
+        <p style="font-size: 1.8rem; font-weight: bold; color: var(--text-main);">{{ stats.pilotes|default(0)|number_format(0, ',', ' ') }}</p>
     </div>
     
-    <div class="card" style="border-left: 4px solid #fbbf24;">
+    <div class="dashboard-card" style="border-left: 4px solid #fbbf24;">
         <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Entreprises</h3>
-        <p style="font-size: 1.8rem; font-weight: bold;">{{ stats.entreprises|default(0)|number_format(0, ',', ' ') }}</p>
+        <p style="font-size: 1.8rem; font-weight: bold; color: var(--text-main);">{{ stats.entreprises|default(0)|number_format(0, ',', ' ') }}</p>
     </div>
     
-    <div class="card" style="border-left: 4px solid #4ade80;">
+    <div class="dashboard-card" style="border-left: 4px solid #4ade80;">
         <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Offres Actives</h3>
-        <p style="font-size: 1.8rem; font-weight: bold;">{{ stats.offres|default(0)|number_format(0, ',', ' ') }}</p>
+        <p style="font-size: 1.8rem; font-weight: bold; color: var(--text-main);">{{ stats.offres|default(0)|number_format(0, ',', ' ') }}</p>
     </div>
 </div>
 
@@ -37,36 +37,36 @@
         <h2 style="margin-bottom: 1.5rem;">Actions de gestion</h2>
         <div class="container-espaces" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             
-            <article class="card">
-                <h3>Utilisateurs</h3>
-                <p style="font-size: 0.8rem;">Gérer les comptes Étudiants et Pilotes.</p>
+            <article class="dashboard-card">
+                <h3 style="color: var(--accent-blue, #2563eb); margin-bottom: 0.5rem;">Utilisateurs</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Gérer les comptes Étudiants et Pilotes.</p>
                 <div style="margin-top: 1rem; display: flex; gap: 10px;">
                     <a href="index.php?page=etudiants" class="btn-cta" style="font-size: 0.7rem;">Étudiants</a>
-                    <a href="index.php?page=pilotes" class="btn-cta" style="font-size: 0.7rem; background: var(--accent-purple);">Pilotes</a>
+                    <a href="index.php?page=pilotes" class="btn-cta" style="font-size: 0.7rem; background: var(--accent-purple, #9333ea);">Pilotes</a>
                 </div>
             </article>
 
-            <article class="card">
-                <h3>Entreprises</h3>
-                <p style="font-size: 0.8rem;">Valider les nouveaux partenaires ou éditer les fiches.</p>
+            <article class="dashboard-card">
+                <h3 style="color: var(--accent-blue, #2563eb); margin-bottom: 0.5rem;">Entreprises</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Valider les nouveaux partenaires ou éditer les fiches.</p>
                 <div style="margin-top: 1rem;">
                     <a href="index.php?page=entreprises" class="btn-cta" style="font-size: 0.7rem;">Gérer le catalogue</a>
                 </div>
             </article>
 
-            <article class="card">
-                <h3>Offres de stage</h3>
-                <p style="font-size: 0.8rem;">Modération des offres et suivi des statistiques.</p>
+            <article class="dashboard-card">
+                <h3 style="color: var(--accent-blue, #2563eb); margin-bottom: 0.5rem;">Offres de stage</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Modération des offres et suivi des statistiques.</p>
                 <div style="margin-top: 1rem;">
                     <a href="index.php?page=offres" class="btn-cta" style="font-size: 0.7rem;">Modérer</a>
                 </div>
             </article>
 
-            <article class="card">
-                <h3>Maintenance</h3>
-                <p style="font-size: 0.8rem;">Sauvegarde de la base de données et logs système.</p>
+            <article class="dashboard-card">
+                <h3 style="color: var(--accent-blue, #2563eb); margin-bottom: 0.5rem;">Maintenance</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Sauvegarde de la base de données et logs système.</p>
                 <div style="margin-top: 1rem;">
-                    <button type="button" style="font-size: 0.7rem; padding: 5px 10px; background: #ff4444; color: white; border:none; cursor:pointer; border-radius:4px;">Backup DB</button>
+                    <button type="button" style="font-size: 0.7rem; padding: 8px 12px; background: #ef4444; color: white; border:none; cursor:pointer; border-radius:6px; font-weight: bold;">Backup DB</button>
                 </div>
             </article>
             
@@ -74,18 +74,41 @@
     </section>
 
     {# Colonne de droite : Alertes (Simulation de flux dynamique) #}
-    <aside style="background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
-        <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent-blue);">Dernières alertes</h2>
+    <aside style="background: #ffffff; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+        <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-main);">Dernières alertes</h2>
         <ul style="list-style: none; font-size: 0.85rem; line-height: 1.6; padding: 0;">
-            <li style="margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
-                <span style="color: #f87171;">●</span> <strong>Nouvelle Entreprise</strong> à valider : <em>CyberSoft</em>
+            <li style="margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border);">
+                <span style="color: #ef4444; margin-right: 5px;">●</span> <strong style="color: var(--text-main);">Nouvelle Entreprise</strong> à valider : <em>CyberSoft</em>
                 <br><small style="color: var(--text-muted);">Il y a 12 min</small>
             </li>
             <li>
-                <span style="color: #4ade80;">●</span> Backup auto effectué avec succès.
+                <span style="color: #22c55e; margin-right: 5px;">●</span> <span style="color: var(--text-main);">Backup auto effectué avec succès.</span>
                 <br><small style="color: var(--text-muted);">Ce matin à 04:00</small>
             </li>
         </ul>
     </aside>
 </div>
+
+<style>
+/* --- Styles spécifiques au Dashboard --- */
+.dashboard-card {
+    background: #ffffff;
+    border: 1px solid var(--border, #d1d5db);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h3 {
+    margin: 0;
+}
+</style>
 {% endblock %}

@@ -22,17 +22,19 @@
   
   <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
     {% for p in pilotes %}
-        <article class="card pilote-card">
-          <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem;">
+        
+        {# CORRECTION : On retire "card" et on garde uniquement "pilote-card" #}
+        <article class="pilote-card">
+          <h3 style="color: var(--accent, #2563eb); margin-bottom: 0.5rem;">
             {{ p.prenom }} {{ p.nom }}
           </h3>
           
-          <p style="margin-bottom: 0.5rem; font-size: 0.95rem;">
+          <p style="margin-bottom: 0.5rem; font-size: 0.95rem; color: var(--text-main);">
             <strong>Email :</strong> {{ p.email }}
           </p>
           
           {# On réintègre la date de création issue de la version PHP pour un meilleur suivi #}
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: auto;">
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: auto; padding-top: 1rem;">
             <strong>Compte créé le :</strong><br>
             {{ p.created_at ? p.created_at|date("d/m/Y à H:i") : 'Non renseignée' }}
           </p>
@@ -50,18 +52,22 @@
 </section>
 
 <style>
-/* Animation et styles spécifiques pour les cartes pilotes */
+/* CORRECTION : On intègre les styles de base de la carte directement ici */
 .pilote-card {
     position: relative; 
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
     min-height: 180px;
+    background: #ffffff; /* Fond bien blanc */
+    border: 1px solid var(--border); /* Bordure discrète */
+    border-radius: 12px; /* Bords arrondis */
+    padding: 1.5rem; /* Espace à l'intérieur */
 }
 
 .pilote-card:hover {
     transform: translateY(-5px);
-    border-color: var(--accent-blue);
+    border-color: var(--accent, #2563eb);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 

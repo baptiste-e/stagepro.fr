@@ -13,7 +13,7 @@
     <p style="color: var(--text-muted);">
         {{ is_management 
             ? "Retrouvez ici l’ensemble des candidatures déposées sur la plateforme." 
-            : "Retrouvez ici les offres auxquelles vous avez postulé et le détail de vos dossiers envoyés." 
+            : "Retrouvez ici les offres auxquelles vous avez postulé et le détail de vos dossiers envoyés."
         }}
     </p>
 </section>
@@ -39,9 +39,10 @@
                     {% set badge = { 'label': 'Refusée', 'bg': '#fee2e2', 'color': '#991b1b' } %}
                 {% endif %}
 
-                <article class="card candidature-card">
+                {# CORRECTION : On a retiré "card" et on garde uniquement "candidature-card" #}
+                <article class="candidature-card">
                     <div style="display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1rem;">
-                        <h3 style="color: var(--accent-blue); margin: 0; font-size: 1.2rem;">
+                        <h3 style="color: var(--accent); margin: 0; font-size: 1.2rem;">
                             {{ c.offre_titre }}
                         </h3>
                         <span style="background: {{ badge.bg }}; color: {{ badge.color }}; padding: 4px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; white-space: nowrap;">
@@ -49,22 +50,22 @@
                         </span>
                     </div>
 
-                    <div style="font-size: 0.95rem; line-height: 1.6;">
-                        <p style="margin: 0;"><strong>🏢 Entreprise :</strong> {{ c.entreprise_nom }}</p>
+                    <div style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main);">
+                        <p style="margin: 0;"><strong> Entreprise :</strong> {{ c.entreprise_nom }}</p>
                         
                         {# Affichage du nom du candidat uniquement pour Admin/Pilote #}
                         {% if is_management %}
                             <p style="margin: 0.5rem 0 0 0;">
-                                <strong>👤 Candidat :</strong> {{ c.etudiant_prenom }} {{ c.etudiant_nom }}
+                                <strong> Candidat :</strong> {{ c.etudiant_prenom }} {{ c.etudiant_nom }}
                             </p>
                         {% endif %}
                     </div>
 
-                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2;">
                         <span style="font-size: 0.8rem; color: var(--text-muted);">
-                            📅 {{ c.created_at|date("d/m/Y à H:i") }}
+                             {{ c.created_at|date("d/m/Y à H:i") }}
                         </span>
-                        <span style="font-size: 0.8rem; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">
+                        <span style="font-size: 0.8rem; font-weight: bold; color: var(--accent); text-transform: uppercase;">
                             Détails &rarr;
                         </span>
                     </div>
@@ -84,15 +85,17 @@
     border: 1px solid var(--border); 
     padding: 1.5rem; 
     border-radius: 12px; 
-    background: var(--surface);
+    background: #ffffff; /* Forcé au blanc pur */
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
 }
 
 .candidature-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    border-color: var(--accent-blue);
+    border-color: var(--accent);
 }
 
 .lien-etendu {
