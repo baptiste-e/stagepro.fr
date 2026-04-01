@@ -3,7 +3,7 @@
 {% block title %}Détail Candidature - {{ candidature.offre_titre }} | StagePro{% endblock %}
 
 {% block content %}
-{# Logique pour le badge de statut (Fusionnée depuis la version PHP) #}
+{# Logique pour le badge de statut #}
 {% set badge = { 'label': 'En attente', 'bg': '#fef3c7', 'color': '#92400e' } %}
 {% if candidature.statut == 'acceptee' %}
     {% set badge = { 'label': 'Acceptée', 'bg': '#dcfce7', 'color': '#166534' } %}
@@ -20,7 +20,7 @@
 
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start;">
 
-        {# CORRECTION : Remplacement de <article> par <div> #}
+        {# COLONNE PRINCIPALE #}
         <div>
             <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem;">
                 <div>
@@ -33,7 +33,7 @@
                 </span>
             </div>
 
-            {# CORRECTION : Remplacement de <section> par <div> #}
+            {# Dossier Candidat #}
             <div style="background: #ffffff; padding: 2.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
                 <h2 style="font-size: 1.4rem; margin-bottom: 2rem; color: #1e293b; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.8rem;">
                     {{ session.user.role == 'etudiant' ? 'Mon Dossier de Candidature' : 'Dossier du Candidat' }}
@@ -70,7 +70,7 @@
                 {% endif %}
             </div>
 
-            {# CORRECTION : Remplacement de <section> par <div> #}
+            {# Rappel offre #}
             <div style="margin-top: 3.5rem;">
                 <h3 style="color: #94a3b8; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem;">Rappel de la description du poste</h3>
                 <div style="line-height: 1.8; color: #334155; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 2rem;">
@@ -79,6 +79,7 @@
             </div>
         </div>
 
+        {# BARRE LATÉRALE #}
         <aside style="position: sticky; top: 2rem;">
             <div style="background: #ffffff; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
                 <h3 style="font-size: 0.875rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Informations Offre</h3>
@@ -93,7 +94,6 @@
                 <div style="background: #ffffff; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
                     <h3 style="font-size: 0.875rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Mettre à jour le statut</h3>
 
-                    {# CORRECTION : Neutralisation du style de form #}
                     <form action="index.php?page=candidature-update-status&id={{ candidature.id }}" method="post" style="margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
                         <select name="statut" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 1rem; background: white; color: #1e293b;">
                             <option value="en_attente" {{ candidature.statut == 'en_attente' ? 'selected' : '' }}>En attente</option>

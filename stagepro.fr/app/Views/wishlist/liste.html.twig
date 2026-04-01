@@ -3,36 +3,35 @@
 {% block title %}Ma Wish-list | StagePro{% endblock %}
 
 {% block content %}
-{# Fil d'Ariane #}
-<nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
+{# Fil d'Ariane - Remplacement de <nav> par une div pour la cohérence #}
+<div aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
-    <a href="index.php?page=home" style="color: var(--accent-blue, #2563eb); text-decoration: none;">Accueil</a> &gt;
+    <a href="index.php?page=home" style="color: var(--accent, #2563eb); text-decoration: none;">Accueil</a> &gt;
     <span style="color: var(--text-muted, #6b7280);">Ma wish-list</span>
   </p>
-</nav>
+</div>
 
-<section>
+<div>
     {# Vérification si la liste est vide #}
     {% if wishlist is empty %}
-        <div style="background: var(--surface); padding: 4rem 2rem; border-radius: 12px; border: 1px dashed var(--border); text-align: center;">
-            <div style="font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.5;"></div>
-            <h1 style="margin-bottom: 1rem;">Votre wish-list est vide</h1>
-            <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem;">Vous n'avez pas encore enregistré d'offres en favoris.</p>
+        <div style="background: #ffffff; padding: 4rem 2rem; border-radius: 12px; border: 1px dashed var(--border, #d1d5db); text-align: center;">
+            <h1 style="margin-bottom: 1rem; color: #1f2937;">Votre wish-list est vide</h1>
+            <p style="color: var(--text-muted, #6b7280); margin-bottom: 2rem; font-size: 1.1rem;">Vous n'avez pas encore enregistré d'offres en favoris.</p>
             <a href="index.php?page=offres" class="btn-cta" style="padding: 0.8rem 2rem; text-decoration: none;">Explorer les offres</a>
         </div>
     {% else %}
-        <h1 style="margin-bottom: 2rem;">Ma wish-list</h1>
+        <h1 style="margin-bottom: 2rem; color: #1f2937;">Ma wish-list</h1>
         
         {# Grille des favoris #}
         <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
             {% for item in wishlist %}
                 
-                {# CORRECTION 1 : On supprime la classe "card" qui créait le bug de clic et de couleur grise #}
-                <article class="wishlist-card" style="display: flex; flex-direction: column; justify-content: space-between; background: var(--surface, #ffffff); border: 1px solid var(--border, #d1d5db); padding: 1.5rem; border-radius: 12px; transition: transform 0.2s;">
+                {# CORRECTION : Remplacement de <article> par <div> pour éviter le fond gris parasite #}
+                <div class="wishlist-card">
                     
                     <div>
-                        <h3 style="color: var(--accent-blue, #2563eb); margin-bottom: 0.5rem; font-size: 1.2rem;">{{ item.titre }}</h3>
-                        <p style="margin-bottom: 0.5rem; color: var(--text-main, #1f2937);"><strong> Entreprise :</strong> {{ item.entreprise_nom }}</p>
+                        <h3 style="color: var(--accent, #2563eb); margin-bottom: 0.5rem; font-size: 1.2rem;">{{ item.titre }}</h3>
+                        <p style="margin-bottom: 0.5rem; color: #1f2937;"><strong> Entreprise :</strong> {{ item.entreprise_nom }}</p>
                         
                         {# Affichage de la date d'ajout #}
                         {% if item.wishlist_created_at %}
@@ -50,36 +49,53 @@
                             Voir l'offre
                         </a>
                         
-                        {# CORRECTION 2 : On reset les styles du <form> pour qu'il ne prenne pas le design des gros formulaires du CSS global #}
-                        <form action="index.php?page=wishlist-remove" method="post" style="margin: 0; padding: 0; background: transparent; border: none;" onsubmit="return confirm('Retirer cette offre de vos favoris ?');">
+                        {# CORRECTION : Neutralisation du style global de <form> #}
+                        <form action="index.php?page=wishlist-remove" method="post" style="margin: 0; padding: 0; background: transparent; border: none; box-shadow: none;" onsubmit="return confirm('Retirer cette offre de vos favoris ?');">
                             <input type="hidden" name="id_offre" value="{{ item.id }}">
-                            <button type="submit" style="background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 0.6rem 1rem; font-size: 0.8rem; cursor: pointer; border-radius: 6px; font-weight: 700; transition: all 0.2s;">
+                            <button type="submit" class="btn-remove">
                                 Retirer
                             </button>
                         </form>
                         
                     </div>
-                </article>
+                </div>
             {% endfor %}
         </div>
     {% endif %}
-</section>
+</div>
 
 <style>
 .wishlist-card {
-    height: auto !important; 
-    min-height: 250px !important;
-    overflow: visible !important;
-    position: relative; /* Sécurise l'empilement */
-    z-index: 10;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    background: #ffffff !important; /* Force le fond blanc */
+    border: 1px solid var(--border, #d1d5db); 
+    padding: 1.5rem; 
+    border-radius: 12px; 
+    transition: all 0.25s ease;
+    min-height: 220px;
 }
+
 .wishlist-card:hover {
     transform: translateY(-5px);
-    border-color: #2563eb !important; /* Utilisation de la couleur brute pour s'assurer que le hover marche */
+    border-color: #2563eb !important;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
-/* Ajout d'un petit effet au survol du bouton supprimer */
-.wishlist-card form button:hover {
+
+.btn-remove {
+    background: transparent; 
+    border: 1px solid #ef4444; 
+    color: #ef4444; 
+    padding: 0.6rem 1rem; 
+    font-size: 0.8rem; 
+    cursor: pointer; 
+    border-radius: 6px; 
+    font-weight: 700; 
+    transition: all 0.2s;
+}
+
+.btn-remove:hover {
     background: #ef4444 !important;
     color: #ffffff !important;
 }

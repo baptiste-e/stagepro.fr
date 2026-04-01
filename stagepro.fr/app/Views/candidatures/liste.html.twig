@@ -18,9 +18,9 @@
     </p>
 </section>
 
-<section style="margin-top: 2rem;">
+<div style="margin-top: 2rem;">
     {% if candidatures is empty %}
-        <div style="background: var(--surface); padding: 3rem; border-radius: 12px; text-align: center; border: 1px solid var(--border);">
+        <div style="background: #ffffff; padding: 3rem; border-radius: 12px; text-align: center; border: 1px solid var(--border);">
             <p style="font-size: 1.1rem; color: var(--text-muted);">Aucune candidature trouvée.</p>
             {% if not is_management %}
                 <a href="index.php?page=offres" class="btn-cta" style="display: inline-block; margin-top: 1rem; text-decoration: none;">
@@ -39,8 +39,8 @@
                     {% set badge = { 'label': 'Refusée', 'bg': '#fee2e2', 'color': '#991b1b' } %}
                 {% endif %}
 
-                {# CORRECTION : On a retiré "card" et on garde uniquement "candidature-card" #}
-                <article class="candidature-card">
+                {# Remplacement de article par div pour éviter les styles gris parasites #}
+                <div class="candidature-card">
                     <div style="display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1rem;">
                         <h3 style="color: var(--accent); margin: 0; font-size: 1.2rem;">
                             {{ c.offre_titre }}
@@ -72,11 +72,11 @@
 
                     {# Lien étendu pour rendre toute la carte cliquable #}
                     <a href="index.php?page=candidature-detail&id={{ c.id }}" class="lien-etendu" title="Voir les détails"></a>
-                </article>
+                </div>
             {% endfor %}
         </div>
     {% endif %}
-</section>
+</div>
 
 <style>
 .candidature-card {
@@ -85,7 +85,7 @@
     border: 1px solid var(--border); 
     padding: 1.5rem; 
     border-radius: 12px; 
-    background: #ffffff; /* Forcé au blanc pur */
+    background: #ffffff; /* Fond blanc forcé */
     display: flex;
     flex-direction: column;
     justify-content: space-between;

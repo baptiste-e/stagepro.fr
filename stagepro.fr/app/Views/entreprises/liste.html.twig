@@ -3,11 +3,12 @@
 {% block title %}Annuaire des entreprises | StagePro{% endblock %}
 
 {% block content %}
-<section>
+{# Utilisation de <div> au lieu de <section> pour éviter les marges forcées du CSS global #}
+<div style="margin-bottom: 3rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
         <div>
             <h1>Annuaire des entreprises</h1>
-            <p style="color: var(--text-muted);">Trouvez votre futur lieu de stage parmi nos partenaires.</p>
+            <p style="color: var(--text-muted, #64748b);">Trouvez votre futur lieu de stage parmi nos partenaires.</p>
         </div>
 
         {# Restriction d'accès : Admin et Pilote uniquement #}
@@ -15,67 +16,80 @@
             <a href="index.php?page=entreprise-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer une entreprise</a>
         {% endif %}
     </div>
-</section>
+</div>
 
-<section style="margin-top: 3rem;">
-    <h2>Entreprises partenaires</h2>
+<div style="margin-top: 3rem;">
+    <h2 style="margin-bottom: 1.5rem;">Entreprises partenaires</h2>
 
-    <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+    <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
         {% for entreprise in entreprises %}
             
-            {# CORRECTION : Remplacement de class="card" par class="entreprise-card" + ajout d'un fond blanc pur #}
-            <article class="entreprise-card" style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; position: relative; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s ease;">
+            {# CORRECTION : Remplacement de <article> par <div> pour éviter le fond gris parasite #}
+            <div class="entreprise-card">
                 
                 <div>
-                    <h3 style="color: var(--accent-blue); margin-bottom: 1rem;">
+                    <h3 style="color: var(--accent, #2563eb); margin-bottom: 1rem; font-size: 1.3rem;">
                         {{ entreprise.nom }}
                     </h3>
 
-                    <p style="line-height: 1.6; color: var(--text-main); margin-bottom: 1rem; font-size: 0.95rem;">
+                    <p style="line-height: 1.6; color: var(--text-main, #1e293b); margin-bottom: 1rem; font-size: 0.95rem;">
                         {# Troncation intelligente de la description #}
                         {% set desc = entreprise.description|default('Aucune description disponible.') %}
                         {{ desc|length > 150 ? desc|slice(0, 150) ~ '...' : desc }}
                     </p>
 
-                    <div style="font-size: 0.9rem;">
+                    <div style="font-size: 0.9rem; color: var(--text-main, #1e293b);">
                         {% if entreprise.email_contact %}
-                            <p style="margin-bottom: 0.4rem; color: var(--text-main);">
-                                <strong> Email :</strong> {{ entreprise.email_contact }}
+                            <p style="margin-bottom: 0.4rem;">
+                                <strong>Email :</strong> {{ entreprise.email_contact }}
                             </p>
                         {% endif %}
 
                         {% if entreprise.telephone_contact %}
-                            <p style="margin-bottom: 0.4rem; color: var(--text-main);">
-                                <strong> Tel :</strong> {{ entreprise.telephone_contact }}
+                            <p style="margin-bottom: 0.4rem;">
+                                <strong>Tel :</strong> {{ entreprise.telephone_contact }}
                             </p>
                         {% endif %}
                     </div>
 
-                    <p style="color: var(--text-muted); margin-top: 1rem; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <p style="color: var(--text-muted, #64748b); margin-top: 1rem; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">
                         Nombre d’offres : {{ entreprise.nb_offres|default(0) }}
                     </p>
                 </div>
 
-                <div style="margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border); position: relative; z-index: 2;">
-                    <span style="color: var(--accent-blue); font-weight: 600; font-size: 0.9rem;">Voir la fiche →</span>
+                <div style="margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border, #e2e8f0); position: relative; z-index: 2;">
+                    <span style="color: var(--accent, #2563eb); font-weight: 600; font-size: 0.9rem;">Voir la fiche →</span>
                 </div>
 
                 {# Lien invisible qui rend toute la carte cliquable #}
                 <a href="index.php?page=entreprise-detail&id={{ entreprise.id }}" class="lien-etendu" title="Voir la fiche de {{ entreprise.nom }}"></a>
-            </article>
+            </div>
         {% else %}
-            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: var(--surface); border-radius: 8px; border: 1px dashed var(--border);">
-                <p style="color: var(--text-muted);">Aucune entreprise trouvée dans l'annuaire.</p>
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #ffffff; border-radius: 12px; border: 1px dashed var(--border, #cbd5e1);">
+                <p style="color: var(--text-muted, #64748b);">Aucune entreprise trouvée dans l'annuaire.</p>
             </div>
         {% endfor %}
     </div>
-</section>
+</div>
 
 <style>
-/* Animation au survol propre à la carte entreprise */
+/* Style spécifique à la carte entreprise (fond blanc pur forcé) */
+.entreprise-card {
+    background: #ffffff !important; 
+    border: 1px solid var(--border, #e2e8f0); 
+    border-radius: 12px; 
+    padding: 1.5rem; 
+    position: relative; 
+    min-height: 250px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    transition: all 0.25s ease;
+}
+
 .entreprise-card:hover {
-    transform: translateY(-5px) !important;
-    border-color: var(--accent-blue) !important;
+    transform: translateY(-5px);
+    border-color: var(--accent, #2563eb) !important;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
 }
 
@@ -85,7 +99,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Assure que le lien recouvre la carte */
+    z-index: 1; /* Assure que le lien recouvre la carte sans bloquer le design */
 }
 </style>
 {% endblock %}
