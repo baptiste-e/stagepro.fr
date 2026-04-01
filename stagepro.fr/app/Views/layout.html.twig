@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ titre_page|default('StagePro') }}{% endblock %}</title>
+
+    <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="styles.css">
     
     <style>
@@ -211,13 +213,34 @@
             <div style="max-width: 1200px; margin: 0 auto;">
                 <p style="margin: 0 0 16px 0; font-size: 0.9rem; line-height: 1.7; color: #374151;">
                     Ce site utilise des cookies pour améliorer votre expérience et mesurer la fréquentation du site.
+                    Si vous cliquez sur « Accepter », les cookies essentiels et statistiques seront activés.
+                    Si vous cliquez sur « Refuser », seuls les cookies essentiels resteront actifs.
                 </p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <a href="index.php?page=cookie-accept" style="background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Accepter</a>
                     <a href="index.php?page=cookie-refuse" style="background: #ef4444; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Refuser</a>
+                    <button type="button" onclick="toggleCookiesSettings()" style="background: white; color: #2563eb; border: 1px solid #2563eb; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px; cursor: pointer;">Personnaliser</button>
+                </div>
+                <div id="cookie-settings" style="display: none; margin-top: 15px; padding: 15px; background: white; border: 1px solid #d1d5db; border-radius: 6px;">
+                    <form method="get" action="index.php">
+                        <input type="hidden" name="page" value="cookie-accept">
+                        <div style="margin-bottom: 10px;">
+                            <label><input type="checkbox" checked disabled> Cookies essentiels (obligatoires)</label>
+                        </div>
+                        <div style="margin-bottom: 14px;">
+                            <label><input type="checkbox" name="stats" checked> Cookies statistiques</label>
+                        </div>
+                        <button type="submit" style="background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: 600;">Enregistrer mes choix</button>
+                    </form>
                 </div>
             </div>
         </div>
+        <script>
+            function toggleCookiesSettings() {
+                const el = document.getElementById('cookie-settings');
+                el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            }
+        </script>
     {% endif %}
 
     <main id="contenu" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; min-height: 75vh;">
@@ -227,6 +250,17 @@
     <footer style="margin-top: 60px; padding: 40px 20px; background: #f3f4f6; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; font-size: 0.9rem;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <p>© 2026 – StagePro – Propulsé par le talent des étudiants CESI.</p>
+            
+            <p style="margin-top: 15px;">
+                <a href="index.php?page=mentions" style="margin: 0 10px; color: #4b5563; text-decoration: underline;">Mentions légales</a>
+                <a href="index.php?page=cookie-reset" style="margin: 0 10px; color: #4b5563;">Préférences Cookies</a>
+            </p>
+
+            {% if cookie_consent is defined and cookie_consent == 'accepted' %}
+                <p style="margin-top: 10px; color: #16a34a; font-weight: 600;">Cookies statistiques activés</p>
+            {% elseif cookie_consent is defined and cookie_consent == 'refused' %}
+                <p style="margin-top: 10px; color: #dc2626; font-weight: 600;">Cookies statistiques refusés</p>
+            {% endif %}
         </div>
     </footer>
 
