@@ -405,6 +405,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   z-index: 2;
 }
 
+
 .stats-header {
   max-width: 700px;
   margin-bottom: 4rem;
@@ -1079,7 +1080,7 @@ body.menu-open {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: var(--text-main);
+  color: #111827 !important;
 }
 
 @media (max-width: 992px) {
