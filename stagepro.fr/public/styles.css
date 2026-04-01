@@ -21,6 +21,7 @@ body {
   color: var(--text-main);
   font-family: sans-serif; /* Utilise la police système */
   line-height: 1.5;
+  padding-top: 50px;
   padding-bottom: 2rem;
 }
 
@@ -37,7 +38,7 @@ section {
 
 /* --- Hero --- */
 .hero {
-  min-height: calc(75vh - var(--header-height));
+  min-height: calc(100vh - var(--header-height));
   width: 100%;
   background: #ffffff;
   display: flex;
@@ -46,7 +47,7 @@ section {
   align-items: center;
   text-align: center;
   margin: 0;
-  padding: 6rem 1rem 3rem 1rem;
+  padding: 0rem 1rem 3rem 1rem;
 }
 
 .hero h1 {
@@ -336,22 +337,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 .espaces-section::before {
-  content: "";
-  position: absolute;
-  top: -120px;
-  left: 0;
-  width: 100%;
-  height: 220px;
-  background: linear-gradient(
-    to bottom,
-    #ffffff 0%,
-    #ffffff 35%,
-    rgba(255, 255, 255, 0.9) 55%,
-    rgba(255, 255, 255, 0.45) 80%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
+  display: none;
 }
 
 .espaces-content {
@@ -398,7 +384,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 }
 
 .stats-content {
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 1rem;
   position: relative;
@@ -433,6 +419,7 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   grid-template-columns: repeat(4, 1fr);
   gap: 3rem;
   align-items: end;
+  text-align: center;
 }
 
 .stat {
@@ -809,13 +796,12 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
 HEADER + NAVIGATION + MENU BURGER
 ========================================================= */
 .site-header {
-  width: 100%;
-  background: var(--surface);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1000;
-  box-shadow: none;
-  transition: box-shadow 0.25s ease;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  z-index: 3000;
 }
 
 .site-header::after {
@@ -1107,4 +1093,49 @@ h2 {
   margin-top: 1rem;
   position: relative;
   z-index: 2;
+}
+
+.cta-final {
+  width: 100%;
+  padding: 4rem 1rem;
+  background: #ffffff;
+  text-align: center;
+}
+
+.cta-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cta-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cta-content p {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* bouton secondaire */
+.btn-outline {
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
