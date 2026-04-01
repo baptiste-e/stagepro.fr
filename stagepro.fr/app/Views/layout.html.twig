@@ -5,218 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ titre_page|default('StagePro') }}{% endblock %}</title>
     <link rel="stylesheet" href="styles.css">
-    
-    <style>
-        /* Sécurité pour empêcher la page blanche due au débordement */
-        body, html { overflow-x: hidden; }
-
-        /* Configuration du menu responsive */
-        .burger-button {
-            display: none; 
-            background: transparent; border: none; cursor: pointer; padding: 10px; z-index: 1100;
-        }
-        .burger-button span {
-            display: block; width: 25px; height: 3px; background: #2563eb; margin: 5px 0; transition: 0.3s; border-radius: 3px;
-        }
-
-        @media (max-width: 992px) {
-            header .container {
-                flex-direction: row !important;
-                gap: 15px !important;
-                text-align: left;
-            }
-            header h1 {
-                margin-right: 0 !important;
-                width: auto;
-            }
-
-            /* Nouveau design du burger */
-            .burger-button { display: block; }
-            
-            .site-nav {
-                display: none;
-                position: absolute; 
-                top: 100%; left: 0; width: 100%;
-                background: white; 
-                box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
-                z-index: 1000;
-                border-top: 1px solid #e5e7eb;
-                border-bottom: 3px solid #2563eb;
-            }
-            
-            .site-nav.is-open { 
-                display: block; 
-                animation: slideDown 0.3s ease-out forwards;
-            }
-
-            @keyframes slideDown {
-                from { opacity: 0; transform: translateY(-10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
-            .site-nav__list { 
-                flex-direction: column !important; 
-                align-items: stretch !important; 
-                padding: 0 !important; 
-                gap: 0 !important; 
-            }
-
-            .site-nav__list li {
-                border-bottom: 1px solid #f3f4f6;
-                width: 100%;
-            }
-            
-            .site-nav__list li:last-child {
-                border-bottom: none;
-            }
-
-            .site-nav__list a {
-                display: block;
-                padding: 16px 24px;
-                font-size: 1.1rem;
-                color: #374151 !important;
-                text-decoration: none;
-            }
-
-            .nav-user-desktop { 
-                border-left: none !important; 
-                margin-left: 0 !important; 
-                padding: 16px 24px !important; 
-                background: #f9fafb; 
-            }
-            
-            .site-nav__logout {
-                color: #ef4444 !important; 
-                font-weight: 700 !important;
-            }
-        }
-    </style>
 
     <link rel="manifest" href="manifest.json">
 
-    {% if cookie_consent is defined and cookie_consent == 'accepted' %}
+    {# =========================
+       COOKIES UTILES
+       ========================= #}
+    {% if cookie_consent == 'accepted' %}
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                try {
-                    localStorage.setItem('cookie_stats_enabled', '1');
+                let visits = parseInt(localStorage.getItem('visits') || '0');
+                localStorage.setItem('visits', visits + 1);
 
-                    let visits = parseInt(localStorage.getItem('stagepro_total_visits') || '0', 10);
-                    localStorage.setItem('stagepro_total_visits', String(visits + 1));
+                let pages = JSON.parse(localStorage.getItem('pages') || '[]');
+                pages.push(window.location.pathname);
+                localStorage.setItem('pages', JSON.stringify(pages));
 
-                    let currentPage = window.location.pathname + window.location.search;
-                    let pages = JSON.parse(localStorage.getItem('stagepro_pages_seen') || '[]');
-
-                    pages.push({
-                        page: currentPage,
-                        viewed_at: new Date().toISOString()
-                    });
-
-                    localStorage.setItem('stagepro_pages_seen', JSON.stringify(pages));
-                    localStorage.setItem('stagepro_last_page', currentPage);
-                } catch (e) {
-                    console.log('Impossible d’écrire dans localStorage', e);
-                }
-            });
-        </script>
-    {% elseif cookie_consent is defined and cookie_consent == 'refused' %}
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                try {
-                    localStorage.removeItem('cookie_stats_enabled');
-                } catch (e) {
-                    console.log('Nettoyage localStorage impossible', e);
-                }
+                console.log("Cookies activés :", visits + 1);
             });
         </script>
     {% endif %}
 </head>
+
 <body>
 
-    {% set userRole = session.user.role_nom|default(session.user.role)|lower|trim %}
+{# ================= HEADER ================= #}
+<header style="background:#fff; border-bottom:1px solid #ddd; padding:15px;">
+    <h1><a href="index.php?page=home" style="color:#2563eb;">StagePro</a></h1>
+</header>
 
-    <header style="background: var(--surface, #ffffff); border-bottom: 1px solid var(--border, #e5e7eb); position: sticky; top: 0; z-index: 1000;">
-        <div class="container site-header-container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 15px 20px; position: relative;">
-            
-            <h1 style="margin: 0; margin-right: 50px; font-size: 1.5rem; flex-shrink: 0;">
-                <a href="index.php?page=home" style="text-decoration: none; color: #2563eb; font-weight: 800; white-space: nowrap;">StagePro</a>
-            </h1>
+{# ================= COOKIE BANNER ================= #}
+{% if cookie_consent is not defined or cookie_consent is null %}
+<div id="cookie-banner" style="
+    position: fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:#f9fafb;
+    border-top:1px solid #ddd;
+    padding:20px;
+    z-index:9999;
+">
 
-            <button
-                type="button"
-                class="burger-button"
-                aria-label="Ouvrir le menu"
-                aria-expanded="false"
-                aria-controls="site-navigation"
-            >
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-    
-            <nav id="site-navigation" class="site-nav" aria-label="Navigation principale">
-                <ul class="site-nav__list" style="list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; flex-wrap: wrap;">
-                    <li><a href="index.php?page=home" style="text-decoration: none; color: inherit; font-weight: 500;">Accueil</a></li>
-                    <li><a href="index.php?page=offres" style="text-decoration: none; color: inherit; font-weight: 500;">Offres</a></li>
-                    <li><a href="index.php?page=candidatures" style="text-decoration: none; color: inherit; font-weight: 500;">Candidatures</a></li>
-                    <li><a href="index.php?page=entreprises" style="text-decoration: none; color: inherit; font-weight: 500;">Entreprises</a></li>
+    <p style="margin-bottom:15px;">
+        Ce site utilise des cookies pour améliorer votre expérience.
+    </p>
 
-                    {% if session.user and userRole in ['admin', 'pilote'] %}
-                        <li><a href="index.php?page=etudiants" style="text-decoration: none; color: inherit; font-weight: 500;">Étudiants</a></li>
-                        <li><a href="index.php?page=pilotes" style="text-decoration: none; color: inherit; font-weight: 500;">Pilotes</a></li>
-                    {% endif %}
+    <div style="display:flex; gap:10px;">
+        <a href="index.php?page=cookie-accept" style="
+            background:#2563eb;
+            color:white;
+            padding:10px 20px;
+            border-radius:6px;
+            text-decoration:none;
+            font-weight:600;
+        ">Accepter</a>
 
-                    {% if session.user and userRole == 'admin' %}
-                        <li><a href="index.php?page=admin-dashboard" style="text-decoration: none; color: inherit; font-weight: 500;">Dashboard</a></li>
-                    {% endif %}
+        <a href="index.php?page=cookie-refuse" style="
+            background:#ef4444;
+            color:white;
+            padding:10px 20px;
+            border-radius:6px;
+            text-decoration:none;
+            font-weight:600;
+        ">Refuser</a>
 
-                    <li><a href="index.php?page=wishlist" style="text-decoration: none; color: inherit; font-weight: 500;">Wish-List</a></li>
+        <button onclick="toggleCookies()" style="
+            border:1px solid #2563eb;
+            color:#2563eb;
+            background:white;
+            padding:10px 20px;
+            border-radius:6px;
+            font-weight:600;
+        ">
+            Personnaliser
+        </button>
+    </div>
 
-                    {% if session.user %}
-                        <li class="nav-user-desktop site-nav__user" style="border-left: 1px solid #ccc; padding-left: 20px; margin-left: 10px; white-space: nowrap;">
-                            <strong style="color: var(--text-main);">
-                                {{ session.user.prenom }}
-                                <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">({{ session.user.role|default(session.user.role_nom) }})</span>
-                            </strong>
-                        </li>
-                        <li><a href="index.php?page=logout" class="site-nav__logout" style="color: #dc2626; text-decoration: none; font-weight: 600;">Déconnexion</a></li>
-                    {% else %}
-                        <li>
-                            <a href="index.php?page=login" class="btn-cta site-nav__login" style="background: #2563eb; color: white; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: 600;">
-                                Connexion
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <div id="cookie-settings" style="display:none; margin-top:15px;">
+        <form method="get" action="index.php">
+            <input type="hidden" name="page" value="cookie-accept">
 
-    {% if cookie_consent is not defined or cookie_consent is null %}
-        <div id="cookie-banner" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #f9fafb; border-top: 1px solid #d1d5db; padding: 20px; z-index: 9999; box-sizing: border-box; box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.1);">
-            <div style="max-width: 1200px; margin: 0 auto;">
-                <p style="margin: 0 0 16px 0; font-size: 0.9rem; line-height: 1.7; color: #374151;">
-                    Ce site utilise des cookies pour améliorer votre expérience et mesurer la fréquentation du site.
-                </p>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <a href="index.php?page=cookie-accept" style="background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Accepter</a>
-                    <a href="index.php?page=cookie-refuse" style="background: #ef4444; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Refuser</a>
-                </div>
-            </div>
-        </div>
-    {% endif %}
+            <label>
+                <input type="checkbox" checked disabled>
+                Essentiels
+            </label><br>
 
-    <main id="contenu" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; min-height: 75vh;">
-        {% block content %}{% endblock %}
-    </main>
+            <label>
+                <input type="checkbox" name="stats" checked>
+                Statistiques
+            </label><br><br>
 
-    <footer style="margin-top: 60px; padding: 40px 20px; background: #f3f4f6; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; font-size: 0.9rem;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <p>© 2026 – StagePro – Propulsé par le talent des étudiants CESI.</p>
-        </div>
-    </footer>
+            <button type="submit">Valider</button>
+        </form>
+    </div>
+</div>
 
-    <button id="scroll-to-top" title="Retour en haut" style="position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background-color: #2563eb; color: white; border: none; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); z-index: 2000; transition: transform 0.2s, background-color 0.2s;">↑</button>
+<script>
+function toggleCookies(){
+    let el = document.getElementById('cookie-settings');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+{% endif %}
 
-    <script src="js/scripts.js"></script>
+{# ================= CONTENT ================= #}
+<main style="padding:40px;">
+    {% block content %}{% endblock %}
+</main>
+
+{# ================= FOOTER ================= #}
+<footer style="text-align:center; padding:20px; background:#f3f4f6;">
+    © 2026 StagePro  
+    | <a href="index.php?page=cookie-reset">Gérer les cookies</a>
+</footer>
+
 </body>
 </html>
