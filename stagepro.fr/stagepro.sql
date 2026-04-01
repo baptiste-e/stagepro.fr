@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 30 mars 2026 à 09:34
+-- Généré le : mer. 01 avr. 2026 à 19:02
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -36,13 +36,6 @@ CREATE TABLE `candidatures` (
   `statut` varchar(20) NOT NULL DEFAULT 'en_attente',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `candidatures`
---
-
-INSERT INTO `candidatures` (`id`, `utilisateur_id`, `offre_id`, `cv`, `lettre_motivation`, `statut`, `created_at`) VALUES
-(5, 3, 2, 'uploads/1774621442_Dossier_Synthese_Yassin_AKACHAR_CPI A2 Info 25-26 Aix_Semestre_4 (2).PDF', 'ihi', 'en_attente', '2026-03-27 14:24:02');
 
 -- --------------------------------------------------------
 
@@ -124,7 +117,7 @@ INSERT INTO `offres` (`id`, `entreprise_id`, `titre`, `description`, `competence
 (25, 7, 'Consultant Cybersécurité', 'Audit et sécurité des systèmes.', NULL, NULL, NULL, 1, 950.00, '2026-03-27', '2026-03-27 14:34:11'),
 (26, 8, 'Ingénieur IA & Sécurité', 'Détection d’intrusions avec IA.', NULL, NULL, NULL, 1, 1000.00, '2026-03-27', '2026-03-27 14:34:11'),
 (27, 6, 'Développeur Mobile', 'Applications Android/iOS.', NULL, NULL, NULL, 1, 800.00, '2026-03-27', '2026-03-27 14:34:11'),
-(28, 3, 'Marketing Digital', 'SEO et réseaux sociaux.', NULL, NULL, NULL, 1, 700.00, '2026-03-27', '2026-03-27 14:34:11');
+(28, 6, 'Marketing Digital', 'SEO et réseaux sociaux.', '', 'Paris', NULL, 1, 700.00, '0000-00-00', '2026-03-27 14:34:11');
 
 -- --------------------------------------------------------
 
@@ -169,10 +162,7 @@ CREATE TABLE `utilisateurs` (
 INSERT INTO `utilisateurs` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `role_id`, `created_at`) VALUES
 (1, 'Admin', 'StagePro', 'admin@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 1, '2026-03-24 13:54:36'),
 (2, 'Pilote', 'Paul', 'pilote@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 2, '2026-03-24 13:54:36'),
-(3, 'Etudiant', 'Emma', 'etudiant@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 3, '2026-03-24 13:54:36'),
-(5, 'Pleindoux', 'Valentin', 'valentin.pleindoux@viacesi.fr', '$2y$10$8raFQm5W8KVGoen2JGS3se0RgLPQHWynrZL3wOyohzwpzLHd3cYqm', 2, '2026-03-25 14:07:36'),
-(6, 'Pleindoux', 'Valentin', 'pleindoux.valentin13@gmail.com', '$2y$10$9ICB8d/91om3lti2Yyz9K.ni.Wo10tPiR5Nqa3GUFlr8XZmG9MizC', 3, '2026-03-25 14:39:25'),
-(7, 'de', 'de', 'eded@gmail.com', '$2y$10$3NvmD7I.mWFveTIsskZSmuM70F58RTgziITt4WFruhxbR/vA02sKy', 2, '2026-03-26 16:10:58');
+(3, 'Etudiant', 'Emma', 'etudiant@stagepro.fr', '$2y$10$CHrQlxIkBDXIGVcRTD8tUe0quwucOLIwDnckCgJA1q6mWd0vylJba', 3, '2026-03-24 13:54:36');
 
 -- --------------------------------------------------------
 
@@ -251,25 +241,25 @@ ALTER TABLE `wishlist`
 -- AUTO_INCREMENT pour la table `candidatures`
 --
 ALTER TABLE `candidatures`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `entreprises`
 --
 ALTER TABLE `entreprises`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `evaluations`
 --
 ALTER TABLE `evaluations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `offres`
 --
 ALTER TABLE `offres`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT pour la table `roles`
@@ -281,13 +271,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Contraintes pour les tables déchargées
