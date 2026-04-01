@@ -3,29 +3,30 @@
 {% block title %}Accueil | StagePro{% endblock %}
 
 {% block content %}
-{# --- SECTION HERO --- #}
-<section class="hero">
+{# --- SECTION HERO : ESPACES RÉDUITS --- #}
+<section class="hero" style="margin-bottom: 1rem; padding-bottom: 2rem;">
     <h1>Trouvez le stage qui propulsera votre carrière</h1>
 
-<form action="index.php" method="get" class="hero-search-form">
-    <input type="hidden" name="page" value="recherche">
+    <form action="index.php" method="get" class="hero-search-form">
+        <input type="hidden" name="page" value="recherche">
 
-    <div class="hero-search-wrapper">
-        <input 
-            type="text" 
-            name="q" 
-            class="hero-search-input"
-            placeholder="Rechercher une offre, une entreprise ou une page du site..."
-            aria-label="Rechercher sur StagePro"
-            required
-        >
-        <button type="submit" class="hero-search-button">Rechercher</button>
-    </div>
-</form>    <a href="index.php?page=offres" class="btn-cta">Explorer les offres</a>
+        <div class="hero-search-wrapper">
+            <input 
+                type="text" 
+                name="q" 
+                class="hero-search-input"
+                placeholder="Rechercher une offre, une entreprise ou une page du site..."
+                aria-label="Rechercher sur StagePro"
+                required
+            >
+            <button type="submit" class="hero-search-button">Rechercher</button>
+        </div>
+    </form>
+    <a href="index.php?page=offres" class="btn-cta">Explorer les offres</a>
 </section>
 
-{# --- SECTION TÉMOIGNAGES / SHOWCASE --- #}
-<section class="entreprise-showcase">
+{# --- SECTION TÉMOIGNAGES : BADGES RESPONSIVES --- #}
+<section class="entreprise-showcase" style="margin-top: 0; padding-top: 1rem;">
     <div class="entreprise-showcase-header">
         <h2 class="fade-in">Pourquoi les entreprises recrutent des stagiaires</h2>
         <p class="showcase-intro fade-in">
@@ -35,7 +36,6 @@
     </div>
 
     <div class="showcase-layout fade-in">
-        {# COLONNE GAUCHE : citation + barre #}
         <div class="showcase-left">
             <div class="testimonial-slider">
                 <div class="testimonial-track">
@@ -80,25 +80,25 @@
         </div>
 
         {# COLONNE DROITE : entreprises #}
-<div class="showcase-right">
-    <div class="showcase-side-card">
-        <ul>
-            <li>TechCorp</li>
-            <li>CreativeLab</li>
-            <li>DataFlow</li>
-            <li>WebNova</li>
-            <li>InnovaTech</li>
-            <li>PixelForge</li>
-            <li>CloudAxis</li>
-            <li>GreenSoft</li>
-            <li>DevSphere</li>
-        </ul>
-    </div>
-</div>
+        <div class="showcase-right">
+            <div class="showcase-side-card">
+                <ul>
+                    <li>TechCorp</li>
+                    <li>CreativeLab</li>
+                    <li>DataFlow</li>
+                    <li>WebNova</li>
+                    <li>InnovaTech</li>
+                    <li>PixelForge</li>
+                    <li>CloudAxis</li>
+                    <li>GreenSoft</li>
+                    <li>DevSphere</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </section>
 
-{# --- SECTION STATISTIQUES (Réintégrée) --- #}
+{# --- SECTION STATISTIQUES --- #}
 <section class="stats-section">
     <div class="stats-content">
         <div class="stats-container">
@@ -125,8 +125,8 @@
     </div>
 </section>
 
-{# --- SECTION ESPACES UTILISATEURS --- #}
-<section class="espaces-section">
+{# --- SECTION ESPACES UTILISATEURS : COLLÉE AUX STATS --- #}
+<section class="espaces-section" style="margin-top: 0 !important; padding-top: 1rem;">
     <div class="espaces-content">
         <h2>Espaces utilisateurs</h2>
         <div class="container-espaces">
@@ -151,19 +151,19 @@
     </div>
 </section>
 
-{# --- SECTION OFFRES À LA UNE --- #}
+{# --- OFFRES À LA UNE --- #}
 <section style="margin-bottom: 5rem;">
     <h2>Offres à la une</h2>
     <div class="grid-offres">
         <article class="card card-dev_web" style="position: relative;">
-            <h3 style="color: var(--accent-blue);">Développeur Web</h3>
+            <h3 style="color: #2563eb;">Développeur Web</h3>
             <p>Entreprise : <strong>TechCorp</strong></p>
             <p class="offre-lieu">Paris (75)</p>
             <a href="index.php?page=offres" class="lien-etendu"></a>
         </article>
 
         <article class="card card-data_analyst" style="position: relative;">
-            <h3 style="color: var(--accent-purple);">Data Analyst</h3>
+            <h3 style="color: #9333ea;">Data Analyst</h3>
             <p>Entreprise : <strong>DataFlow</strong></p>
             <p class="offre-lieu">Lyon (69)</p>
             <a href="index.php?page=offres" class="lien-etendu"></a>
@@ -178,6 +178,7 @@
     </div>
 </section>
 
+{# --- FAQ COMPLÈTE --- #}
 <section class="faq-section">
     <div class="faq-container">
         <h2 class="faq-title">Besoin d’aide ?</h2>
