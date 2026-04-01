@@ -6,119 +6,365 @@
     <title>{% block title %}{{ titre_page|default('StagePro') }}{% endblock %}</title>
     <link rel="stylesheet" href="styles.css">
 
+    <style>
+        body, html {
+            overflow-x: hidden;
+        }
+
+        .burger-button {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1100;
+        }
+
+        .burger-button span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #2563eb;
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        .site-header {
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .site-header__inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            position: relative;
+        }
+
+        .site-logo {
+            margin: 0;
+            margin-right: 50px;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .site-logo a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .site-nav__list {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        .site-nav__list a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: 500;
+        }
+
+        .nav-user-desktop {
+            border-left: 1px solid #ccc;
+            padding-left: 20px;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .nav-user-desktop span {
+            font-size: 0.75rem;
+            font-weight: normal;
+            color: #6b7280;
+        }
+
+        .site-nav__logout {
+            color: #dc2626 !important;
+            font-weight: 600 !important;
+        }
+
+        .site-nav__login {
+            background: #2563eb;
+            color: white !important;
+            padding: 8px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 992px) {
+            .site-header__inner {
+                flex-direction: row !important;
+                gap: 15px !important;
+                text-align: left;
+            }
+
+            .site-logo {
+                margin-right: 0 !important;
+                width: auto;
+            }
+
+            .burger-button {
+                display: block;
+            }
+
+            .site-nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+                z-index: 1000;
+                border-top: 1px solid #e5e7eb;
+                border-bottom: 3px solid #2563eb;
+            }
+
+            .site-nav.is-open {
+                display: block;
+                animation: slideDown 0.3s ease-out forwards;
+            }
+
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .site-nav__list {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                padding: 0 !important;
+                gap: 0 !important;
+            }
+
+            .site-nav__list li {
+                border-bottom: 1px solid #f3f4f6;
+                width: 100%;
+            }
+
+            .site-nav__list li:last-child {
+                border-bottom: none;
+            }
+
+            .site-nav__list a {
+                display: block;
+                padding: 16px 24px;
+                font-size: 1.1rem;
+                color: #374151 !important;
+                text-decoration: none;
+            }
+
+            .nav-user-desktop {
+                border-left: none !important;
+                margin-left: 0 !important;
+                padding: 16px 24px !important;
+                background: #f9fafb;
+            }
+
+            .site-nav__logout {
+                color: #ef4444 !important;
+                font-weight: 700 !important;
+            }
+        }
+    </style>
+
     <link rel="manifest" href="manifest.json">
 
-    {# =========================
-       COOKIES UTILES
-       ========================= #}
     {% if cookie_consent == 'accepted' %}
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                let visits = parseInt(localStorage.getItem('visits') || '0');
+                let visits = parseInt(localStorage.getItem('visits') || '0', 10);
                 localStorage.setItem('visits', visits + 1);
 
                 let pages = JSON.parse(localStorage.getItem('pages') || '[]');
-                pages.push(window.location.pathname);
+                pages.push(window.location.pathname + window.location.search);
                 localStorage.setItem('pages', JSON.stringify(pages));
 
-                console.log("Cookies activés :", visits + 1);
+                console.log('Cookies activés :', visits + 1);
             });
         </script>
     {% endif %}
 </head>
-
 <body>
 
-{# ================= HEADER ================= #}
-<header style="background:#fff; border-bottom:1px solid #ddd; padding:15px;">
-    <h1><a href="index.php?page=home" style="color:#2563eb;">StagePro</a></h1>
-</header>
+    {% set userRole = session.user.role_nom|default(session.user.role)|lower|trim %}
 
-{# ================= COOKIE BANNER ================= #}
-{% if cookie_consent is not defined or cookie_consent is null %}
-<div id="cookie-banner" style="
-    position: fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:#f9fafb;
-    border-top:1px solid #ddd;
-    padding:20px;
-    z-index:9999;
-">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <h1 class="site-logo">
+                <a href="index.php?page=home">StagePro</a>
+            </h1>
 
-    <p style="margin-bottom:15px;">
-        Ce site utilise des cookies pour améliorer votre expérience.
-    </p>
+            <button
+                type="button"
+                class="burger-button"
+                aria-label="Ouvrir le menu"
+                aria-expanded="false"
+                aria-controls="site-navigation"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-    <div style="display:flex; gap:10px;">
-        <a href="index.php?page=cookie-accept" style="
-            background:#2563eb;
-            color:white;
-            padding:10px 20px;
-            border-radius:6px;
-            text-decoration:none;
-            font-weight:600;
-        ">Accepter</a>
+            <nav id="site-navigation" class="site-nav" aria-label="Navigation principale">
+                <ul class="site-nav__list">
+                    <li><a href="index.php?page=home">Accueil</a></li>
+                    <li><a href="index.php?page=offres">Offres</a></li>
+                    <li><a href="index.php?page=candidatures">Candidatures</a></li>
+                    <li><a href="index.php?page=entreprises">Entreprises</a></li>
 
-        <a href="index.php?page=cookie-refuse" style="
-            background:#ef4444;
-            color:white;
-            padding:10px 20px;
-            border-radius:6px;
-            text-decoration:none;
-            font-weight:600;
-        ">Refuser</a>
+                    {% if session.user and userRole in ['admin', 'pilote'] %}
+                        <li><a href="index.php?page=etudiants">Étudiants</a></li>
+                        <li><a href="index.php?page=pilotes">Pilotes</a></li>
+                    {% endif %}
 
-        <button onclick="toggleCookies()" style="
-            border:1px solid #2563eb;
-            color:#2563eb;
-            background:white;
-            padding:10px 20px;
-            border-radius:6px;
-            font-weight:600;
+                    {% if session.user and userRole == 'admin' %}
+                        <li><a href="index.php?page=admin-dashboard">Dashboard</a></li>
+                    {% endif %}
+
+                    <li><a href="index.php?page=wishlist">Wish-List</a></li>
+
+                    {% if session.user %}
+                        <li class="nav-user-desktop site-nav__user">
+                            <strong>
+                                {{ session.user.prenom }}
+                                <span>({{ session.user.role|default(session.user.role_nom) }})</span>
+                            </strong>
+                        </li>
+                        <li><a href="index.php?page=logout" class="site-nav__logout">Déconnexion</a></li>
+                    {% else %}
+                        <li>
+                            <a href="index.php?page=login" class="btn-cta site-nav__login">
+                                Connexion
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    {% if cookie_consent is not defined or cookie_consent is null %}
+        <div id="cookie-banner" style="
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #f9fafb;
+            border-top: 1px solid #d1d5db;
+            padding: 20px;
+            z-index: 9999;
+            box-sizing: border-box;
+            box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.1);
         ">
-            Personnaliser
-        </button>
-    </div>
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <p style="margin: 0 0 16px 0; font-size: 0.9rem; line-height: 1.7; color: #374151;">
+                    Ce site utilise des cookies pour améliorer votre expérience et mesurer la fréquentation du site.
+                    Si vous cliquez sur « Accepter », les cookies essentiels et statistiques seront activés.
+                    Si vous cliquez sur « Refuser », seuls les cookies essentiels resteront actifs.
+                </p>
 
-    <div id="cookie-settings" style="display:none; margin-top:15px;">
-        <form method="get" action="index.php">
-            <input type="hidden" name="page" value="cookie-accept">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="index.php?page=cookie-accept" style="
+                        background: #2563eb;
+                        color: white;
+                        text-decoration: none;
+                        padding: 10px 20px;
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                        border-radius: 6px;
+                    ">
+                        Accepter
+                    </a>
 
-            <label>
-                <input type="checkbox" checked disabled>
-                Essentiels
-            </label><br>
+                    <a href="index.php?page=cookie-refuse" style="
+                        background: #ef4444;
+                        color: white;
+                        text-decoration: none;
+                        padding: 10px 20px;
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                        border-radius: 6px;
+                    ">
+                        Refuser
+                    </a>
 
-            <label>
-                <input type="checkbox" name="stats" checked>
-                Statistiques
-            </label><br><br>
+                    <button type="button" onclick="toggleCookies()" style="
+                        border: 1px solid #2563eb;
+                        color: #2563eb;
+                        background: white;
+                        padding: 10px 20px;
+                        border-radius: 6px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">
+                        Personnaliser
+                    </button>
+                </div>
 
-            <button type="submit">Valider</button>
-        </form>
-    </div>
-</div>
+                <div id="cookie-settings" style="display: none; margin-top: 15px;">
+                    <form method="get" action="index.php">
+                        <input type="hidden" name="page" value="cookie-accept">
 
-<script>
-function toggleCookies(){
-    let el = document.getElementById('cookie-settings');
-    el.style.display = el.style.display === 'none' ? 'block' : 'none';
-}
-</script>
-{% endif %}
+                        <label>
+                            <input type="checkbox" checked disabled>
+                            Essentiels
+                        </label><br>
 
-{# ================= CONTENT ================= #}
-<main style="padding:40px;">
-    {% block content %}{% endblock %}
-</main>
+                        <label>
+                            <input type="checkbox" name="stats" checked>
+                            Statistiques
+                        </label><br><br>
 
-{# ================= FOOTER ================= #}
-<footer style="text-align:center; padding:20px; background:#f3f4f6;">
-    © 2026 StagePro  
-    | <a href="index.php?page=cookie-reset">Gérer les cookies</a>
-</footer>
+                        <button type="submit" style="
+                            background: #2563eb;
+                            color: white;
+                            border: none;
+                            padding: 8px 15px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-weight: 600;
+                        ">
+                            Valider
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
+        <script>
+            function toggleCookies() {
+                let el = document.getElementById('cookie-settings');
+                el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            }
+        </script>
+    {% endif %}
+
+    <main id="contenu" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; min-height: 75vh;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer style="text-align: center; padding: 20px; background: #f3f4f6;">
+        © 2026 StagePro |
+        <a href="index.php?page=cookie-reset">Gérer les cookies</a>
+    </footer>
+
+    <script src="js/scripts.js"></script>
 </body>
 </html>

@@ -79,9 +79,10 @@
             </div>
         </div>
 
+        {# COLONNE DROITE : entreprises #}
         <div class="showcase-right">
             <div class="showcase-side-card">
-                <ul style="display: flex; flex-wrap: wrap; gap: 10px; padding: 0; list-style: none; justify-content: center;">
+                <ul>
                     <li>TechCorp</li>
                     <li>CreativeLab</li>
                     <li>DataFlow</li>
@@ -97,30 +98,30 @@
     </div>
 </section>
 
-{# --- SECTION STATISTIQUES : VERSION IMMUNISÉE (SANS H3 POUR ÉVITER LES COUPURES) --- #}
-<section style="margin-bottom: 2rem; padding: 2rem 0; width: 100%; overflow: visible !important;">
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; text-align: center; max-width: 1200px; margin: 0 auto;">
-        
-        <div style="flex: 1; min-width: 200px;">
-            <span style="font-size: 2.5rem; font-weight: 800; color: #2563eb; display: block; line-height: 1.5; opacity: 1 !important;">120+</span>
-            <span style="color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; display: block;">Offres disponibles</span>
-        </div>
+{# --- SECTION STATISTIQUES --- #}
+<section class="stats-section">
+    <div class="stats-content">
+        <div class="stats-container">
+            <div class="stat">
+                <div class="stat-number">120+</div>
+                <div class="stat-label">Offres disponibles</div>
+            </div>
 
-        <div style="flex: 1; min-width: 200px;">
-            <span style="font-size: 2.5rem; font-weight: 800; color: #9333ea; display: block; line-height: 1.5; opacity: 1 !important;">35+</span>
-            <span style="color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; display: block;">Entreprises partenaires</span>
-        </div>
+            <div class="stat">
+                <div class="stat-number">35+</div>
+                <div class="stat-label">Entreprises partenaires</div>
+            </div>
 
-        <div style="flex: 1; min-width: 200px;">
-            <span style="font-size: 2.5rem; font-weight: 800; color: #4ade80; display: block; line-height: 1.5; opacity: 1 !important;">250+</span>
-            <span style="color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; display: block;">Candidatures envoyées</span>
-        </div>
+            <div class="stat">
+                <div class="stat-number">250+</div>
+                <div class="stat-label">Candidatures envoyées</div>
+            </div>
 
-        <div style="flex: 1; min-width: 200px;">
-            <span style="font-size: 2.5rem; font-weight: 800; color: #fbbf24; display: block; line-height: 1.5; opacity: 1 !important;">80+</span>
-            <span style="color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; display: block;">Offres en wish-list</span>
+            <div class="stat">
+                <div class="stat-number">80+</div>
+                <div class="stat-label">Offres en wish-list</div>
+            </div>
         </div>
-
     </div>
 </section>
 
@@ -155,23 +156,23 @@
     <h2>Offres à la une</h2>
     <div class="grid-offres">
         <article class="card card-dev_web" style="position: relative;">
-            <h3 style="color: #2563eb;">Développeur Web</h3>
+            <h3>Développeur Web</h3>
             <p>Entreprise : <strong>TechCorp</strong></p>
-            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 1rem;">Lieu : Paris (75)</p>
+            <p class="offre-lieu">Paris (75)</p>
             <a href="index.php?page=offres" class="lien-etendu"></a>
         </article>
 
         <article class="card card-data_analyst" style="position: relative;">
-            <h3 style="color: #9333ea;">Data Analyst</h3>
+            <h3>Data Analyst</h3>
             <p>Entreprise : <strong>DataFlow</strong></p>
-            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 1rem;">Lieu : Lyon (69)</p>
+            <p class="offre-lieu">Lyon (69)</p>
             <a href="index.php?page=offres" class="lien-etendu"></a>
         </article>
 
         <article class="card card-UI_UX_designer" style="position: relative;">
-            <h3 style="color: #fbbf24;">UI/UX Designer</h3>
+            <h3>UI/UX Designer</h3>
             <p>Entreprise : <strong>CreativeLab</strong></p>
-            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 1rem;">Lieu : Bordeaux (33)</p>
+            <p class="offre-lieu">Bordeaux (33)</p>
             <a href="index.php?page=offres" class="lien-etendu"></a>
         </article>
     </div>
