@@ -28,12 +28,12 @@
           </h3>
           
           <p style="margin-bottom: 0.5rem; font-size: 0.95rem;">
-            <strong>📧 Email :</strong> {{ etudiant.email }}
+            <strong>Email :</strong> {{ etudiant.email }}
           </p>
           
           {# On réintègre la date de création issue de la version PHP #}
           <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: auto;">
-            <strong>📅 Inscrit le :</strong><br>
+            <strong>Inscrit le :</strong><br>
             {{ etudiant.created_at ? etudiant.created_at|date("d/m/Y à H:i") : 'Non renseignée' }}
           </p>
 

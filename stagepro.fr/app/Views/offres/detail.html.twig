@@ -52,7 +52,7 @@
                         <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                             {% if maCandidature.cv %}
                                 <a href="{{ maCandidature.cv }}" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 600;">
-                                    📄 Voir le CV envoyé
+                                    Voir le CV envoyé
                                 </a>
                             {% endif %}
                             <a href="index.php?page=candidatures" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.9rem;">Suivre mes candidatures →</a>
@@ -87,10 +87,10 @@
         <aside class="sidebar" style="position: sticky; top: 2rem;">
             <div style="background: var(--surface, #ffffff); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border, #e5e7eb); margin-bottom: 1.5rem;">
                 <h3 style="font-size: 0.875rem; color: var(--text-muted, #6b7280); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem;">Détails du stage</h3>
-                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>📍 Lieu :</strong> {{ offre.localite }}</p>
-                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>⏳ Durée :</strong> {{ offre.duree }}</p>
-                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>💰 Gratification :</strong> {{ offre.remuneration|number_format(2, ',', ' ') }} €/mois</p>
-                <p style="margin: 0; font-size: 0.95rem;"><strong>👥 Places :</strong> {{ offre.nb_places|default(1) }} poste(s)</p>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>Lieu :</strong> {{ offre.localite }}</p>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>Durée :</strong> {{ offre.duree }}</p>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem;"><strong>Gratification :</strong> {{ offre.remuneration|number_format(2, ',', ' ') }} €/mois</p>
+                <p style="margin: 0; font-size: 0.95rem;"><strong>Places :</strong> {{ offre.nb_places|default(1) }} poste(s)</p>
             </div>
 
             {% if session.user and session.user.role == 'etudiant' %}

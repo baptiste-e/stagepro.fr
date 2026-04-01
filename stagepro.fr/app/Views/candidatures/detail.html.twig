@@ -79,8 +79,8 @@
         <aside style="position: sticky; top: 2rem;">
             <div style="background: #ffffff; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.5rem;">
                 <h3 style="font-size: 0.875rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Informations Offre</h3>
-                <p style="margin-bottom: 0.75rem;"><strong>📍 Lieu :</strong> {{ candidature.localite|default('Non renseigné') }}</p>
-                <p><strong>💰 Gratification :</strong> 
+                <p style="margin-bottom: 0.75rem;"><strong>Lieu :</strong> {{ candidature.localite|default('Non renseigné') }}</p>
+                <p><strong>Gratification :</strong> 
                     {{ candidature.remuneration ? candidature.remuneration|number_format(2, ',', ' ') ~ ' €/mois' : 'Non renseignée' }}
                 </p>
             </div>

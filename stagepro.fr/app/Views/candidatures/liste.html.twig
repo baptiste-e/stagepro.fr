@@ -50,19 +50,19 @@
                     </div>
 
                     <div style="font-size: 0.95rem; line-height: 1.6;">
-                        <p style="margin: 0;"><strong>🏢 Entreprise :</strong> {{ c.entreprise_nom }}</p>
+                        <p style="margin: 0;"><strong>Entreprise :</strong> {{ c.entreprise_nom }}</p>
                         
                         {# Affichage du nom du candidat uniquement pour Admin/Pilote #}
                         {% if is_management %}
                             <p style="margin: 0.5rem 0 0 0;">
-                                <strong>👤 Candidat :</strong> {{ c.etudiant_prenom }} {{ c.etudiant_nom }}
+                                <strong>Candidat :</strong> {{ c.etudiant_prenom }} {{ c.etudiant_nom }}
                             </p>
                         {% endif %}
                     </div>
 
                     <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 0.8rem; color: var(--text-muted);">
-                            📅 {{ c.created_at|date("d/m/Y à H:i") }}
+                             {{ c.created_at|date("d/m/Y à H:i") }}
                         </span>
                         <span style="font-size: 0.8rem; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">
                             Détails &rarr;
