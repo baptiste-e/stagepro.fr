@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ titre_page|default('StagePro') }}{% endblock %}</title>
 
+    {# AJOUT SEO : Meta Description dynamique avec valeur par défaut #}
+    <meta name="description" content="{% block meta_description %}Trouvez votre stage idéal avec StagePro, la plateforme de mise en relation entre étudiants et entreprises pour les talents de demain.{% endblock %}">
+
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="styles.css">
     
@@ -213,8 +216,6 @@
             <div style="max-width: 1200px; margin: 0 auto;">
                 <p style="margin: 0 0 16px 0; font-size: 0.9rem; line-height: 1.7; color: #374151;">
                     Ce site utilise des cookies pour améliorer votre expérience et mesurer la fréquentation du site.
-                    Si vous cliquez sur « Accepter », les cookies essentiels et statistiques seront activés.
-                    Si vous cliquez sur « Refuser », seuls les cookies essentiels resteront actifs.
                 </p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <a href="index.php?page=cookie-accept" style="background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Accepter</a>
