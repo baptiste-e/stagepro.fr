@@ -1139,3 +1139,68 @@ h2 {
   border-color: var(--accent);
   color: var(--accent);
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+}
+
+/* Boutons précédent / suivant */
+.pagination-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    border: 1px solid #d1d5db;
+    color: #374151;
+    background: white;
+
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+/* Numéros */
+.pagination-number {
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    background: white;
+
+    transition: all 0.2s ease;
+}
+
+.pagination-number:hover {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+/* Page active */
+.pagination-number.active {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+/* Désactivé */
+.pagination-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

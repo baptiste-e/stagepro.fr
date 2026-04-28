@@ -23,18 +23,41 @@ class EntrepriseController {
         }
     }
 
-    public function index() {
-        $entreprises = $this->model->findAll();
-        foreach ($entreprises as &$entreprise) {
-            $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
-        }
-        unset($entreprise);
+  public function index() {
+    $entreprises = $this->model->findAll();
 
-        echo $this->twig->render('entreprises/liste.html.twig', [
-            'entreprises' => $entreprises,
-            'titre_page' => "Annuaire des Entreprises | StagePro"
-        ]);
+    foreach ($entreprises as &$entreprise) {
+        $entreprise['nb_offres'] = $this->model->countOffresLiees((int)$entreprise['id']);
     }
+    unset($entreprise);
+
+    // -----------------------------
+    // PAGINATION : 6 entreprises par page
+    // -----------------------------
+    $entreprisesParPage = 6;
+    $pageActuelle = max(1, (int)($_GET['pagination'] ?? 1));
+
+    $totalEntreprises = count($entreprises);
+    $totalPages = max(1, (int)ceil($totalEntreprises / $entreprisesParPage));
+
+    if ($pageActuelle > $totalPages) {
+        $pageActuelle = $totalPages;
+    }
+
+    $offset = ($pageActuelle - 1) * $entreprisesParPage;
+    $entreprises = array_slice($entreprises, $offset, $entreprisesParPage);
+
+    echo $this->twig->render('entreprises/liste.html.twig', [
+        'entreprises' => $entreprises,
+
+        // Variables pour la pagination
+        'pageActuelle' => $pageActuelle,
+        'totalPages' => $totalPages,
+        'routePagination' => 'entreprises',
+
+        'titre_page' => "Annuaire des Entreprises | StagePro"
+    ]);
+}
 
     /**
      * UNE SEULE MÉTHODE SHOW ICI (Fusionnée avec les avis)

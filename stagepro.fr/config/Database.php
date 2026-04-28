@@ -7,7 +7,7 @@ class Database {
     public static function getConnection() {
         if (self::$instance === null) {
             try {
-                // Remplace par tes vrais identifiants si nécessaire
+                
                 self::$instance = new PDO(
                     "mysql:host=localhost;dbname=stagepro;charset=utf8", 
                     "root", 

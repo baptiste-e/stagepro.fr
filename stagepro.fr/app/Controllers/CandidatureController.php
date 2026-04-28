@@ -29,29 +29,50 @@ class CandidatureController {
      * - Admin/Pilote : voient toutes les candidatures du système
      */
     public function index() {
-        if (!isset($_SESSION['user'])) {
-            header('Location: index.php?page=login');
-            exit;
-        }
-
-        $role = $this->getRole();
-        $userId = (int)$_SESSION['user']['id'];
-
-        if (in_array($role, ['admin', 'pilote'], true)) {
-            $candidatures = $this->model->findAllFull();
-            $titre_page = "Gestion des candidatures | StagePro";
-        } else {
-            $candidatures = $this->model->findByEtudiant($userId);
-            $titre_page = "Mes Candidatures | StagePro";
-        }
-
-        echo $this->twig->render('candidatures/liste.html.twig', [
-            'candidatures' => $candidatures,
-            'role' => $role,
-            'titre_page' => $titre_page
-        ]);
+    if (!isset($_SESSION['user'])) {
+        header('Location: index.php?page=login');
+        exit;
     }
 
+    $role = $this->getRole();
+    $userId = (int)$_SESSION['user']['id'];
+
+    if (in_array($role, ['admin', 'pilote'], true)) {
+        $candidatures = $this->model->findAllFull();
+        $titre_page = "Gestion des candidatures | StagePro";
+    } else {
+        $candidatures = $this->model->findByEtudiant($userId);
+        $titre_page = "Mes Candidatures | StagePro";
+    }
+
+    // -----------------------------
+    // PAGINATION : 6 candidatures par page
+    // -----------------------------
+    $candidaturesParPage = 6;
+    $pageActuelle = max(1, (int)($_GET['pagination'] ?? 1));
+
+    $totalCandidatures = count($candidatures);
+    $totalPages = max(1, (int)ceil($totalCandidatures / $candidaturesParPage));
+
+    if ($pageActuelle > $totalPages) {
+        $pageActuelle = $totalPages;
+    }
+
+    $offset = ($pageActuelle - 1) * $candidaturesParPage;
+    $candidatures = array_slice($candidatures, $offset, $candidaturesParPage);
+
+    echo $this->twig->render('candidatures/liste.html.twig', [
+        'candidatures' => $candidatures,
+        'role' => $role,
+
+        // Variables pour la pagination dans Twig
+        'pageActuelle' => $pageActuelle,
+        'totalPages' => $totalPages,
+        'routePagination' => 'candidatures',
+
+        'titre_page' => $titre_page
+    ]);
+}
     /**
      * Détail d'une candidature précise
      */

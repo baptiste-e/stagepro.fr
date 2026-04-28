@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<section>
+<div style="margin-bottom: 2rem;">
     <h1>{{ is_management ? 'Gestion des candidatures' : 'Mes candidatures' }}</h1>
     <p style="color: var(--text-muted);">
         {{ is_management 
@@ -16,9 +16,9 @@
             : "Retrouvez ici les offres auxquelles vous avez postulé et le détail de vos dossiers envoyés."
         }}
     </p>
-</section>
+</div>
 
-<div style="margin-top: 2rem;">
+<div style="margin-top: 3rem; margin-bottom: 5rem;">
     {% if candidatures is empty %}
         <div style="background: #ffffff; padding: 3rem; border-radius: 12px; text-align: center; border: 1px solid var(--border);">
             <p style="font-size: 1.1rem; color: var(--text-muted);">Aucune candidature trouvée.</p>
@@ -29,7 +29,7 @@
             {% endif %}
         </div>
     {% else %}
-        <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
             {% for c in candidatures %}
                 {# Logique des badges de statut #}
                 {% set badge = { 'label': 'En attente', 'bg': '#fef3c7', 'color': '#92400e' } %}
@@ -75,6 +75,31 @@
                 </div>
             {% endfor %}
         </div>
+    {% endif %}
+</div>
+
+<div class="pagination">
+    {% if pageActuelle > 1 %}
+        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle - 1 }}" class="pagination-btn">
+            ← Précédent
+        </a>
+    {% else %}
+        <span class="pagination-btn disabled">← Précédent</span>
+    {% endif %}
+
+    {% for i in 1..totalPages %}
+        <a href="index.php?page={{ routePagination }}&pagination={{ i }}"
+           class="pagination-number {% if i == pageActuelle %}active{% endif %}">
+            {{ i }}
+        </a>
+    {% endfor %}
+
+    {% if pageActuelle < totalPages %}
+        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle + 1 }}" class="pagination-btn">
+            Suivant →
+        </a>
+    {% else %}
+        <span class="pagination-btn disabled">Suivant →</span>
     {% endif %}
 </div>
 

@@ -64,6 +64,32 @@
     {% endif %}
 </div>
 
+{# --- PAGINATION --- #}
+<div class="pagination">
+    {% if pageActuelle > 1 %}
+        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle - 1 }}" class="pagination-btn">
+            ← Précédent
+        </a>
+    {% else %}
+        <span class="pagination-btn disabled">← Précédent</span>
+    {% endif %}
+
+    {% for i in 1..totalPages %}
+        <a href="index.php?page={{ routePagination }}&pagination={{ i }}"
+           class="pagination-number {% if i == pageActuelle %}active{% endif %}">
+            {{ i }}
+        </a>
+    {% endfor %}
+
+    {% if pageActuelle < totalPages %}
+        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle + 1 }}" class="pagination-btn">
+            Suivant →
+        </a>
+    {% else %}
+        <span class="pagination-btn disabled">Suivant →</span>
+    {% endif %}
+</div>
+
 <style>
 .wishlist-card {
     display: flex; 

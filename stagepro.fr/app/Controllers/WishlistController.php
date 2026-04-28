@@ -18,27 +18,48 @@ class WishlistController {
      * Affiche la liste des favoris (Wish-list) de l'étudiant
      */
     public function index() {
-        // Sécurité : redirection si non connecté
-        if (!isset($_SESSION['user'])) { 
-            header('Location: index.php?page=login'); 
-            exit; 
-        }
-        
-        $id_user = (int)$_SESSION['user']['id'];
-        
-        // Récupération de la liste via le modèle
-        $wishlist = $this->model->getUserWishlist($id_user);
-        
-        // On conserve la variable sémantique de tes collègues pour la vue
-        $wishlist_est_vide = empty($wishlist);
-        
-        echo $this->twig->render('wishlist/liste.html.twig', [
-            'wishlist' => $wishlist,
-            'wishlist_est_vide' => $wishlist_est_vide,
-            'titre_page' => "Mes favoris | StagePro"
-        ]);
+    // Sécurité : redirection si non connecté
+    if (!isset($_SESSION['user'])) { 
+        header('Location: index.php?page=login'); 
+        exit; 
+    }
+    
+    $id_user = (int)$_SESSION['user']['id'];
+    
+    // Récupération de la liste via le modèle
+    $wishlist = $this->model->getUserWishlist($id_user);
+
+    // On conserve la variable avant pagination
+    $wishlist_est_vide = empty($wishlist);
+
+    // -----------------------------
+    // PAGINATION : 6 favoris par page
+    // -----------------------------
+    $favorisParPage = 6;
+    $pageActuelle = max(1, (int)($_GET['pagination'] ?? 1));
+
+    $totalFavoris = count($wishlist);
+    $totalPages = max(1, (int)ceil($totalFavoris / $favorisParPage));
+
+    if ($pageActuelle > $totalPages) {
+        $pageActuelle = $totalPages;
     }
 
+    $offset = ($pageActuelle - 1) * $favorisParPage;
+    $wishlist = array_slice($wishlist, $offset, $favorisParPage);
+    
+    echo $this->twig->render('wishlist/liste.html.twig', [
+        'wishlist' => $wishlist,
+        'wishlist_est_vide' => $wishlist_est_vide,
+
+        // Variables pour la pagination
+        'pageActuelle' => $pageActuelle,
+        'totalPages' => $totalPages,
+        'routePagination' => 'favoris',
+
+        'titre_page' => "Mes favoris | StagePro"
+    ]);
+}
     /**
      * Ajoute une offre à la wish-list
      */
