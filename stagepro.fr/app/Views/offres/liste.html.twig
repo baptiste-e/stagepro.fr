@@ -96,6 +96,7 @@
                 <div style="display: flex; gap: 12px; align-items: center;">
                     {% if session.user and session.user.role == 'etudiant' %}
                         <form action="index.php?page=wishlist-add" method="post" style="margin: 0; background: transparent; border: none; padding: 0;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                             <input type="hidden" name="id_offre" value="{{ offre.id }}">
                             <button type="submit" title="Ajouter aux favoris" style="background: white; border: 1px solid #d1d5db; padding: 6px 12px; border-radius: 6px; cursor: pointer; color: #6b7280; transition: 0.2s;">
                                 ☆

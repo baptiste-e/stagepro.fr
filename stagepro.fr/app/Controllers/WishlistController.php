@@ -69,6 +69,8 @@ class WishlistController {
             exit; 
         }
 
+        Csrf::check();
+
         $id_offre = (int)($_POST['id_offre'] ?? 0);
         $id_user = (int)$_SESSION['user']['id'];
 
@@ -89,6 +91,8 @@ class WishlistController {
             header('Location: index.php?page=login'); 
             exit; 
         }
+
+        Csrf::check();
 
         // On accepte POST ou GET (REQUEST) pour plus de souplesse selon le bouton cliqué
         $id_offre = (int)($_REQUEST['id_offre'] ?? 0);

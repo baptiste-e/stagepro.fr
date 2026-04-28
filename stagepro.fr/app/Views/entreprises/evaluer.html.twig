@@ -5,6 +5,7 @@
     <h1>Évaluer l'entreprise {{ entreprise.nom }}</h1>
     
     <form action="index.php?page=entreprise-save-eval" method="POST" style="margin-top: 1.5rem;">
+     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="entreprise_id" value="{{ entreprise.id }}">
         
         <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Quelle note donnez-vous ?</label>

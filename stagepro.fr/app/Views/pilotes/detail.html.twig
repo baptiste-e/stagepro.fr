@@ -54,6 +54,7 @@
         </a>
 
         <form action="index.php?page=pilote-delete" method="post" style="margin: 0; padding: 0; border: none; background: transparent;" onsubmit="return confirm('Attention : Cette action est irréversible. Confirmer la suppression de ce pilote ?');">
+         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <input type="hidden" name="id" value="{{ pilote.id }}">
             <button type="submit" style="width: 100%; background: transparent; border: 1px solid #ef4444; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 0.6rem; border-radius: 6px; font-weight: 600; transition: all 0.2s;">
                 Supprimer le pilote

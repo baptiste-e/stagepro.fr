@@ -23,7 +23,7 @@
   <div class="container-espaces" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
     {% for p in pilotes %}
         
-        {# CORRECTION : On retire "card" et on garde uniquement "pilote-card" #}
+        {# On retire "card" et on garde uniquement "pilote-card" #}
         <article class="pilote-card">
           <h3 style="color: var(--accent, #2563eb); margin-bottom: 0.5rem;">
             {{ p.prenom }} {{ p.nom }}
@@ -52,7 +52,7 @@
 </section>
 
 <style>
-/* CORRECTION : On intègre les styles de base de la carte directement ici */
+/* On intègre les styles de base de la carte directement ici */
 .pilote-card {
     position: relative; 
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;

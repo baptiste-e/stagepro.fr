@@ -49,8 +49,9 @@
                             Voir l'offre
                         </a>
                         
-                        {# CORRECTION : Neutralisation du style global de <form> #}
+                        {# Neutralisation du style global de <form> #}
                         <form action="index.php?page=wishlist-remove" method="post" style="margin: 0; padding: 0; background: transparent; border: none; box-shadow: none;" onsubmit="return confirm('Retirer cette offre de vos favoris ?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                             <input type="hidden" name="id_offre" value="{{ item.id }}">
                             <button type="submit" class="btn-remove">
                                 Retirer

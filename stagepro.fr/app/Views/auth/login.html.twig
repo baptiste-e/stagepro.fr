@@ -14,6 +14,7 @@
     {% endif %}
 
     <form action="index.php?page=login" method="post">
+     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div class="form-group" style="margin-bottom: 1.5rem;">
             <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem;">Email</label>
             <input type="email" id="email" name="email" placeholder="votre@email.fr" required 

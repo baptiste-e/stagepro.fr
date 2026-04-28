@@ -129,9 +129,12 @@ class OffreController {
      */
     public function save() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            Csrf::check();
             header('Location: index.php?page=offres');
             exit;
         }
+
+        
 
         $id = (int)($_POST['id'] ?? 0);
         

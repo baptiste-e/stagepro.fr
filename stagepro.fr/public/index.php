@@ -16,12 +16,10 @@ $twig = new \Twig\Environment($loader, [
     'debug' => true
 ]);
 
-// Ajout des variables globales pour que Twig y ait accès dans TOUS les templates
-$twig->addGlobal('session', $_SESSION);
-$twig->addGlobal('cookie_consent', $_COOKIE['cookie_consent'] ?? null);
 
 // 4. Imports des ressources système et des contrôleurs
 require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../app/Security/Csrf.php';
 require_once __DIR__ . '/../app/Controllers/OffreController.php';
 require_once __DIR__ . '/../app/Controllers/EntrepriseController.php';
 require_once __DIR__ . '/../app/Controllers/EtudiantController.php';
@@ -31,6 +29,12 @@ require_once __DIR__ . '/../app/Controllers/AuthController.php';
 require_once __DIR__ . '/../app/Controllers/CandidatureController.php';
 require_once __DIR__ . '/../app/Controllers/WishlistController.php';
 require_once __DIR__ . '/../app/Controllers/SearchController.php';
+
+// Ajout des variables globales pour que Twig y ait accès dans TOUS les templates
+$twig->addGlobal('session', $_SESSION);
+$twig->addGlobal('cookie_consent', $_COOKIE['cookie_consent'] ?? null);
+$twig->addGlobal('csrf_token', Csrf::generate());
+
 
 // 5. Récupération des paramètres de navigation
 $page = $_GET['page'] ?? 'home';

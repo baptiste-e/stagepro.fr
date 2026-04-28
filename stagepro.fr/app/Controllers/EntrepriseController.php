@@ -104,6 +104,7 @@ class EntrepriseController {
     public function save() {
         $this->checkAuth();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            Csrf::check();
             $this->model->create(
                 trim($_POST['nom'] ?? ''),
                 trim($_POST['description'] ?? ''),
@@ -113,11 +114,14 @@ class EntrepriseController {
             header('Location: index.php?page=entreprises&status=created');
             exit;
         }
+
+        
     }
 
     public function update() {
         $this->checkAuth();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            Csrf::check();
             $id = (int)($_POST['id'] ?? 0);
             $data = [
                 'nom' => trim($_POST['nom'] ?? ''),
@@ -129,16 +133,20 @@ class EntrepriseController {
             header('Location: index.php?page=entreprise-detail&id=' . $id . '&status=updated');
             exit;
         }
+
+        
     }
 
     public function delete() {
         $this->checkAuth();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            Csrf::check();
             $id = (int)($_POST['id'] ?? 0);
             if ($id > 0) { $this->model->delete($id); }
             header('Location: index.php?page=entreprises&status=deleted');
             exit;
         }
+        
     }
 
     public function evaluate($id) {
@@ -151,6 +159,7 @@ class EntrepriseController {
 
     public function saveEvaluation() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            Csrf::check();
             $eId = $_POST['entreprise_id'];
             $uId = $_SESSION['user']['id'];
             $note = $_POST['note'];
@@ -160,5 +169,6 @@ class EntrepriseController {
             header("Location: index.php?page=entreprise-detail&id=" . $eId . "&status=evaluated");
             exit;
         }
+        
     }
 }

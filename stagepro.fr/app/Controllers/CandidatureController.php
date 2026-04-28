@@ -117,7 +117,10 @@ class CandidatureController {
             exit;
         }
 
+        
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            Csrf::check();
             $offreId = (int)($_POST['id_offre'] ?? 0);
             $lettre = htmlspecialchars($_POST['lm'] ?? '');
             $userId = (int)$_SESSION['user']['id'];
@@ -148,6 +151,8 @@ class CandidatureController {
             exit;
         }
 
+        
+
         $role = $this->getRole();
         if (!in_array($role, ['admin', 'pilote'], true)) {
             header('Location: index.php?page=home');
@@ -155,6 +160,7 @@ class CandidatureController {
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            Csrf::check();
             $statut = $_POST['statut'] ?? 'en_attente';
             $this->model->updateStatut((int)$id, $statut);
         }
@@ -166,27 +172,32 @@ class CandidatureController {
     /**
      * Annulation d'une candidature par l'étudiant
      */
-    public function cancel($id_candidature) {
-        if (!isset($_SESSION['user'])) {
-            header('Location: index.php?page=login');
-            exit;
-        }
-
-        $role = $this->getRole();
-        if ($role !== 'etudiant') {
-            header('Location: index.php?page=candidatures');
-            exit;
-        }
-
-        $userId = (int)$_SESSION['user']['id'];
-        $id_cand = (int)$id_candidature;
-
-        if ($id_cand > 0) {
-            // On vérifie l'ID utilisateur pour être sûr que l'étudiant supprime SA propre candidature
-            $this->model->deleteByIdentifiers($id_cand, $userId);
-        }
-
-        header("Location: index.php?page=candidatures&status=canceled");
+   public function cancel() {
+    if (!isset($_SESSION['user'])) {
+        header('Location: index.php?page=login');
         exit;
     }
+
+    $role = $this->getRole();
+    if ($role !== 'etudiant') {
+        header('Location: index.php?page=candidatures');
+        exit;
+    }
+
+    // ✅ Vérification CSRF
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        Csrf::check();
+
+        $userId = (int)$_SESSION['user']['id'];
+        $id_cand = (int)($_POST['id'] ?? 0);
+
+        if ($id_cand > 0) {
+            // On vérifie que l'étudiant supprime SA propre candidature
+            $this->model->deleteByIdentifiers($id_cand, $userId);
+        }
+    }
+
+    header("Location: index.php?page=candidatures&status=canceled");
+    exit;
+}
 }

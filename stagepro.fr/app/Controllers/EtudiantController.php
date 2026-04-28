@@ -112,9 +112,10 @@ class EtudiantController {
             header('Location: index.php?page=home');
             exit;
         }
+        
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
-
+        Csrf::check();
         $id = (int)($_POST['id'] ?? 0);
 
         // Récupération du rôle étudiant pour l'ID de rôle correct
@@ -153,12 +154,15 @@ class EtudiantController {
      */
     public function delete() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') exit;
+        Csrf::check();
 
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
 
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
             die("Accès refusé.");
         }
+
+        
 
         $id = (int)($_POST['id'] ?? 0);
 

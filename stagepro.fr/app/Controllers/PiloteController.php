@@ -117,7 +117,10 @@ class PiloteController
     {
         $this->requireRoles(['admin']);
 
+        
+
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            Csrf::check();
             header('Location: index.php?page=pilotes');
             exit;
         }
@@ -163,6 +166,7 @@ class PiloteController
         $this->requireRoles(['admin']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          Csrf::check();   
             $id = (int)($_POST['id'] ?? 0);
 
             if ($id > 0) {
@@ -173,6 +177,7 @@ class PiloteController
             exit;
         }
         
+
         header('Location: index.php?page=pilotes');
         exit;
     }
