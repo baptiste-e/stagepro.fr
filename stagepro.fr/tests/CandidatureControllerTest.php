@@ -33,7 +33,17 @@ final class CandidatureControllerTest extends TestCase
         ];
 
         $fakeModel = new class {
-            public function findAllFull()
+            public function countAllFull(): int
+            {
+                return 2;
+            }
+
+            public function countByEtudiant($userId): int
+            {
+                return 0;
+            }
+
+            public function findAllFullPaginated($limit, $offset): array
             {
                 return [
                     [
@@ -49,7 +59,7 @@ final class CandidatureControllerTest extends TestCase
                 ];
             }
 
-            public function findByEtudiant($userId)
+            public function findByEtudiantPaginated($userId, $limit, $offset): array
             {
                 return [];
             }
@@ -63,9 +73,11 @@ final class CandidatureControllerTest extends TestCase
 
         $this->assertSame('PAGE_ADMIN_CANDIDATURES', $output);
         $this->assertSame('candidatures/liste.html.twig', $twig->lastTemplate);
-        $this->assertArrayHasKey('candidatures', $twig->lastContext);
         $this->assertCount(2, $twig->lastContext['candidatures']);
         $this->assertSame('admin', $twig->lastContext['role']);
+        $this->assertSame(1, $twig->lastContext['pageActuelle']);
+        $this->assertSame(1, $twig->lastContext['totalPages']);
+        $this->assertSame('candidatures', $twig->lastContext['routePagination']);
         $this->assertSame('Gestion des candidatures | StagePro', $twig->lastContext['titre_page']);
     }
 
@@ -80,12 +92,22 @@ final class CandidatureControllerTest extends TestCase
         ];
 
         $fakeModel = new class {
-            public function findAllFull()
+            public function countAllFull(): int
+            {
+                return 0;
+            }
+
+            public function countByEtudiant($userId): int
+            {
+                return 1;
+            }
+
+            public function findAllFullPaginated($limit, $offset): array
             {
                 return [];
             }
 
-            public function findByEtudiant($userId)
+            public function findByEtudiantPaginated($userId, $limit, $offset): array
             {
                 return [
                     [
@@ -107,6 +129,9 @@ final class CandidatureControllerTest extends TestCase
         $this->assertSame('candidatures/liste.html.twig', $twig->lastTemplate);
         $this->assertCount(1, $twig->lastContext['candidatures']);
         $this->assertSame('etudiant', $twig->lastContext['role']);
+        $this->assertSame(1, $twig->lastContext['pageActuelle']);
+        $this->assertSame(1, $twig->lastContext['totalPages']);
+        $this->assertSame('candidatures', $twig->lastContext['routePagination']);
         $this->assertSame('Mes Candidatures | StagePro', $twig->lastContext['titre_page']);
     }
 
@@ -121,7 +146,7 @@ final class CandidatureControllerTest extends TestCase
         ];
 
         $fakeModel = new class {
-            public function findByIdFull($id)
+            public function findByIdFull($id): array
             {
                 return [
                     'id' => 5,
@@ -141,7 +166,6 @@ final class CandidatureControllerTest extends TestCase
 
         $this->assertSame('PAGE_DETAIL_CANDIDATURE', $output);
         $this->assertSame('candidatures/detail.html.twig', $twig->lastTemplate);
-        $this->assertArrayHasKey('candidature', $twig->lastContext);
         $this->assertSame(5, $twig->lastContext['candidature']['id']);
         $this->assertSame('etudiant', $twig->lastContext['role']);
         $this->assertSame('Détail candidature | StagePro', $twig->lastContext['titre_page']);

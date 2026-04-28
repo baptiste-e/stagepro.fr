@@ -1204,3 +1204,24 @@ h2 {
     opacity: 0.4;
     cursor: not-allowed;
 }
+.carousel-btn {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.2s ease;
+}
+
+.carousel-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.carousel-btn:active {
+    transform: translateY(0);
+}

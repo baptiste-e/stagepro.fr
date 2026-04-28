@@ -68,14 +68,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Exemple de validation de formulaire simple (STx 3)
-    const forms = document.querySelectorAll('form');
-    forms.forEach(form => {
-        form.addEventListener('submit', (e) => {
-            // Ici, vous ajouteriez la logique de vérification côté client
-            console.log("Formulaire soumis : validation en cours...");
+   // Validation simple des formulaires
+const forms = document.querySelectorAll('form');
+
+forms.forEach(form => {
+    form.addEventListener('submit', (e) => {
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            if (field.value.trim() === '') {
+                isValid = false;
+                field.style.borderColor = '#ef4444';
+            } else {
+                field.style.borderColor = '';
+            }
         });
+
+        const emailFields = form.querySelectorAll('input[type="email"]');
+        emailFields.forEach(field => {
+            if (field.value.trim() !== '' && !field.value.includes('@')) {
+                isValid = false;
+                field.style.borderColor = '#ef4444';
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+            alert("Veuillez remplir correctement les champs obligatoires.");
+        }
     });
+});
 
     const header = document.querySelector('.site-header');
 
@@ -102,43 +125,102 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const testimonialCards = document.querySelectorAll('.testimonial-card');
-    const progressBar = document.querySelector('.testimonial-progress-bar');
+const testimonialCards = document.querySelectorAll('.testimonial-card');
+const progressBar = document.querySelector('.testimonial-progress-bar');
 
-    if (testimonialCards.length > 0 && progressBar) {
-        let currentIndex = 0;
-        const duration = 10000;
+if (testimonialCards.length > 0 && progressBar) {
+    let currentIndex = 0;
+    const duration = 10000;
 
-        function showTestimonial(index) {
-            testimonialCards.forEach((card, i) => {
-                card.classList.toggle('active', i === index);
-            });
-        }
+    let timeoutId = null;
+    let startTime = null;
+    let remainingTime = duration;
+    let isPaused = false;
 
-        function animateProgress() {
-            progressBar.style.transition = 'none';
-            progressBar.style.width = '0%';
+    const pauseBtn = document.getElementById('pause-carousel');
 
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    progressBar.style.transition = `width ${duration}ms linear`;
-                    progressBar.style.width = '100%';
-                });
-            });
-        }
-
-        function nextTestimonial() {
-            currentIndex = (currentIndex + 1) % testimonialCards.length;
-            showTestimonial(currentIndex);
-            animateProgress();
-        }
-
-        showTestimonial(currentIndex);
-        animateProgress();
-
-        setInterval(nextTestimonial, duration);
+    function showTestimonial(index) {
+        testimonialCards.forEach((card, i) => {
+            card.classList.toggle('active', i === index);
+        });
     }
 
+    function startProgress(time) {
+        progressBar.style.transition = 'none';
+
+        requestAnimationFrame(() => {
+            progressBar.style.transition = `width ${time}ms linear`;
+            progressBar.style.width = '100%';
+        });
+    }
+
+    function resetProgress() {
+        progressBar.style.transition = 'none';
+        progressBar.style.width = '0%';
+    }
+
+    function nextTestimonial() {
+        currentIndex = (currentIndex + 1) % testimonialCards.length;
+        showTestimonial(currentIndex);
+
+        remainingTime = duration;
+        resetProgress();
+
+        requestAnimationFrame(() => {
+            startCarousel();
+        });
+    }
+
+    function startCarousel() {
+        startTime = Date.now();
+        startProgress(remainingTime);
+
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(nextTestimonial, remainingTime);
+    }
+
+    function pauseCarousel() {
+        isPaused = true;
+        clearTimeout(timeoutId);
+
+        const elapsed = Date.now() - startTime;
+        remainingTime = Math.max(0, remainingTime - elapsed);
+
+        const currentWidth = getComputedStyle(progressBar).width;
+        progressBar.style.transition = 'none';
+        progressBar.style.width = currentWidth;
+
+        if (pauseBtn) {
+            pauseBtn.textContent = "Reprendre";
+            pauseBtn.setAttribute('aria-label', 'Reprendre le carrousel');
+        }
+    }
+
+    function resumeCarousel() {
+        isPaused = false;
+        startCarousel();
+
+        if (pauseBtn) {
+            pauseBtn.textContent = "Pause";
+            pauseBtn.setAttribute('aria-label', 'Mettre en pause le carrousel');
+        }
+    }
+
+    showTestimonial(currentIndex);
+    resetProgress();
+    startCarousel();
+
+    if (pauseBtn) {
+        pauseBtn.addEventListener('click', () => {
+            if (isPaused) {
+                resumeCarousel();
+            } else {
+                pauseCarousel();
+            }
+        });
+    }
+}
+    
     const fadeElements = document.querySelectorAll('.fade-in');
 
     if (fadeElements.length > 0) {
