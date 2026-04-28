@@ -1,13 +1,13 @@
 {% extends "layout.html.twig" %}
 
-{% block title %}Ma Wish-list | StagePro{% endblock %}
+{% block title %}Mes favoris | StagePro{% endblock %}
 
 {% block content %}
 {# Fil d'Ariane - Remplacement de <nav> par une div pour la cohérence #}
 <div aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
     <a href="index.php?page=home" style="color: var(--accent, #2563eb); text-decoration: none;">Accueil</a> &gt;
-    <span style="color: var(--text-muted, #6b7280);">Ma wish-list</span>
+    <span style="color: var(--text-muted, #6b7280);">Mes favoris</span>
   </p>
 </div>
 
@@ -15,12 +15,12 @@
     {# Vérification si la liste est vide #}
     {% if wishlist is empty %}
         <div style="background: #ffffff; padding: 4rem 2rem; border-radius: 12px; border: 1px dashed var(--border, #d1d5db); text-align: center;">
-            <h1 style="margin-bottom: 1rem; color: #1f2937;">Votre wish-list est vide</h1>
+            <h1 style="margin-bottom: 1rem; color: #1f2937;">Vos favoris vide</h1>
             <p style="color: var(--text-muted, #6b7280); margin-bottom: 2rem; font-size: 1.1rem;">Vous n'avez pas encore enregistré d'offres en favoris.</p>
             <a href="index.php?page=offres" class="btn-cta" style="padding: 0.8rem 2rem; text-decoration: none;">Explorer les offres</a>
         </div>
     {% else %}
-        <h1 style="margin-bottom: 2rem; color: #1f2937;">Ma wish-list</h1>
+        <h1 style="margin-bottom: 2rem; color: #1f2937;">Mes favoris</h1>
         
         {# Grille des favoris #}
         <div class="container-espaces" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">

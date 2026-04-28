@@ -35,7 +35,7 @@ class WishlistController {
         echo $this->twig->render('wishlist/liste.html.twig', [
             'wishlist' => $wishlist,
             'wishlist_est_vide' => $wishlist_est_vide,
-            'titre_page' => "Ma Wish-list | StagePro"
+            'titre_page' => "Mes favoris | StagePro"
         ]);
     }
 
@@ -78,7 +78,7 @@ class WishlistController {
         }
 
         // Redirection vers la page précédente ou par défaut vers la wishlist
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php?page=wishlist'));
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php?page=favoris'));
         exit;
     }
 }

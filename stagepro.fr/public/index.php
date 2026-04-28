@@ -127,16 +127,21 @@ case 'entreprise-save-eval':
         (new CandidatureController($twig))->updateStatus($id);
         break;
 
-    // --- WISHLIST (FAVORIS) ---
-    case 'wishlist':
-        (new WishlistController($twig))->index();
-        break;
-    case 'wishlist-add':
-        (new WishlistController($twig))->add();
-        break;
-    case 'wishlist-remove':
-        (new WishlistController($twig))->remove();
-        break;
+    // --- FAVORIS ---
+case 'favoris':
+case 'wishlist':
+    (new WishlistController($twig))->index();
+    break;
+
+case 'favoris-add':
+case 'wishlist-add':
+    (new WishlistController($twig))->add();
+    break;
+
+case 'favoris-remove':
+case 'wishlist-remove':
+    (new WishlistController($twig))->remove();
+    break;
 
     // --- ADMINISTRATION & UTILISATEURS ---
     case 'admin':
