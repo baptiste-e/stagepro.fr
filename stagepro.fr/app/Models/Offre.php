@@ -23,6 +23,24 @@ class Offre {
     }
 
     /**
+     * Récupère les offres paginées avec LIMIT et OFFSET
+     */
+    public function findAllPaginated(int $limit, int $offset): array {
+        $sql = "SELECT o.*, e.nom AS entreprise_nom
+                FROM offres o
+                LEFT JOIN entreprises e ON o.entreprise_id = e.id
+                ORDER BY o.date_offre DESC, o.id DESC
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Recherche multicritère (Titre, Entreprise, Compétences, Rémunération, Dates)
      */
     public function search(array $filters = []): array {
@@ -75,23 +93,141 @@ class Offre {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-public function searchGlobal(string $term): array {
-    $sql = "SELECT o.*, e.nom AS entreprise_nom
-            FROM offres o
-            LEFT JOIN entreprises e ON o.entreprise_id = e.id
-            WHERE o.titre LIKE :term
-               OR o.description LIKE :term
-               OR o.competences LIKE :term
-               OR e.nom LIKE :term
-            ORDER BY o.date_offre DESC, o.id DESC";
 
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([
-        ':term' => '%' . $term . '%'
-    ]);
+    /**
+     * Recherche multicritère paginée avec LIMIT et OFFSET
+     */
+    public function searchPaginated(array $filters = [], int $limit = 6, int $offset = 0): array {
+        $sql = "SELECT o.*, e.nom AS entreprise_nom
+                FROM offres o
+                LEFT JOIN entreprises e ON o.entreprise_id = e.id
+                WHERE 1=1";
+        $params = [];
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        if (!empty($filters['titre'])) {
+            $sql .= " AND o.titre LIKE :titre";
+            $params[':titre'] = '%' . $filters['titre'] . '%';
+        }
+
+        if (!empty($filters['entreprise'])) {
+            $sql .= " AND e.nom LIKE :entreprise";
+            $params[':entreprise'] = '%' . $filters['entreprise'] . '%';
+        }
+
+        if (!empty($filters['competences'])) {
+            $sql .= " AND o.competences LIKE :competences";
+            $params[':competences'] = '%' . $filters['competences'] . '%';
+        }
+
+        if (isset($filters['remuneration']) && $filters['remuneration'] !== '') {
+            $sql .= " AND o.remuneration >= :remuneration";
+            $params[':remuneration'] = (float)$filters['remuneration'];
+        }
+
+        if (!empty($filters['date_offre'])) {
+            $sql .= " AND o.date_offre = :date_offre";
+            $params[':date_offre'] = $filters['date_offre'];
+        }
+
+        if (!empty($filters['date_debut'])) {
+            $sql .= " AND o.date_offre >= :date_debut";
+            $params[':date_debut'] = $filters['date_debut'];
+        }
+
+        if (!empty($filters['date_fin'])) {
+            $sql .= " AND o.date_offre <= :date_fin";
+            $params[':date_fin'] = $filters['date_fin'];
+        }
+
+        $sql .= " ORDER BY o.date_offre DESC, o.id DESC
+                  LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        foreach ($params as $key => $value) {
+            if ($key === ':remuneration') {
+                $stmt->bindValue($key, $value);
+            } else {
+                $stmt->bindValue($key, $value, PDO::PARAM_STR);
+            }
+        }
+
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Compte le nombre total d'offres après recherche multicritère
+     */
+    public function countSearch(array $filters = []): int {
+        $sql = "SELECT COUNT(*)
+                FROM offres o
+                LEFT JOIN entreprises e ON o.entreprise_id = e.id
+                WHERE 1=1";
+        $params = [];
+
+        if (!empty($filters['titre'])) {
+            $sql .= " AND o.titre LIKE :titre";
+            $params[':titre'] = '%' . $filters['titre'] . '%';
+        }
+
+        if (!empty($filters['entreprise'])) {
+            $sql .= " AND e.nom LIKE :entreprise";
+            $params[':entreprise'] = '%' . $filters['entreprise'] . '%';
+        }
+
+        if (!empty($filters['competences'])) {
+            $sql .= " AND o.competences LIKE :competences";
+            $params[':competences'] = '%' . $filters['competences'] . '%';
+        }
+
+        if (isset($filters['remuneration']) && $filters['remuneration'] !== '') {
+            $sql .= " AND o.remuneration >= :remuneration";
+            $params[':remuneration'] = (float)$filters['remuneration'];
+        }
+
+        if (!empty($filters['date_offre'])) {
+            $sql .= " AND o.date_offre = :date_offre";
+            $params[':date_offre'] = $filters['date_offre'];
+        }
+
+        if (!empty($filters['date_debut'])) {
+            $sql .= " AND o.date_offre >= :date_debut";
+            $params[':date_debut'] = $filters['date_debut'];
+        }
+
+        if (!empty($filters['date_fin'])) {
+            $sql .= " AND o.date_offre <= :date_fin";
+            $params[':date_fin'] = $filters['date_fin'];
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return (int)$stmt->fetchColumn();
+    }
+
+    public function searchGlobal(string $term): array {
+        $sql = "SELECT o.*, e.nom AS entreprise_nom
+                FROM offres o
+                LEFT JOIN entreprises e ON o.entreprise_id = e.id
+                WHERE o.titre LIKE :term
+                   OR o.description LIKE :term
+                   OR o.competences LIKE :term
+                   OR e.nom LIKE :term
+                ORDER BY o.date_offre DESC, o.id DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':term' => '%' . $term . '%'
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Récupère une offre spécifique par son ID
      */

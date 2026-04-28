@@ -25,6 +25,24 @@ class Entreprise
     }
 
     /**
+     * Récupère les entreprises paginées avec LIMIT et OFFSET
+     */
+    public function findAllPaginated(int $limit, int $offset): array
+    {
+        $sql = "SELECT *
+                FROM entreprises
+                ORDER BY nom ASC
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * RÉVISION SFx 5 : Récupère une entreprise par son ID avec sa note moyenne
      */
     public function findById(int $id): array|false
@@ -133,35 +151,36 @@ class Entreprise
             'comm' => htmlspecialchars($commentaire)
         ]);
     }
-/**
- * Recherche globale simple pour la barre de recherche
- */
-public function searchGlobal(string $term): array
-{
-    $sql = "SELECT *
-            FROM entreprises
-            WHERE nom LIKE :term
-               OR description LIKE :term
-               OR email_contact LIKE :term
-               OR telephone_contact LIKE :term
-            ORDER BY nom ASC";
 
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([
-        ':term' => '%' . $term . '%'
-    ]);
+    /**
+     * Recherche globale simple pour la barre de recherche
+     */
+    public function searchGlobal(string $term): array
+    {
+        $sql = "SELECT *
+                FROM entreprises
+                WHERE nom LIKE :term
+                   OR description LIKE :term
+                   OR email_contact LIKE :term
+                   OR telephone_contact LIKE :term
+                ORDER BY nom ASC";
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':term' => '%' . $term . '%'
+        ]);
 
-public function getEvaluations(int $id): array {
-    $sql = "SELECT ev.*, u.nom, u.prenom
-            FROM evaluations ev
-            JOIN utilisateurs u ON ev.utilisateur_id = u.id
-            WHERE ev.entreprise_id = :id
-            ORDER BY ev.created_at DESC";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute(['id' => $id]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getEvaluations(int $id): array {
+        $sql = "SELECT ev.*, u.nom, u.prenom
+                FROM evaluations ev
+                JOIN utilisateurs u ON ev.utilisateur_id = u.id
+                WHERE ev.entreprise_id = :id
+                ORDER BY ev.created_at DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 } // Fin de la classe

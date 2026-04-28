@@ -41,6 +41,41 @@ class Candidature {
     }
 
     /**
+     * Récupère les candidatures d'un étudiant avec LIMIT et OFFSET
+     */
+    public function findByEtudiantPaginated($userId, int $limit, int $offset) {
+        $sql = "SELECT c.*, o.titre AS offre_titre, e.nom AS entreprise_nom
+                FROM candidatures c
+                JOIN offres o ON c.offre_id = o.id
+                JOIN entreprises e ON o.entreprise_id = e.id
+                WHERE c.utilisateur_id = :id
+                ORDER BY c.created_at DESC
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id', (int)$userId, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Compte les candidatures d'un étudiant
+     */
+    public function countByEtudiant($userId): int {
+        $sql = "SELECT COUNT(*)
+                FROM candidatures
+                WHERE utilisateur_id = :id";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => (int)$userId]);
+
+        return (int)$stmt->fetchColumn();
+    }
+
+    /**
      * Récupère TOUTES les candidatures avec les infos étudiants (pour Admin / Pilote)
      */
     public function findAllFull() {
@@ -57,6 +92,39 @@ class Candidature {
                 ORDER BY c.created_at DESC";
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupère TOUTES les candidatures avec LIMIT et OFFSET
+     */
+    public function findAllFullPaginated(int $limit, int $offset) {
+        $sql = "SELECT c.*, 
+                       o.titre AS offre_titre,
+                       e.nom AS entreprise_nom,
+                       u.nom AS etudiant_nom,
+                       u.prenom AS etudiant_prenom,
+                       u.email AS etudiant_email
+                FROM candidatures c
+                JOIN offres o ON c.offre_id = o.id
+                JOIN entreprises e ON o.entreprise_id = e.id
+                JOIN utilisateurs u ON c.utilisateur_id = u.id
+                ORDER BY c.created_at DESC
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Compte toutes les candidatures
+     */
+    public function countAllFull(): int {
+        $sql = "SELECT COUNT(*) FROM candidatures";
+        return (int)$this->db->query($sql)->fetchColumn();
     }
 
     /**

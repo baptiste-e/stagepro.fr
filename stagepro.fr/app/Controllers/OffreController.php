@@ -24,57 +24,52 @@ class OffreController {
      * Liste des offres avec système de filtrage + pagination
      */
     public function index() {
-    $filters = [
-        'titre' => trim($_GET['titre'] ?? ''),
-        'entreprise' => trim($_GET['entreprise'] ?? ''),
-        'competences' => trim($_GET['competences'] ?? ''),
-        'remuneration' => trim($_GET['remuneration'] ?? '')
-    ];
+        $filters = [
+            'titre' => trim($_GET['titre'] ?? ''),
+            'entreprise' => trim($_GET['entreprise'] ?? ''),
+            'competences' => trim($_GET['competences'] ?? ''),
+            'remuneration' => trim($_GET['remuneration'] ?? '')
+        ];
 
-    // On filtre les résultats seulement si au moins un champ est rempli
-    $hasFilters = !empty(array_filter($filters));
-    $offres = $hasFilters ? $this->model->search($filters) : $this->model->findAll();
+        // On filtre les résultats seulement si au moins un champ est rempli
+        $hasFilters = !empty(array_filter($filters));
 
-    // -----------------------------
-    // PAGINATION : 6 offres par page
-    // -----------------------------
+        // -----------------------------
+        // PAGINATION SQL : 6 offres par page
+        // -----------------------------
+        $offresParPage = 6;
+        $pageActuelle = max(1, (int)($_GET['pagination'] ?? 1));
 
-    // Nombre d'offres affichées par page
-    $offresParPage = 6;
+        // Nombre total d'offres après filtrage
+        $totalOffres = $hasFilters
+            ? $this->model->countSearch($filters)
+            : $this->model->countAll();
 
-    // Numéro de page actuel dans l'URL : index.php?page=offres&pagination=2
-    $pageActuelle = max(1, (int)($_GET['pagination'] ?? 1));
+        $totalPages = max(1, (int)ceil($totalOffres / $offresParPage));
 
-    // Nombre total d'offres après filtrage
-    $totalOffres = count($offres);
+        if ($pageActuelle > $totalPages) {
+            $pageActuelle = $totalPages;
+        }
 
-    // Nombre total de pages
-    // max(1, ...) permet d'afficher au moins la page 1 même s'il n'y a pas assez d'offres
-    $totalPages = max(1, (int)ceil($totalOffres / $offresParPage));
+        $offset = ($pageActuelle - 1) * $offresParPage;
 
-    // Sécurité : si l'utilisateur met pagination=999, on le ramène à la dernière page
-    if ($pageActuelle > $totalPages) {
-        $pageActuelle = $totalPages;
+        // Récupération uniquement des 6 offres de la page actuelle
+        $offres = $hasFilters
+            ? $this->model->searchPaginated($filters, $offresParPage, $offset)
+            : $this->model->findAllPaginated($offresParPage, $offset);
+
+        echo $this->twig->render('offres/liste.html.twig', [
+            'offres' => $offres,
+            'filters' => $filters,
+
+            // Variables envoyées à Twig pour afficher la pagination
+            'pageActuelle' => $pageActuelle,
+            'totalPages' => $totalPages,
+            'routePagination' => 'offres',
+
+            'titre_page' => "Offres de stage | StagePro"
+        ]);
     }
-
-    // À partir de quelle offre on commence
-    $offset = ($pageActuelle - 1) * $offresParPage;
-
-    // On garde seulement les 6 offres de la page actuelle
-    $offres = array_slice($offres, $offset, $offresParPage);
-
-    echo $this->twig->render('offres/liste.html.twig', [
-        'offres' => $offres,
-        'filters' => $filters,
-
-        // Variables envoyées à Twig pour afficher la pagination
-        'pageActuelle' => $pageActuelle,
-        'totalPages' => $totalPages,
-        'routePagination' => 'offres',
-
-        'titre_page' => "Offres de stage | StagePro"
-    ]);
-}
 
     /**
      * Affiche le détail d'une offre et vérifie si l'étudiant a déjà postulé

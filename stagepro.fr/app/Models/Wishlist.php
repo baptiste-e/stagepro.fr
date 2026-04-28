@@ -57,4 +57,42 @@ class Wishlist {
         $stmt->execute(['u' => (int)$id_user]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Récupère les favoris d'un utilisateur avec LIMIT et OFFSET
+     */
+    public function getUserWishlistPaginated($id_user, int $limit, int $offset) {
+        $sql = "SELECT 
+                    o.*, 
+                    e.nom AS entreprise_nom,
+                    w.created_at AS wishlist_created_at
+                FROM wishlist w 
+                JOIN offres o ON w.offre_id = o.id 
+                JOIN entreprises e ON o.entreprise_id = e.id 
+                WHERE w.utilisateur_id = :u
+                ORDER BY w.created_at DESC
+                LIMIT :limit OFFSET :offset";
+            
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':u', (int)$id_user, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Compte le nombre total de favoris d'un utilisateur
+     */
+    public function countUserWishlist($id_user): int {
+        $sql = "SELECT COUNT(*)
+                FROM wishlist
+                WHERE utilisateur_id = :u";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['u' => (int)$id_user]);
+
+        return (int)$stmt->fetchColumn();
+    }
 }
