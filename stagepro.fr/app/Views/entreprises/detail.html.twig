@@ -6,8 +6,8 @@
 {# Fil d'Ariane #}
 <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
-    <a href="index.php?page=home" style="color: var(--accent-blue, #2563eb); text-decoration: none;">Accueil</a> &gt;
-    <a href="index.php?page=entreprises" style="color: var(--accent-blue, #2563eb); text-decoration: none;">Entreprises</a> &gt;
+    <a href="/home" style="color: var(--accent-blue, #2563eb); text-decoration: none;">Accueil</a> &gt;
+    <a href="/entreprises" style="color: var(--accent-blue, #2563eb); text-decoration: none;">Entreprises</a> &gt;
     <span style="color: var(--text-muted, #6b7280);">Fiche entreprise</span>
   </p>
 </nav>
@@ -87,7 +87,7 @@
             <h4 style="margin: 0 0 0.5rem 0; color: #92400e; font-size: 1.1rem;">Votre avis nous intéresse !</h4>
             <p style="margin: 0; color: #b45309; font-size: 0.9rem;">Aidez vos camarades en notant votre expérience dans cette entreprise.</p>
         </div>
-        <a href="index.php?page=entreprise-evaluate&id={{ entreprise.id }}" class="btn-cta" style="background: #f59e0b; padding: 0.8rem 1.5rem; font-size: 0.9rem; text-decoration: none; border-radius: 6px; color: white; font-weight: 600;">
+        <a href="/entreprise-evaluate?id={{ entreprise.id }}" class="btn-cta" style="background: #f59e0b; padding: 0.8rem 1.5rem; font-size: 0.9rem; text-decoration: none; border-radius: 6px; color: white; font-weight: 600;">
              Évaluer l'entreprise
         </a>
     </div>
@@ -128,16 +128,16 @@
 
   {# Liens de navigation #}
   <div style="margin-top: 2.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-    <a href="index.php?page=entreprises" style="color: var(--accent-blue, #2563eb); text-decoration: none; font-weight: 600; font-size: 0.9rem;">&larr; Retour à l'annuaire</a>
+    <a href="/entreprises" style="color: var(--accent-blue, #2563eb); text-decoration: none; font-weight: 600; font-size: 0.9rem;">&larr; Retour à l'annuaire</a>
     {% if entreprise.nb_offres > 0 %}
-        <a href="index.php?page=offres&entreprise={{ entreprise.nom|url_encode }}" class="btn-cta" style="background: #2563eb; color: white; padding: 0.6rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.8rem;">Voir ses offres</a>
+        <a href="/offres?entreprise={{ entreprise.nom|url_encode }}" class="btn-cta" style="background: #2563eb; color: white; padding: 0.6rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.8rem;">Voir ses offres</a>
     {% endif %}
   </div>
 
   {# Zone Admin #}
   {% if session.user and userRole in ['admin', 'pilote'] %}
     <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed #ccc; display: flex; gap: 1rem; flex-wrap: wrap;">
-      <a href="index.php?page=entreprise-edit&id={{ entreprise.id }}" 
+      <a href="/entreprise-edit?id={{ entreprise.id }}" 
          class="btn-cta" 
          style="background: #818cf8; color: white; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: 600; font-size: 0.9rem;">
         Modifier la fiche

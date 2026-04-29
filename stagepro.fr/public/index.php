@@ -9,6 +9,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // 2. Démarrage de la session
 session_start();
 
+if (!isset($_GET['page'])) {
+    $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+    $_GET['page'] = $uri !== '' ? $uri : 'home';
+}
+
 // 3. Configuration de Twig
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../app/Views');
 $twig = new \Twig\Environment($loader, [

@@ -13,7 +13,7 @@
 
     {# Accès restreint au bouton de création (Admin/Pilote) #}
     {% if session.user and session.user.role in ['admin', 'pilote'] %}
-      <a href="index.php?page=etudiant-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer un étudiant</a>
+      <a href="/etudiant-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer un étudiant</a>
     {% endif %}
   </div>
 </div>
@@ -42,7 +42,7 @@
           </div>
 
           {# Lien étendu pour rendre toute la carte cliquable #}
-          <a href="index.php?page=etudiant-detail&id={{ etudiant.id }}" class="lien-etendu" title="Voir le profil de {{ etudiant.prenom }}"></a>
+          <a href="/etudiant-detail?id={{ etudiant.id }}" class="lien-etendu" title="Voir le profil de {{ etudiant.prenom }}"></a>
         </div>
     {% else %}
         {# État vide si aucun étudiant n'est trouvé #}

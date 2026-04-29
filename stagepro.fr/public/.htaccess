@@ -1,8 +1,17 @@
+Options -MultiViews
 RewriteEngine On
 
-# Si le fichier ou dossier existe → on ne touche pas
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+# Anciennes URL : /index.php?page=offres -> /offres
+RewriteCond %{THE_REQUEST} \s/+index\.php\?page=([^\s&]+) [NC]
+RewriteRule ^index\.php$ /%1? [R=301,L]
 
-# Redirige vers index.php
-RewriteRule ^(.+)$ index.php?page=$1 [QSA,L]
+# Si le fichier ou dossier existe, on ne touche pas
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# URL vide -> home
+RewriteRule ^$ index.php?page=home [QSA,L]
+
+# URL propre -> index.php?page=...
+RewriteRule ^([a-zA-Z0-9_-]+)$ index.php?page=$1 [QSA,L]

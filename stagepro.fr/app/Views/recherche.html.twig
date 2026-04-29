@@ -21,7 +21,7 @@
                         <article class="card" style="position: relative;">
                             <h3>{{ entreprise.nom }}</h3>
                             <p>{{ entreprise.description|slice(0, 140) }}{% if entreprise.description|length > 140 %}...{% endif %}</p>
-                            <a href="index.php?page=entreprise-detail&id={{ entreprise.id }}" class="lien-etendu"></a>
+                            <a href="/entreprise-detail?id={{ entreprise.id }}" class="lien-etendu"></a>
                         </article>
                     {% endfor %}
                 </div>
@@ -39,7 +39,7 @@
                             <p style="margin-top: 0.8rem;">
                                 {{ offre.description|slice(0, 140) }}{% if offre.description|length > 140 %}...{% endif %}
                             </p>
-                            <a href="index.php?page=offre-detail&id={{ offre.id }}" class="lien-etendu"></a>
+                            <a href="/offre-detail?id={{ offre.id }}" class="lien-etendu"></a>
                         </article>
                     {% endfor %}
                 </div>

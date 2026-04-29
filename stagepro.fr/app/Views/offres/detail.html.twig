@@ -19,7 +19,7 @@
 <div style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
     {# Fil d'Ariane #}
     <nav style="margin-bottom: 2rem; font-size: 0.8rem; color: #666;">
-        <a href="index.php?page=offres" style="color: #2563eb; text-decoration: none;">&larr; Retour aux offres</a>
+        <a href="/offres" style="color: #2563eb; text-decoration: none;">&larr; Retour aux offres</a>
     </nav>
 
     <div class="detail-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start;">
@@ -57,7 +57,7 @@
                                      Voir le CV envoyé
                                 </a>
                             {% endif %}
-                            <a href="index.php?page=candidatures" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.9rem;">Suivre mes candidatures →</a>
+                            <a href="/candidatures" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.9rem;">Suivre mes candidatures →</a>
                         </div>
                     </div>
                 {% else %}
@@ -111,7 +111,7 @@
             {% if session.user and session.user.role in ['admin', 'pilote'] %}
                 <div style="padding: 1.5rem; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px;">
                     <h3 style="font-size: 0.875rem; color: #be123c; text-transform: uppercase; margin-bottom: 1rem;">Administration</h3>
-                    <a href="index.php?page=offre-edit&id={{ offre.id }}" 
+                    <a href="/offre-edit?id={{ offre.id }}" 
                        style="display: block; text-align: center; background: #1e293b; color: white; padding: 0.75rem; border-radius: 6px; text-decoration: none; margin-bottom: 0.5rem; font-weight: 600;">
                         Modifier l'offre
                     </a>

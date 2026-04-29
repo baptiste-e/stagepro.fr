@@ -13,7 +13,7 @@
 
         {# Restriction d'accès : Admin et Pilote uniquement #}
         {% if session.user and session.user.role in ['admin', 'pilote'] %}
-            <a href="index.php?page=entreprise-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer une entreprise</a>
+            <a href="/entreprise-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer une entreprise</a>
         {% endif %}
     </div>
 </div>
@@ -62,7 +62,7 @@
                 </div>
 
                 {# Lien invisible qui rend toute la carte cliquable #}
-                <a href="index.php?page=entreprise-detail&id={{ entreprise.id }}" class="lien-etendu" title="Voir la fiche de {{ entreprise.nom }}"></a>
+                <a href="/entreprise-detail?id={{ entreprise.id }}" class="lien-etendu" title="Voir la fiche de {{ entreprise.nom }}"></a>
             </div>
         {% else %}
             <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #ffffff; border-radius: 12px; border: 1px dashed var(--border, #cbd5e1);">
@@ -75,7 +75,7 @@
 {# --- PAGINATION --- #}
 <div class="pagination">
     {% if pageActuelle > 1 %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle - 1 }}" class="pagination-btn">
+        <a href="/{{ routePagination }}?pagination={{ pageActuelle - 1 }}" class="pagination-btn">
             ← Précédent
         </a>
     {% else %}
@@ -83,14 +83,14 @@
     {% endif %}
 
     {% for i in 1..totalPages %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ i }}"
+        <a href="/{{ routePagination }}?pagination={{ i }}"
            class="pagination-number {% if i == pageActuelle %}active{% endif %}">
             {{ i }}
         </a>
     {% endfor %}
 
     {% if pageActuelle < totalPages %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle + 1 }}" class="pagination-btn">
+        <a href="/{{ routePagination }}?pagination={{ pageActuelle + 1 }}" class="pagination-btn">
             Suivant →
         </a>
     {% else %}

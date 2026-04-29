@@ -12,8 +12,8 @@
     {# Fil d'Ariane #}
     <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
       <p>
-        <a href="index.php?page=home" style="color: #2563eb; text-decoration: none;">Accueil</a> &gt;
-        <a href="index.php?page=entreprises" style="color: #2563eb; text-decoration: none;">Entreprises</a> &gt;
+        <a href="/home" style="color: #2563eb; text-decoration: none;">Accueil</a> &gt;
+        <a href="/entreprises" style="color: #2563eb; text-decoration: none;">Entreprises</a> &gt;
         <span style="color: #666;">{{ isEdit ? 'Modification' : 'Création' }}</span>
       </p>
     </nav>
@@ -76,7 +76,7 @@
             {{ isEdit ? "Enregistrer les modifications" : "Créer l'entreprise" }}
           </button>
           
-          <a href="index.php?page=entreprises" 
+          <a href="/entreprises" 
              style="text-decoration: none; color: #64748b; font-weight: 500; font-size: 1rem; padding: 0.8rem 1rem;">
             Annuler
           </a>

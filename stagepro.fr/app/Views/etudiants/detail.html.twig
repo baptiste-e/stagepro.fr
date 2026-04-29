@@ -9,8 +9,8 @@
 {# Fil d’ariane #}
 <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
-    <a href="index.php?page=home" style="color: var(--accent, #2563eb); text-decoration: none;">Accueil</a> &gt;
-    <a href="index.php?page=etudiants" style="color: var(--accent, #2563eb); text-decoration: none;">Étudiants</a> &gt;
+    <a href="/home" style="color: var(--accent, #2563eb); text-decoration: none;">Accueil</a> &gt;
+    <a href="/etudiants" style="color: var(--accent, #2563eb); text-decoration: none;">Étudiants</a> &gt;
     <span style="color: var(--text-muted, #6b7280);">Détail profil</span>
   </p>
 </nav>
@@ -49,7 +49,7 @@
       {# Actions réservées (Admin/Pilote) #}
       {% if userRole == 'admin' or userRole == 'pilote' %}
       <div style="margin-top: 2rem; border-top: 1px solid var(--border, #d1d5db); padding-top: 1.5rem;">
-        <a href="index.php?page=etudiant-edit&id={{ etudiant.id }}" 
+        <a href="/etudiant-edit?id={{ etudiant.id }}" 
            style="display: block; text-align: center; margin-bottom: 0.7rem; font-size: 0.85rem; text-decoration: none; background: #1e293b; color: white; padding: 0.7rem; border-radius: 6px; font-weight: bold; transition: opacity 0.2s;">
             Modifier le compte
         </a>
@@ -91,7 +91,7 @@
                       <p style="font-size: 0.8rem; color: var(--text-muted, #6b7280); margin: 0;">Envoyée le : {{ c.created_at|date("d/m/Y") }}</p>
                       
                       <div style="margin-top: 1rem; text-align: right; border-top: 1px solid var(--border, #d1d5db); padding-top: 0.8rem;">
-                          <a href="index.php?page=candidature-detail&id={{ c.id }}" style="font-size: 0.85rem; color: var(--accent, #2563eb); text-decoration: none; font-weight: 600;">Voir la candidature &rarr;</a>
+                          <a href="/candidature-detail?id={{ c.id }}" style="font-size: 0.85rem; color: var(--accent, #2563eb); text-decoration: none; font-weight: 600;">Voir la candidature &rarr;</a>
                       </div>
                   </div>
               {% endfor %}

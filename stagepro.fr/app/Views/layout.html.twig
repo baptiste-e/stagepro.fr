@@ -158,7 +158,7 @@
     <header class="site-header">
         <div class="site-header__inner">
             <h1 class="site-logo">
-                <a href="index.php?page=home">StagePro</a>
+                <a href="/home">StagePro</a>
             </h1>
 
             <button
@@ -218,8 +218,8 @@
                     Ce site utilise des cookies pour améliorer votre expérience et mesurer la fréquentation du site.
                 </p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <a href="index.php?page=cookie-accept" style="background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Accepter</a>
-                    <a href="index.php?page=cookie-refuse" style="background: #ef4444; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Refuser</a>
+                    <a href="/cookie-accept" style="background: #2563eb; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Accepter</a>
+                    <a href="/cookie-refuse" style="background: #ef4444; color: white; text-decoration: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px;">Refuser</a>
                     <button type="button" onclick="toggleCookiesSettings()" style="background: white; color: #2563eb; border: 1px solid #2563eb; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 6px; cursor: pointer;">Personnaliser</button>
                 </div>
                 <div id="cookie-settings" style="display: none; margin-top: 15px; padding: 15px; background: white; border: 1px solid #d1d5db; border-radius: 6px;">
@@ -253,8 +253,8 @@
             <p>© 2026 – StagePro – Propulsé par le talent des étudiants CESI.</p>
             
             <p style="margin-top: 15px;">
-                <a href="index.php?page=mentions" style="margin: 0 10px; color: #4b5563; text-decoration: underline;">Mentions légales</a>
-                <a href="index.php?page=cookie-reset" style="margin: 0 10px; color: #4b5563;">Préférences Cookies</a>
+                <a href="/mentions" style="margin: 0 10px; color: #4b5563; text-decoration: underline;">Mentions légales</a>
+                <a href="/cookie-reset" style="margin: 0 10px; color: #4b5563;">Préférences Cookies</a>
             </p>
 
             {% if cookie_consent is defined and cookie_consent == 'accepted' %}

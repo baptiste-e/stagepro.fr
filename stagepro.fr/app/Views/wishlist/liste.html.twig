@@ -6,7 +6,7 @@
 {# Fil d'Ariane - Remplacement de <nav> par une div pour la cohérence #}
 <div aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
   <p>
-    <a href="index.php?page=home" style="color: var(--accent, #2563eb); text-decoration: none;">Accueil</a> &gt;
+    <a href="/home" style="color: var(--accent, #2563eb); text-decoration: none;">Accueil</a> &gt;
     <span style="color: var(--text-muted, #6b7280);">Mes favoris</span>
   </p>
 </div>
@@ -17,7 +17,7 @@
         <div style="background: #ffffff; padding: 4rem 2rem; border-radius: 12px; border: 1px dashed var(--border, #d1d5db); text-align: center;">
             <h1 style="margin-bottom: 1rem; color: #1f2937;">Vos favoris vide</h1>
             <p style="color: var(--text-muted, #6b7280); margin-bottom: 2rem; font-size: 1.1rem;">Vous n'avez pas encore enregistré d'offres en favoris.</p>
-            <a href="index.php?page=offres" class="btn-cta" style="padding: 0.8rem 2rem; text-decoration: none;">Explorer les offres</a>
+            <a href="/offres" class="btn-cta" style="padding: 0.8rem 2rem; text-decoration: none;">Explorer les offres</a>
         </div>
     {% else %}
         <h1 style="margin-bottom: 2rem; color: #1f2937;">Mes favoris</h1>
@@ -45,7 +45,7 @@
                     {# Actions #}
                     <div style="margin-top: 2rem; display: flex; gap: 12px; align-items: center; border-top: 1px solid var(--border, #d1d5db); padding-top: 1.2rem;">
                         
-                        <a href="index.php?page=offre-detail&id={{ item.id }}" class="btn-cta" style="font-size: 0.8rem; text-decoration: none; padding: 0.6rem 1rem;">
+                        <a href="/offre-detail?id={{ item.id }}" class="btn-cta" style="font-size: 0.8rem; text-decoration: none; padding: 0.6rem 1rem;">
                             Voir l'offre
                         </a>
                         
@@ -68,7 +68,7 @@
 {# --- PAGINATION --- #}
 <div class="pagination">
     {% if pageActuelle > 1 %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle - 1 }}" class="pagination-btn">
+        <a href="/{{ routePagination }}?pagination={{ pageActuelle - 1 }}" class="pagination-btn">
             ← Précédent
         </a>
     {% else %}
@@ -76,14 +76,14 @@
     {% endif %}
 
     {% for i in 1..totalPages %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ i }}"
+        <a href="/{{ routePagination }}?pagination={{ i }}"
            class="pagination-number {% if i == pageActuelle %}active{% endif %}">
             {{ i }}
         </a>
     {% endfor %}
 
     {% if pageActuelle < totalPages %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle + 1 }}" class="pagination-btn">
+        <a href="/{{ routePagination }}?pagination={{ pageActuelle + 1 }}" class="pagination-btn">
             Suivant →
         </a>
     {% else %}

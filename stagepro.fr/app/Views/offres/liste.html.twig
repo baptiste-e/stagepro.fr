@@ -11,14 +11,14 @@
     </div>
     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
         {# Bouton Statistiques #}
-        <a href="index.php?page=offres-stats" 
+        <a href="/offres-stats" 
            style="background: #818cf8; color: white; padding: 0.8rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 6px -1px rgba(129, 140, 248, 0.3);">
              Statistiques globales
         </a>
         
         {# Bouton de création réservé Admin/Pilote #}
         {% if session.user and session.user.role in ['admin', 'pilote'] %}
-          <a href="index.php?page=offre-create" 
+          <a href="/offre-create" 
              style="background: #2563eb; color: white; padding: 0.8rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 700; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);">
              + Publier une offre
           </a>
@@ -60,7 +60,7 @@
       <button type="submit" style="background: #2563eb; color: white; padding: 0.75rem 2rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 700;">
           Rechercher
       </button>
-      <a href="index.php?page=offres" style="text-decoration: none; color: var(--text-muted, #6b7280); font-size: 0.95rem; font-weight: 500;">Effacer les filtres</a>
+      <a href="/offres" style="text-decoration: none; color: var(--text-muted, #6b7280); font-size: 0.95rem; font-weight: 500;">Effacer les filtres</a>
     </div>
   </form>
 </div>
@@ -104,13 +104,13 @@
                         </form>
                     {% endif %}
 
-                    <a href="index.php?page=offre-detail&id={{ offre.id }}" style="color: #818cf8; font-size: 0.95rem; text-decoration: none; font-weight: 700;">Détails →</a>
+                    <a href="/offre-detail?id={{ offre.id }}" style="color: #818cf8; font-size: 0.95rem; text-decoration: none; font-weight: 700;">Détails →</a>
 
                     {# Actions Administrateur (Corrigées : Icônes visibles) #}
                     {% if session.user and session.user.role in ['admin', 'pilote'] %}
                         <div style="display: flex; gap: 10px; margin-left: 5px; border-left: 1px solid #e5e7eb; padding-left: 10px;">
-                            <a href="index.php?page=offre-edit&id={{ offre.id }}" title="Modifier" style="text-decoration: none; font-size: 1.1rem;"></a>
-                            <a href="index.php?page=offre-delete&id={{ offre.id }}" 
+                            <a href="/offre-edit?id={{ offre.id }}" title="Modifier" style="text-decoration: none; font-size: 1.1rem;"></a>
+                            <a href="/offre-delete?id={{ offre.id }}" 
                                style="text-decoration: none; font-size: 1.1rem;" 
                                onclick="return confirm('Supprimer cette offre ?')" 
                                title="Supprimer"></a>
@@ -122,7 +122,7 @@
     {% else %}
         <div style="grid-column: 1 / -1; text-align: center; padding: 5rem; color: #6b7280; background: #ffffff; border-radius: 12px; border: 2px dashed #e5e7eb;">
             <p style="font-size: 1.2rem; font-weight: 500;">Aucune offre ne correspond à votre recherche.</p>
-            <a href="index.php?page=offres" style="color: #2563eb; display: block; margin-top: 1rem; font-weight: 600;">Voir toutes les offres</a>
+            <a href="/offres" style="color: #2563eb; display: block; margin-top: 1rem; font-weight: 600;">Voir toutes les offres</a>
         </div>
     {% endfor %}
   </div>
@@ -132,7 +132,7 @@
 {# --- PAGINATION --- #}
 <div class="pagination">
     {% if pageActuelle > 1 %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle - 1 }}" class="pagination-btn">
+        <a href="/{{ routePagination }}?pagination={{ pageActuelle - 1 }}" class="pagination-btn">
             ← Précédent
         </a>
     {% else %}
@@ -140,14 +140,14 @@
     {% endif %}
 
     {% for i in 1..totalPages %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ i }}"
+        <a href="/{{ routePagination }}?pagination={{ i }}"
            class="pagination-number {% if i == pageActuelle %}active{% endif %}">
             {{ i }}
         </a>
     {% endfor %}
 
     {% if pageActuelle < totalPages %}
-        <a href="index.php?page={{ routePagination }}&pagination={{ pageActuelle + 1 }}" class="pagination-btn">
+        <a href="/{{ routePagination }}?pagination={{ pageActuelle + 1 }}" class="pagination-btn">
             Suivant →
         </a>
     {% else %}

@@ -12,8 +12,8 @@
   {# Fil d’ariane #}
   <nav aria-label="Fil d’ariane" style="margin-bottom: 2rem; font-size: 0.8rem;">
     <p>
-      <a href="index.php?page=home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
-      <a href="index.php?page=etudiants" style="color: var(--accent-blue); text-decoration: none;">Étudiants</a> &gt;
+      <a href="/home" style="color: var(--accent-blue); text-decoration: none;">Accueil</a> &gt;
+      <a href="/etudiants" style="color: var(--accent-blue); text-decoration: none;">Étudiants</a> &gt;
       <span style="color: var(--text-muted);">{{ isEdit ? 'Édition' : 'Création' }}</span>
     </p>
   </nav>
@@ -73,7 +73,7 @@
         {{ isEdit ? "Mettre à jour le profil" : "Créer le compte étudiant" }}
       </button>
       
-      <a href="index.php?page=etudiants" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;">
+      <a href="/etudiants" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;">
         Annuler et revenir
       </a>
     </div>

@@ -12,7 +12,7 @@
     
     {# Seul l'administrateur a les droits de création pour les pilotes #}
     {% if session.user and session.user.role == 'admin' %}
-      <a href="index.php?page=pilote-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer un pilote</a>
+      <a href="/pilote-create" class="btn-cta" style="font-size: 0.85rem;">+ Créer un pilote</a>
     {% endif %}
   </div>
 </section>
@@ -40,7 +40,7 @@
           </p>
 
           {# Lien invisible qui rend toute la carte cliquable pour une meilleure UX #}
-          <a href="index.php?page=pilote-detail&id={{ p.id }}" class="lien-etendu" title="Voir le profil de {{ p.prenom }}"></a>
+          <a href="/pilote-detail?id={{ p.id }}" class="lien-etendu" title="Voir le profil de {{ p.prenom }}"></a>
         </article>
     {% else %}
         {# Affichage si la liste est vide #}
