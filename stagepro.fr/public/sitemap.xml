@@ -2,27 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>https://stagepro.fr/index.php?page=home</loc>
+        <loc>https://stagepro.fr/home</loc>
     </url>
 
     <url>
-        <loc>https://stagepro.fr/index.php?page=offres</loc>
+        <loc>https://stagepro.fr/offres</loc>
     </url>
 
     <url>
-        <loc>https://stagepro.fr/index.php?page=candidatures</loc>
+        <loc>https://stagepro.fr/candidatures</loc>
     </url>
 
     <url>
-        <loc>https://stagepro.fr/index.php?page=entreprises</loc>
+        <loc>https://stagepro.fr/entreprises</loc>
     </url>
 
     <url>
-        <loc>https://stagepro.fr/index.php?page=login</loc>
-    </url>
-
-    <url>
-        <loc>https://stagepro.fr/index.php?page=wishlist</loc>
+        <loc>https://stagepro.fr/login</loc>
     </url>
 
 </urlset>

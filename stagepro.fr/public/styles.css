@@ -1247,3 +1247,65 @@ h2 {
         width: 100%;
     }
 }
+
+/* --- RESPONSIVE SECTION TÉMOIGNAGES / BADGES ENTREPRISES --- */
+@media (max-width: 768px) {
+  .entreprise-showcase {
+    padding: 3rem 0 2rem 0;
+  }
+
+  .showcase-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
+  }
+
+  .showcase-left,
+  .showcase-right {
+    width: 100%;
+  }
+
+  .testimonial-slider {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0 2rem 0;
+  }
+
+  .testimonial-card {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .testimonial-track {
+    min-height: 330px;
+  }
+
+  .showcase-side-card {
+    width: 100%;
+  }
+
+  .showcase-side-card ul {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .showcase-side-card li {
+    width: 100%;
+    min-height: 70px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .entreprise-showcase h2 {
+    font-size: 1.5rem;
+  }
+
+  .testimonial-quote {
+    font-size: 0.95rem;
+  }
+
+  .testimonial-track {
+    min-height: 380px;
+  }
+}
