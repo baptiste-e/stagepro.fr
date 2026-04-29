@@ -443,6 +443,16 @@ section:not(.hero):not(.entreprise-showcase):not(.espaces-section):not(.stats-se
   color: var(--text-muted);
   line-height: 1.5;
   max-width: 220px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  text-align: center;
 }
 
 @media (max-width: 992px) {
@@ -1249,7 +1259,7 @@ h2 {
 }
 
 /* --- RESPONSIVE SECTION TÉMOIGNAGES / BADGES ENTREPRISES --- */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .entreprise-showcase {
     padding: 3rem 0 2rem 0;
   }
