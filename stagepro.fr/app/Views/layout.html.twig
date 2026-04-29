@@ -175,21 +175,21 @@
 
             <nav id="site-navigation" class="site-nav" aria-label="Navigation principale">
                 <ul class="site-nav__list">
-                    <li><a href="index.php?page=home">Accueil</a></li>
-                    <li><a href="index.php?page=offres">Offres</a></li>
-                    <li><a href="index.php?page=candidatures">Candidatures</a></li>
-                    <li><a href="index.php?page=entreprises">Entreprises</a></li>
+                    <li><a href="/home">Accueil</a></li>
+                    <li><a href="/offres">Offres</a></li>
+                    <li><a href="/candidatures">Candidatures</a></li>
+                    <li><a href="/entreprises">Entreprises</a></li>
 
                     {% if session.user and userRole in ['admin', 'pilote'] %}
-                        <li><a href="index.php?page=etudiants">Étudiants</a></li>
-                        <li><a href="index.php?page=pilotes">Pilotes</a></li>
+                        <li><a href="/etudiants">Étudiants</a></li>
+                        <li><a href="/pilotes">Pilotes</a></li>
                     {% endif %}
 
                     {% if session.user and userRole == 'admin' %}
-                        <li><a href="index.php?page=admin">Dashboard</a></li>
+                        <li><a href="/admin">Dashboard</a></li>
                     {% endif %}
 
-                    <li><a href="index.php?page=wishlist">Favoris</a></li>
+                    <li><a href="/wishlist">Favoris</a></li>
 
                     {% if session.user %}
                         <li class="nav-user-desktop site-nav__user">
@@ -198,10 +198,10 @@
                                 <span>({{ session.user.role|default(session.user.role_nom) }})</span>
                             </strong>
                         </li>
-                        <li><a href="index.php?page=logout" class="site-nav__logout">Déconnexion</a></li>
+                        <li><a href="/logout" class="site-nav__logout">Déconnexion</a></li>
                     {% else %}
                         <li>
-                            <a href="index.php?page=login" class="btn-cta site-nav__login">
+                            <a href="/login" class="btn-cta site-nav__login">
                                 Connexion
                             </a>
                         </li>
