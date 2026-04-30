@@ -71,11 +71,14 @@
             </div>
 
             {# Durée #}
-            <div>
-                <label for="duree" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #1e293b;">Durée du stage</label>
-                <input type="text" id="duree" name="duree" value="{{ offre.duree|default('') }}" 
-                       placeholder="Ex: 6 mois" 
-                       style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border, #d1d5db); box-sizing: border-box; background: #ffffff;">
+             <div>
+             <label for="duree" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #1e293b;">
+             Durée du stage (semaine)
+             </label>
+            <input type="number" id="duree" name="duree" value="{{ offre.duree|default('') }}" 
+             placeholder="Ex : 12"
+             min="1"
+             style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border, #d1d5db); box-sizing: border-box; background: #ffffff;">
             </div>
 
             {# Nombre de places #}
