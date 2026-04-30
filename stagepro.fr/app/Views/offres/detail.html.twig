@@ -64,6 +64,7 @@
                     <h2 style="margin-bottom: 1.5rem; color: var(--text-main, #111827);">Postuler à cette offre</h2>
                     
                     <form action="index.php?page=postuler" method="post" enctype="multipart/form-data" style="margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="id_offre" value="{{ offre.id }}">
                         
                         <div style="margin-bottom: 1.5rem;">
@@ -89,8 +90,8 @@
         <aside class="sidebar" style="position: sticky; top: 2rem;">
             <div style="background: var(--surface, #ffffff); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border, #e5e7eb); margin-bottom: 1.5rem;">
                 <h3 style="font-size: 0.875rem; color: var(--text-muted, #6b7280); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem;">Détails du stage</h3>
-                <p style="margin-bottom: 1rem; font-size: 0.95rem; color: #1e293b;"><strong> Lieu :</strong> {{ offre.localite }}</p>
-                <p style="margin-bottom: 1rem; font-size: 0.95rem; color: #1e293b;"><strong> Durée :</strong> {{ offre.duree }}</p>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem; color: #1e293b;"><strong> Lieu :</strong> {{ offre.localite|default('Non renseigné') }}</p>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem; color: #1e293b;"><strong> Durée :</strong> {{ offre.duree|default('Non renseignée') }}</p>
                 <p style="margin-bottom: 1rem; font-size: 0.95rem; color: #1e293b;"><strong> Gratification :</strong> {{ offre.remuneration|number_format(2, ',', ' ') }} €/mois</p>
                 <p style="margin: 0; font-size: 0.95rem; color: #1e293b;"><strong> Places :</strong> {{ offre.nb_places|default(1) }} poste(s)</p>
             </div>
@@ -99,7 +100,8 @@
                 <div style="padding: 1.5rem; background: var(--surface, #ffffff); border: 1px solid var(--border, #e5e7eb); border-radius: 12px; margin-bottom: 1.5rem;">
                     <h3 style="font-size: 0.875rem; color: var(--text-muted, #6b7280); text-transform: uppercase; margin-bottom: 1rem;">Actions</h3>
                     
-                    <form action="index.php?page=wishlist-add" method="post" style="margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
+                    <form action="/wishlist-add" method="post" style="margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="id_offre" value="{{ offre.id }}">
                         <button type="submit" style="width: 100%; background: transparent; border: 2px solid #2563eb; color: #2563eb; padding: 0.75rem; border-radius: 6px; cursor: pointer; font-weight: 600;">
                             ☆ Ajouter aux favoris
@@ -116,7 +118,8 @@
                         Modifier l'offre
                     </a>
                     
-                    <form action="index.php?page=offre-delete" method="post" onsubmit="return confirm('Supprimer définitivement ?');" style="margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
+                    <form action="/offre-delete" method="post" onsubmit="return confirm('Supprimer définitivement ?');" style="margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="id" value="{{ offre.id }}">
                         <button type="submit" style="width: 100%; background: #e11d48; color: white; padding: 0.75rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
                             Supprimer

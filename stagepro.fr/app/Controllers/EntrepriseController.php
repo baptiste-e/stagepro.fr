@@ -111,7 +111,7 @@ class EntrepriseController {
                 trim($_POST['email_contact'] ?? ''),
                 trim($_POST['telephone_contact'] ?? '')
             );
-            header('Location: index.php?page=entreprises&status=created');
+            header('Location: /entreprises?status=created');
             exit;
         }
 
@@ -130,7 +130,7 @@ class EntrepriseController {
                 'telephone_contact' => trim($_POST['telephone_contact'] ?? '')
             ];
             $this->model->update($id, $data);
-            header('Location: index.php?page=entreprise-detail&id=' . $id . '&status=updated');
+            header('Location: /entreprise-detail?id=' . $id . '&status=updated');
             exit;
         }
 
@@ -143,7 +143,7 @@ class EntrepriseController {
             Csrf::check();
             $id = (int)($_POST['id'] ?? 0);
             if ($id > 0) { $this->model->delete($id); }
-            header('Location: index.php?page=entreprises&status=deleted');
+            header('Location: /entreprises?status=deleted');
             exit;
         }
         
@@ -153,6 +153,8 @@ class EntrepriseController {
         $entreprise = $this->model->findById((int)$id);
         echo $this->twig->render('entreprises/evaluer.html.twig', [
             'entreprise' => $entreprise,
+            'csrf_token' => Csrf::generate(),
+
             'titre_page' => "Évaluer " . $entreprise['nom']
         ]);
     }
@@ -166,9 +168,34 @@ class EntrepriseController {
             $comm = $_POST['commentaire'];
 
             $this->model->addEvaluation($eId, $uId, $note, $comm);
-            header("Location: index.php?page=entreprise-detail&id=" . $eId . "&status=evaluated");
+            header("Location: /entreprise-detail?id=" . $eId . "&status=evaluated");
             exit;
         }
         
     }
+
+    public function deleteEvaluation() {
+    if (!isset($_SESSION['user'])) {
+        header('Location: /login');
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        Csrf::check();
+
+        $evaluationId = (int)($_POST['evaluation_id'] ?? 0);
+        $entrepriseId = (int)($_POST['entreprise_id'] ?? 0);
+        $userId = (int)$_SESSION['user']['id'];
+
+        if ($evaluationId > 0) {
+            $this->model->deleteEvaluation($evaluationId, $userId);
+        }
+
+        header('Location: /entreprise-detail?id=' . $entrepriseId);
+        exit;
+    }
+
+    header('Location: /entreprises');
+    exit;
+}
 }

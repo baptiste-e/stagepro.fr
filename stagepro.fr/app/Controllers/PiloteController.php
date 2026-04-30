@@ -120,10 +120,11 @@ class PiloteController
         
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            Csrf::check();
-            header('Location: index.php?page=pilotes');
-            exit;
-        }
+    header('Location: /pilotes');
+    exit;
+}
+
+Csrf::check();
 
         $id = (int)($_POST['id'] ?? 0);
 

@@ -43,7 +43,7 @@ class EtudiantController {
         $etudiant = $this->model->findById((int)$id);
 
         if (!$etudiant) {
-            header('Location: index.php?page=etudiants');
+            header('Location: /etudiants');
             exit;
         }
 
@@ -109,7 +109,7 @@ class EtudiantController {
         $role = $_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '';
 
         if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'])) {
-            header('Location: index.php?page=home');
+            header('Location: /etudiants');
             exit;
         }
         
@@ -170,7 +170,7 @@ class EtudiantController {
             $this->model->delete($id);
         }
 
-        header('Location: index.php?page=etudiants&message=deleted');
+        header('Location: /etudiants?message=deleted');
         exit;
     }
 }

@@ -118,9 +118,25 @@
                           {{ eval.commentaire|default('L\'étudiant n\'a pas laissé de commentaire écrit.')|nl2br }}
                       </p>
                       <small style="display: block; margin-top: 10px; color: #9ca3af; font-size: 0.8rem;">
-                          Posté le {{ eval.created_at|date("d/m/Y") }}
-                      </small>
-                  </div>
+    Posté le {{ eval.created_at|date("d/m/Y") }}
+</small>
+
+{% if session.user and session.user.id == eval.utilisateur_id %}
+    <form action="/entreprise-delete-eval" method="post"
+          onsubmit="return confirm('Supprimer votre avis ?');"
+          style="margin-top: 1rem; padding: 0; background: transparent; border: none; box-shadow: none;">
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="evaluation_id" value="{{ eval.id }}">
+        <input type="hidden" name="entreprise_id" value="{{ entreprise.id }}">
+
+        <button type="submit"
+                style="background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;">
+            Supprimer mon avis
+        </button>
+    </form>
+{% endif %}
+</div>
               {% endfor %}
           </div>
       {% endif %}
@@ -144,7 +160,7 @@
       </a>
 
       {# CORRECTION : Nettoyage du <form> pour qu'il soit transparent et n'ait plus de carrés parasites #}
-      <form action="index.php?page=entreprise-delete" method="post" onsubmit="return confirm('Supprimer définitivement cette entreprise ?');" style="display: inline; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
+      <form action="/entreprise-delete" method="post" onsubmit="return confirm('Supprimer définitivement cette entreprise ?');" style="display: inline; margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="id" value="{{ entreprise.id }}">
         <button type="submit" style="background: #dc2626; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">

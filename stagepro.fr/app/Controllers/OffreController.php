@@ -1,5 +1,6 @@
 <?php
 // app/Controllers/OffreController.php
+require_once __DIR__ . '/../Security/Csrf.php';
 require_once __DIR__ . '/../Models/Offre.php';
 require_once __DIR__ . '/../Models/Entreprise.php';
 require_once __DIR__ . '/../Models/Candidature.php';
@@ -94,10 +95,11 @@ class OffreController {
         }
 
         echo $this->twig->render('offres/detail.html.twig', [
-            'offre' => $offre,
-            'maCandidature' => $maCandidature,
-            'titre_page' => htmlspecialchars($offre['titre']) . " | StagePro"
-        ]);
+    'offre' => $offre,
+    'maCandidature' => $maCandidature,
+    'csrf_token' => Csrf::generate(),
+    'titre_page' => htmlspecialchars($offre['titre']) . " | StagePro"
+]);
     }
 
     /**
@@ -120,6 +122,7 @@ class OffreController {
             'modeEdition' => $modeEdition,
             'offre' => $offre,
             'entreprises' => $entreprises,
+            'csrf_token' => Csrf::generate(),
             'titre_page' => $modeEdition ? "Modifier l'offre" : "Publier une offre"
         ]);
     }
@@ -128,51 +131,66 @@ class OffreController {
      * Sauvegarde les données (Insert ou Update)
      */
     public function save() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            Csrf::check();
-            header('Location: index.php?page=offres');
-            exit;
-        }
-
-        
-
-        $id = (int)($_POST['id'] ?? 0);
-        
-        // Construction des données sécurisées (fusion des logiques)
-        $data = [
-            'titre' => htmlspecialchars($_POST['titre'] ?? ''),
-            'description' => htmlspecialchars($_POST['description'] ?? ''),
-            'competences' => htmlspecialchars($_POST['competences'] ?? ''),
-            'localite' => htmlspecialchars($_POST['localite'] ?? ''),
-            'duree' => htmlspecialchars($_POST['duree'] ?? ''),
-            'remuneration' => ($_POST['remuneration'] ?? '') !== '' ? (float)$_POST['remuneration'] : null,
-            'nb_places' => (int)($_POST['nb_places'] ?? 1),
-            'id_entreprise' => (int)($_POST['id_entreprise'] ?? 0)
-        ];
-
-        if ($id > 0) {
-            $this->model->update($id, $data);
-        } else {
-            $this->model->create($data);
-        }
-
-        header('Location: index.php?page=offres&status=success');
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: /offres');
         exit;
     }
+
+    Csrf::check();
+
+    $id = (int)($_POST['id'] ?? 0);
+
+    $data = [
+        'titre' => trim($_POST['titre'] ?? ''),
+        'description' => trim($_POST['description'] ?? ''),
+        'competences' => trim($_POST['competences'] ?? ''),
+        'localite' => trim($_POST['localite'] ?? ''),
+        'duree' => trim($_POST['duree'] ?? ''),
+        'remuneration' => ($_POST['remuneration'] ?? '') !== '' ? (float)$_POST['remuneration'] : null,
+        'nb_places' => (int)($_POST['nb_places'] ?? 1),
+        'id_entreprise' => (int)($_POST['id_entreprise'] ?? 0),
+        'date_offre' => $_POST['date_offre'] ?? date('Y-m-d')
+    ];
+
+    if ($id > 0) {
+        $this->model->update($id, $data);
+        header('Location: /offre-detail?id=' . $id);
+        exit;
+    }
+
+    $this->model->create($data);
+    header('Location: /offres');
+    exit;
+
+}
 
     /**
      * Supprime une offre (réservé Admin/Pilote)
      */
-    public function delete($id) {
-        $id_to_delete = ((int)$id > 0) ? (int)$id : (int)($_POST['id'] ?? 0);
-
-        if ($id_to_delete > 0) {
-            $this->model->delete($id_to_delete);
-        }
-
-        header('Location: index.php?page=offres&status=deleted');
+    public function delete($id = 0) {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: index.php?page=offres');
         exit;
     }
+
+    Csrf::check();
+
+    $role = strtolower($_SESSION['user']['role_nom'] ?? $_SESSION['user']['role'] ?? '');
+
+    if (!isset($_SESSION['user']) || !in_array($role, ['admin', 'pilote'], true)) {
+        header('Location: index.php?page=login');
+        exit;
+    }
+
+    $id_to_delete = (int)($_POST['id'] ?? $id);
+
+    if ($id_to_delete > 0) {
+        $this->model->delete($id_to_delete);
+    }
+
+    header('Location: index.php?page=offres&status=deleted');
+    exit;
+}
 
     /**
      * Statistiques détaillées des offres

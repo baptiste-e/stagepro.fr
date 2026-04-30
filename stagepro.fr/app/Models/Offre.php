@@ -275,33 +275,33 @@ class Offre {
      * Met à jour une offre existante
      */
     public function update(int $id, array $data): bool {
-        $sql = "UPDATE offres
-                SET titre = :titre,
-                    description = :description,
-                    competences = :competences,
-                    localite = :localite,
-                    duree = :duree,
-                    remuneration = :remuneration,
-                    nb_places = :nb_places,
-                    entreprise_id = :id_entreprise,
-                    date_offre = :date_offre
-                WHERE id = :id";
+    $sql = "UPDATE offres
+            SET titre = :titre,
+                description = :description,
+                competences = :competences,
+                localite = :localite,
+                duree = :duree,
+                remuneration = :remuneration,
+                nb_places = :nb_places,
+                entreprise_id = :id_entreprise,
+                date_offre = :date_offre
+            WHERE id = :id";
 
-        $stmt = $this->pdo->prepare($sql);
+    $stmt = $this->pdo->prepare($sql);
 
-        return $stmt->execute([
-            ':titre'         => $data['titre'],
-            ':description'   => $data['description'],
-            ':competences'   => $data['competences'],
-            ':localite'      => $data['localite'] !== '' ? $data['localite'] : null,
-            ':duree'         => $data['duree'] !== '' ? $data['duree'] : null,
-            ':remuneration'  => $data['remuneration'] !== '' ? $data['remuneration'] : null,
-            ':nb_places'     => $data['nb_places'],
-            ':id_entreprise' => $data['id_entreprise'],
-            ':date_offre'    => $data['date_offre'],
-            ':id'            => $id
-        ]);
-    }
+    return $stmt->execute([
+        ':titre' => $data['titre'],
+        ':description' => $data['description'],
+        ':competences' => $data['competences'],
+        ':localite' => $data['localite'],
+        ':duree' => $data['duree'],
+        ':remuneration' => $data['remuneration'],
+        ':nb_places' => $data['nb_places'],
+        ':id_entreprise' => $data['id_entreprise'],
+        ':date_offre' => $data['date_offre'],
+        ':id' => $id
+    ]);
+}
 
     /**
      * Suppression sécurisée en cascade (Transaction)

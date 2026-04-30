@@ -15,6 +15,7 @@ class AuthController {
         $erreur = '';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+             Csrf::check();
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? ''; 
 

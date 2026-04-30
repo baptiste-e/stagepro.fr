@@ -79,7 +79,7 @@ class WishlistController {
         }
 
         // Redirection vers la page précédente (Referer) ou par défaut vers les offres
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php?page=offres'));
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/offres'));
         exit;
     }
 
@@ -88,14 +88,14 @@ class WishlistController {
      */
     public function remove() {
         if (!isset($_SESSION['user'])) { 
-            header('Location: index.php?page=login'); 
+            header('Location: /login');
             exit; 
         }
 
         Csrf::check();
 
         // On accepte POST ou GET (REQUEST) pour plus de souplesse selon le bouton cliqué
-        $id_offre = (int)($_REQUEST['id_offre'] ?? 0);
+        $id_offre = (int)($_POST['id_offre'] ?? 0);
         $id_user = (int)$_SESSION['user']['id'];
 
         if ($id_offre > 0) {
@@ -103,7 +103,7 @@ class WishlistController {
         }
 
         // Redirection vers la page précédente ou par défaut vers la wishlist
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php?page=favoris'));
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/wishlist'));
         exit;
     }
 }

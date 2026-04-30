@@ -183,4 +183,18 @@ class Entreprise
         $stmt->execute(['id' => $id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-} // Fin de la classe
+
+    public function deleteEvaluation(int $evaluationId, int $userId): bool {
+    $sql = "DELETE FROM evaluations
+            WHERE id = :id
+            AND utilisateur_id = :user_id";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    return $stmt->execute([
+        ':id' => $evaluationId,
+        ':user_id' => $userId
+    ]);
+}
+} 
+

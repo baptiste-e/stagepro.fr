@@ -54,7 +54,7 @@
             Modifier le compte
         </a>
 
-        <form action="index.php?page=etudiant-delete" method="post" style="margin: 0; padding: 0; border: none; background: transparent;" onsubmit="return confirm('Confirmer la suppression de cet étudiant ?');">
+        <form action="/etudiant-delete" method="post" style="margin: 0; padding: 0; border: none; background: transparent;" onsubmit="return confirm('Confirmer la suppression de cet étudiant ?');">
          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <input type="hidden" name="id" value="{{ etudiant.id }}">
             <button type="submit" class="btn-delete-outline">
