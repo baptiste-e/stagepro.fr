@@ -125,19 +125,27 @@ class CandidatureController {
             $lettre = htmlspecialchars($_POST['lm'] ?? '');
             $userId = (int)$_SESSION['user']['id'];
 
-            // Gestion de l'upload du CV
-            $cvPath = null;
-            if (!empty($_FILES['cv']['tmp_name'])) {
-                if (!is_dir('uploads')) {
-                    mkdir('uploads', 0777, true);
-                }
+            // Gestion de l'upload du CV : PDF uniquement
+$cvPath = null;
 
-                $cvPath = 'uploads/' . time() . '_' . basename($_FILES['cv']['name']);
-                move_uploaded_file($_FILES['cv']['tmp_name'], $cvPath);
-            }
+if (!empty($_FILES['cv']['tmp_name'])) {
+    $extension = strtolower(pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION));
+    $mime = mime_content_type($_FILES['cv']['tmp_name']);
+
+    if ($extension !== 'pdf' || $mime !== 'application/pdf') {
+        die("Erreur : le CV doit être un fichier PDF.");
+    }
+
+    if (!is_dir('uploads')) {
+        mkdir('uploads', 0777, true);
+    }
+
+    $cvPath = 'uploads/' . time() . '_' . basename($_FILES['cv']['name']);
+    move_uploaded_file($_FILES['cv']['tmp_name'], $cvPath);
+}
 
             $this->model->create($userId, $offreId, $cvPath, $lettre);
-            header("Location: index.php?page=candidatures&status=applied");
+            header("Location: /candidatures?status=applied");
             exit;
         }
     }

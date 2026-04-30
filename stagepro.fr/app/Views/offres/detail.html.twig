@@ -63,13 +63,13 @@
                 {% else %}
                     <h2 style="margin-bottom: 1.5rem; color: var(--text-main, #111827);">Postuler à cette offre</h2>
                     
-                    <form action="index.php?page=postuler" method="post" enctype="multipart/form-data" style="margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
+                    <form action="/postuler" method="post" enctype="multipart/form-data" style="margin: 0; padding: 0; border: none; background: transparent; box-shadow: none;">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="id_offre" value="{{ offre.id }}">
                         
                         <div style="margin-bottom: 1.5rem;">
                             <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Votre CV (Format PDF uniquement)</label>
-                            <input type="file" name="cv" accept=".pdf" required style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px;">
+                            <input type="file" name="cv" accept="application/pdf,.pdf" required style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px;">
                         </div>
 
                         <div style="margin-bottom: 1.5rem;">
